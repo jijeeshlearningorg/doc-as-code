@@ -35,7 +35,7 @@ jobs:
       - name: Create doc-request.json
         run: |
           cat > doc-request.json << 'EOF'
-          ${{ toJson(github.event.client_payload) }}
+          ${{ toJson(github.event.client_payload.dispatch_data) }}
           EOF
 
           echo "=================================="
@@ -43,34 +43,6 @@ jobs:
           echo "=================================="
 
           cat doc-request.json
-
-          echo ""
-          echo "=================================="
-          echo "PRODUCT"
-          echo "=================================="
-
-          grep -i product doc-request.json || true
-
-          echo ""
-          echo "=================================="
-          echo "CAPABILITIES"
-          echo "=================================="
-
-          grep -i capabilities doc-request.json || true
-
-          echo ""
-          echo "=================================="
-          echo "IMPACTED CAPABILITIES"
-          echo "=================================="
-
-          grep -i impacted_capabilities doc-request.json || true
-
-          echo ""
-          echo "=================================="
-          echo "CHANGED FILES"
-          echo "=================================="
-
-          grep -i changed_files doc-request.json || true
 
       - name: Clone Actions Repository
         env:
@@ -98,28 +70,11 @@ jobs:
           echo "CATALOG FILES"
           echo "=================================="
 
-          find catalog -type f | sort
+          find catalog -type f | sort || true
 
-          echo ""
-          echo "=================================="
-          echo "PRODUCT CATALOG"
-          echo "=================================="
-
-          cat catalog/product-catalog.yaml
-
-          echo ""
-          echo "=================================="
-          echo "CAPABILITY CATALOG"
-          echo "=================================="
-
-          cat catalog/capability-catalog.yaml
-
-          echo ""
-          echo "=================================="
-          echo "TECHNOLOGY CATALOG"
-          echo "=================================="
-
-          cat catalog/technology-catalog.yaml
+          cat catalog/product-catalog.yaml || true
+          cat catalog/capability-catalog.yaml || true
+          cat catalog/technology-catalog.yaml || true
 
       - name: Clone Source Repository
         env:
@@ -127,8 +82,11 @@ jobs:
         run: |
           rm -rf source
 
+          echo "SOURCE REPOSITORY:"
+          echo "${{ github.event.client_payload.dispatch_data.source_repo_full }}"
+
           git clone \
-            https://x-access-token:${PAT}@github.com/${{ github.event.client_payload.source_repo_full }}.git \
+            https://x-access-token:${PAT}@github.com/${{ github.event.client_payload.dispatch_data.source_repo_full }}.git \
             source
 
       - name: Show Source Repository Files
@@ -151,63 +109,26 @@ jobs:
 
       - name: Verify Agent Files
         run: |
-          echo "=================================="
-          echo "AGENT FILES"
-          echo "=================================="
-
           find _actions/agents -type f | sort || true
 
-      - name: Generate Agent Based Documentation
+      - name: Generate Agent Documentation
         run: |
-          echo "=================================="
-          echo "RUNNING PRODUCT-CENTRIC GENERATOR"
-          echo "=================================="
-
           python _actions/scripts/generate-agent-docs.py
 
       - name: Verify Generated HLD Files
         run: |
-          echo "=================================="
-          echo "GENERATED HLD FILES"
-          echo "=================================="
-
           find docs/02-Architecture-and-Designs/01-High-Level-Designs \
             -name "*.md" \
-            -type f \
-            -exec ls -lah {} \;
+            -type f
 
       - name: Verify Generated LLD Files
         run: |
-          echo "=================================="
-          echo "GENERATED LLD FILES"
-          echo "=================================="
-
           find docs/02-Architecture-and-Designs/02-Low-Level-Designs \
             -name "*.md" \
-            -type f \
-            -exec ls -lah {} \;
-
-      - name: Display Generated Documents
-        run: |
-          echo ""
-          echo "=================================="
-          echo "GENERATED DOCUMENTS"
-          echo "=================================="
-
-          find docs -name "*.md" -type f | while read file
-          do
-            echo ""
-            echo "FILE: $file"
-            echo "----------------------------------"
-            cat "$file"
-          done
+            -type f
 
       - name: Validate Documentation Content
         run: |
-          echo "=================================="
-          echo "DOCUMENT VALIDATION"
-          echo "=================================="
-
           HLD_COUNT=$(find docs/02-Architecture-and-Designs/01-High-Level-Designs -name "*.md" | wc -l)
 
           LLD_COUNT=$(find docs/02-Architecture-and-Designs/02-Low-Level-Designs -name "*.md" | wc -l)
@@ -225,18 +146,12 @@ jobs:
             exit 1
           fi
 
-          echo "Documentation validation passed"
-
       - name: Update Navigation
         run: |
           python _actions/scripts/update-navigation.py
 
       - name: Show Generated Files
         run: |
-          echo "=================================="
-          echo "GENERATED FILES"
-          echo "=================================="
-
           find docs -type f | sort
 
       - name: Cleanup Temporary Files
@@ -244,15 +159,10 @@ jobs:
           rm -rf _actions
           rm -rf source
           rm -rf template
-          rm -rf generated
           rm -f doc-request.json
 
       - name: Commit Documentation
         run: |
-          echo "=================================="
-          echo "COMMIT DOCUMENTATION"
-          echo "=================================="
-
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
@@ -275,9 +185,6 @@ jobs:
 
           for i in 1 2 3
           do
-            echo ""
-            echo "Push attempt $i"
-
             git pull --rebase origin main
 
             if git push origin HEAD:main
@@ -286,7 +193,6 @@ jobs:
               exit 0
             fi
 
-            echo "Retrying..."
             sleep 5
           done
 
