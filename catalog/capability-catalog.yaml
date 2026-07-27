@@ -1,0 +1,30 @@
+capabilities:
+
+  networking:
+    description: Network services
+    technologies:
+      - envoy
+
+  security:
+    description: Security capabilities
+    technologies:
+      - vault
+
+  kubernetes:
+    description: Container platform
+    technologies:
+      - kubernetes
+
+  observability:
+    description: Monitoring platform
+
+  ai-platform:
+    description: AI services
+    technologies:
+      - vector-db
+
+  data-platform:
+    description: Data platform services
+    technologies:
+      - kafka
+      - vector-db

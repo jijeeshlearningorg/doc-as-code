@@ -1,0 +1,42 @@
+products:
+
+  greenfield-cloud-platform:
+
+    metadata:
+      name: Greenfield Cloud Platform
+      version: 1.0
+      owner: Cloud Architecture Team
+      status: Active
+
+    overview:
+      description: >
+        Enterprise cloud platform providing networking,
+        security, Kubernetes, observability, AI platform
+        and data platform capabilities.
+
+      purpose: >
+        Provide a scalable, secure and automated cloud
+        platform.
+
+    capabilities:
+      - networking
+      - security
+      - kubernetes
+      - observability
+      - ai-platform
+      - data-platform
+
+    technologies:
+      - kubernetes
+      - kafka
+      - vector-db
+      - envoy
+
+    documents:
+
+      hld:
+        folder: docs/02-Architecture-and-Designs/01-High-Level-Designs
+        file: greenfield-cloud-platform-hld.md
+
+      lld:
+        folder: docs/02-Architecture-and-Designs/02-Low-Level-Designs

@@ -1,69 +1,46 @@
-services:
+products:
 
-  security-compliance:
-    display_name: Security Compliance
+  greenfield-cloud-platform:
 
-    nav_group: Security and Compliance
-
-    category: Security
-
-    source_repositories:
-      - greenfield-code
-
-    source_files:
-      - src/security_vault.py
-
-    hld: docs/07-Security-and-Compliance/01-Security-Posture/security-compliance-hld.md
-
-    lld: docs/07-Security-and-Compliance/03-Access-Control/security-compliance-lld.md
-
-  greenfield-network:
-    display_name: Greenfield Network
-
-    nav_group: Architecture and Designs
-
-    category: Architecture
+    metadata:
+      display_name: Greenfield Cloud Platform
+      category: Architecture
+      nav_group: Architecture and Designs
 
     source_repositories:
       - greenfield-code
 
-    source_files:
-      - src/deploy.py
+    capabilities:
+      - networking
+      - security
+      - kubernetes
+      - observability
+      - ai-platform
+      - data-platform
 
-    hld: docs/02-Architecture-and-Designs/01-High-Level-Designs/greenfield-network-hld.md
+    hld:
+      docs/02-Architecture-and-Designs/01-High-Level-Designs/greenfield-cloud-platform-hld.md
 
-    lld: docs/02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-network-lld.md
+    lld_folder:
+      docs/02-Architecture-and-Designs/02-Low-Level-Designs
 
-  migration-platform:
-    display_name: Migration Platform
+  brownfield-migration-platform:
 
-    nav_group: Migrations and Projects
-
-    category: Migration
-
-    source_repositories:
-      - brownfield-code
-
-    source_files:
-      - src/migrate.py
-
-    hld: docs/08-Migrations-and-Projects/migration-platform-hld.md
-
-    lld: docs/08-Migrations-and-Projects/migration-platform-lld.md
-
-  capacity-management:
-    display_name: Capacity Management
-
-    nav_group: Operations and Support
-
-    category: Operations
+    metadata:
+      display_name: Brownfield Migration Platform
+      category: Migration
+      nav_group: Migrations and Projects
 
     source_repositories:
       - brownfield-code
 
-    source_files:
-      - src/capacity_calc.py
+    capabilities:
+      - migration
+      - capacity-management
+      - observability
 
-    hld: docs/05-Operations-and-Support/03-User-Guides/capacity-management-hld.md
+    hld:
+      docs/08-Migrations-and-Projects/brownfield-migration-platform-hld.md
 
-    lld: docs/05-Operations-and-Support/03-User-Guides/capacity-management-lld.md
+    lld_folder:
+      docs/08-Migrations-and-Projects

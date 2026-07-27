@@ -1,0 +1,16 @@
+technologies:
+
+  kubernetes:
+    category: container
+
+  kafka:
+    category: messaging
+
+  vector-db:
+    category: ai
+
+  envoy:
+    category: networking
+
+  vault:
+    category: security

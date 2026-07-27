@@ -46,17 +46,31 @@ jobs:
 
           echo ""
           echo "=================================="
+          echo "PRODUCT"
+          echo "=================================="
+
+          grep -i product doc-request.json || true
+
+          echo ""
+          echo "=================================="
+          echo "CAPABILITIES"
+          echo "=================================="
+
+          grep -i capabilities doc-request.json || true
+
+          echo ""
+          echo "=================================="
+          echo "IMPACTED CAPABILITIES"
+          echo "=================================="
+
+          grep -i impacted_capabilities doc-request.json || true
+
+          echo ""
+          echo "=================================="
           echo "CHANGED FILES"
           echo "=================================="
 
           grep -i changed_files doc-request.json || true
-
-          echo ""
-          echo "=================================="
-          echo "IMPACTED SERVICES"
-          echo "=================================="
-
-          grep -i impacted_services doc-request.json || true
 
       - name: Clone Actions Repository
         env:
@@ -78,6 +92,35 @@ jobs:
             https://x-access-token:${PAT}@github.com/jijeeshlab/doc-templete.git \
             template
 
+      - name: Verify Catalog Files
+        run: |
+          echo "=================================="
+          echo "CATALOG FILES"
+          echo "=================================="
+
+          find catalog -type f | sort
+
+          echo ""
+          echo "=================================="
+          echo "PRODUCT CATALOG"
+          echo "=================================="
+
+          cat catalog/product-catalog.yaml
+
+          echo ""
+          echo "=================================="
+          echo "CAPABILITY CATALOG"
+          echo "=================================="
+
+          cat catalog/capability-catalog.yaml
+
+          echo ""
+          echo "=================================="
+          echo "TECHNOLOGY CATALOG"
+          echo "=================================="
+
+          cat catalog/technology-catalog.yaml
+
       - name: Clone Source Repository
         env:
           PAT: ${{ secrets.CENTRAL_DOCS_TOKEN }}
@@ -95,92 +138,6 @@ jobs:
           echo "=================================="
 
           find source -type f | sort
-
-          echo ""
-          echo "=================================="
-          echo "PYTHON FILES"
-          echo "=================================="
-
-          find source -name "*.py" -type f | sort
-
-          echo ""
-          echo "=================================="
-          echo "PYTHON SYNTAX CHECK"
-          echo "=================================="
-
-          find source -name "*.py" -type f | sort | while read file
-          do
-            echo ""
-            echo "Checking: $file"
-
-            python -m py_compile "$file"
-
-            echo "OK: $file"
-          done
-
-          echo ""
-          echo "=================================="
-          echo "ALL PYTHON FILES VALIDATED"
-          echo "=================================="
-
-      - name: Validate Function Detection
-        run: |
-          echo "=================================="
-          echo "FUNCTION DETECTION TEST"
-          echo "=================================="
-
-          python - << 'EOF'
-          import ast
-          from pathlib import Path
-
-          py_files = sorted(Path("source").rglob("*.py"))
-
-          total_functions = 0
-
-          if not py_files:
-              print("No Python files found.")
-              raise SystemExit(1)
-
-          for file_path in py_files:
-
-              print("")
-              print("==================================")
-              print(f"FILE: {file_path}")
-              print("==================================")
-
-              content = file_path.read_text(
-                  encoding="utf-8",
-                  errors="ignore"
-              )
-
-              tree = ast.parse(content)
-
-              functions = []
-
-              for node in ast.walk(tree):
-                  if isinstance(node, ast.FunctionDef):
-                      functions.append(node.name)
-
-              print("")
-              print("Functions Found:")
-              print("==============================")
-
-              if not functions:
-                  print("No functions detected")
-
-              for func in functions:
-                  print(func)
-
-              print("")
-              print(f"Function Count: {len(functions)}")
-
-              total_functions += len(functions)
-
-          print("")
-          print("==================================")
-          print(f"TOTAL FUNCTIONS DETECTED: {total_functions}")
-          print("==================================")
-          EOF
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -203,57 +160,47 @@ jobs:
       - name: Generate Agent Based Documentation
         run: |
           echo "=================================="
-          echo "RUNNING AGENT GENERATOR"
+          echo "RUNNING PRODUCT-CENTRIC GENERATOR"
           echo "=================================="
 
           python _actions/scripts/generate-agent-docs.py
 
-          echo ""
+      - name: Verify Generated HLD Files
+        run: |
           echo "=================================="
           echo "GENERATED HLD FILES"
           echo "=================================="
 
-          find docs -name "*hld*.md" -type f -exec ls -lah {} \;
+          find docs/02-Architecture-and-Designs/01-High-Level-Designs \
+            -name "*.md" \
+            -type f \
+            -exec ls -lah {} \;
 
-          echo ""
+      - name: Verify Generated LLD Files
+        run: |
           echo "=================================="
           echo "GENERATED LLD FILES"
           echo "=================================="
 
-          find docs -name "*lld*.md" -type f -exec ls -lah {} \;
+          find docs/02-Architecture-and-Designs/02-Low-Level-Designs \
+            -name "*.md" \
+            -type f \
+            -exec ls -lah {} \;
 
+      - name: Display Generated Documents
+        run: |
           echo ""
           echo "=================================="
-          echo "ALL GENERATED HLD FILES"
+          echo "GENERATED DOCUMENTS"
           echo "=================================="
 
-          find docs -name "*hld*.md" -type f | while read file
+          find docs -name "*.md" -type f | while read file
           do
             echo ""
             echo "FILE: $file"
             echo "----------------------------------"
             cat "$file"
           done
-
-          echo ""
-          echo "=================================="
-          echo "ALL GENERATED LLD FILES"
-          echo "=================================="
-
-          find docs -name "*lld*.md" -type f | while read file
-          do
-            echo ""
-            echo "FILE: $file"
-            echo "----------------------------------"
-            cat "$file"
-          done
-
-          echo ""
-          echo "=================================="
-          echo "SEARCHING FOR AGENT CONTEXT"
-          echo "=================================="
-
-          grep -R "Agent Context" docs || true
 
       - name: Validate Documentation Content
         run: |
@@ -261,8 +208,9 @@ jobs:
           echo "DOCUMENT VALIDATION"
           echo "=================================="
 
-          HLD_COUNT=$(find docs -name "*hld*.md" | wc -l)
-          LLD_COUNT=$(find docs -name "*lld*.md" | wc -l)
+          HLD_COUNT=$(find docs/02-Architecture-and-Designs/01-High-Level-Designs -name "*.md" | wc -l)
+
+          LLD_COUNT=$(find docs/02-Architecture-and-Designs/02-Low-Level-Designs -name "*.md" | wc -l)
 
           echo "HLD FILES: $HLD_COUNT"
           echo "LLD FILES: $LLD_COUNT"
@@ -323,7 +271,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Generate documentation using agents"
+          git commit -m "Generate product-centric architecture documentation"
 
           for i in 1 2 3
           do
