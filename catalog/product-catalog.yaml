@@ -1,42 +1,123 @@
 products:
 
-  greenfield-cloud-platform:
+  vmware-cloud-services:
 
     metadata:
-      name: Greenfield Cloud Platform
-      version: 1.0
-      owner: Cloud Architecture Team
+      name: VMware Cloud Services
+      version: "2.0"
+      owner: Cloud Engineering
       status: Active
 
     overview:
       description: >
-        Enterprise cloud platform providing networking,
-        security, Kubernetes, observability, AI platform
-        and data platform capabilities.
+        VMware Cloud Services (VCS) is a private and hybrid cloud platform
+        built on VMware Cloud Foundation providing compute, storage,
+        networking, automation, monitoring, security, disaster recovery,
+        container and multi-tenancy capabilities.
 
       purpose: >
-        Provide a scalable, secure and automated cloud
-        platform.
+        Provide an enterprise-grade private and hybrid cloud platform
+        capable of delivering virtual machines, container platforms,
+        automation services and cloud integrations.
+
+      audience:
+        - Enterprise Architects
+        - Solution Architects
+        - Cloud Engineers
+        - Operations Teams
+        - Security Teams
+        - Service Delivery Teams
+
+    scope:
+
+      in_scope:
+        - VMware Cloud Foundation
+        - Software Defined Networking
+        - Compute Virtualization
+        - vSAN Storage
+        - Container Platform Services
+        - API Driven Service Delivery
+        - Lifecycle Management
+        - Monitoring and Reporting
+        - Security and Compliance
+        - Disaster Recovery
+        - Multi-Tenancy
+        - Public Cloud Integration
+
+      out_of_scope:
+        - Customer Specific Application Support
+        - Customer ITSM Integration Projects
+        - Managed Operating System Services
+        - Application Development Services
+        - Non Standard Hardware Integrations
 
     capabilities:
+      - compute
+      - storage
       - networking
+      - automation
+      - monitoring
       - security
-      - kubernetes
-      - observability
-      - ai-platform
-      - data-platform
+      - disaster-recovery
+      - backup
+      - containers
+      - multi-tenancy
+      - lifecycle-management
+      - public-cloud-integration
+      - reporting
+      - api-service-broker
 
     technologies:
-      - kubernetes
-      - kafka
-      - vector-db
-      - envoy
+      - vsphere
+      - esxi
+      - vcenter
+      - vsan
+      - nsx-t
+      - aria-automation
+      - aria-orchestrator
+      - aria-operations
+      - aria-logs
+      - aria-network-insight
+      - tanzu-kubernetes-grid
+      - tanzu-mission-control
+      - sddc-manager
+      - vlcm
+      - aria-suite-lifecycle-manager
+      - trend-micro
+      - nessus
+      - hashicorp-vault
+      - canopy-enterprise-backup
+      - avamar
+      - data-domain
+      - srm
+      - vsphere-replication
+      - hcx
+      - vmc
+      - service-broker
 
-    documents:
+    architecture:
+      principles:
+        - Security by Design
+        - Automation First
+        - API First
+        - Infrastructure as Code
+        - Documentation as Code
+        - Multi-Tenant Ready
+        - Lifecycle Managed
+        - Cloud Native Ready
 
-      hld:
-        folder: docs/02-Architecture-and-Designs/01-High-Level-Designs
-        file: greenfield-cloud-platform-hld.md
+    integrations:
 
-      lld:
-        folder: docs/02-Architecture-and-Designs/02-Low-Level-Designs
+      internal:
+        - Active Directory
+        - DNS
+        - NTP
+        - Canopy Enterprise Backup
+        - Trend Micro
+        - Nessus
+
+      external:
+        - ServiceNow
+        - Public Cloud Landing Zones
+        - VMware Cloud
+        - Customer ITSM Platforms
