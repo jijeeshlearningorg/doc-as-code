@@ -1,30 +1,110 @@
 capabilities:
 
-  networking:
-    description: Network services
+  compute:
+    name: Compute Capability
+    description: VMware vSphere based compute platform providing virtual machine hosting and resource management.
     technologies:
-      - envoy
+      - vsphere
+      - esxi
+      - vcenter
+
+  storage:
+    name: Storage Capability
+    description: Software-defined storage services using VMware vSAN and optional Fibre Channel storage.
+    technologies:
+      - vsan
+      - fibre-channel-storage
+
+  networking:
+    name: Software Defined Networking
+    description: NSX-T based virtual networking, routing, segmentation and connectivity services.
+    technologies:
+      - nsx-t
+      - aria-network-insight
+
+  automation:
+    name: Automation and Orchestration
+    description: Automated provisioning, lifecycle management and service delivery.
+    technologies:
+      - aria-automation
+      - aria-orchestrator
+      - ansible
+      - github-actions
+
+  monitoring:
+    name: Monitoring and Observability
+    description: Performance, health, logging and operational telemetry.
+    technologies:
+      - aria-operations
+      - aria-logs
+      - aria-network-insight
 
   security:
-    description: Security capabilities
+    name: Security and Compliance
+    description: Platform security controls, vulnerability management and compliance automation.
     technologies:
-      - vault
+      - trend-micro
+      - nessus
+      - hashicorp-vault
+      - vmware-nkp
 
-  kubernetes:
-    description: Container platform
+  disaster-recovery:
+    name: Disaster Recovery
+    description: Site protection, workload replication and recovery capabilities.
     technologies:
-      - kubernetes
+      - srm
+      - vsphere-replication
+      - vsan-stretched-cluster
 
-  observability:
-    description: Monitoring platform
-
-  ai-platform:
-    description: AI services
+  backup:
+    name: Backup and Recovery
+    description: Image and application level backup services.
     technologies:
-      - vector-db
+      - canopy-enterprise-backup
+      - avamar
+      - data-domain
 
-  data-platform:
-    description: Data platform services
+  containers:
+    name: Container Platform
+    description: Kubernetes platform services for modern application workloads.
     technologies:
-      - kafka
-      - vector-db
+      - tanzu-kubernetes-grid
+      - tanzu-mission-control
+
+  multi-tenancy:
+    name: Multi-Tenancy
+    description: Logical and operational separation of multiple tenants within a VCS deployment.
+    technologies:
+      - nsx-t
+      - aria-automation
+
+  lifecycle-management:
+    name: Lifecycle Management
+    description: Automated patching, upgrades and platform lifecycle operations.
+    technologies:
+      - sddc-manager
+      - vlcm
+      - aria-suite-lifecycle-manager
+
+  public-cloud-integration:
+    name: Public Cloud Integration
+    description: Connectivity and workload integration with hyperscaler cloud environments.
+    technologies:
+      - hcx
+      - vmc
+      - aria-automation
+
+  reporting:
+    name: Reporting and Billing
+    description: Operational, utilization and billing reporting capabilities.
+    technologies:
+      - aria-operations
+      - cloud-db
+
+  api-service-broker:
+    name: API and Service Broker
+    description: Service consumption layer exposing VCS functionality through APIs and service catalog.
+    technologies:
+      - aria-automation
+      - service-broker
+``
