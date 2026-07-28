@@ -102,11 +102,3 @@ plugins:
       skip_classes:
         - skip-lightbox
 
-  - AI Generated Documentation:
-      - Greenfield Cloud Platform:
-          - Greenfield Cloud Platform HLD: 02-Architecture-and-Designs/01-High-Level-Designs/greenfield-cloud-platform-hld.md
-          - Greenfield Cloud Platform - Ai Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-ai-platform-lld.md
-          - Greenfield Cloud Platform - Data Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-data-platform-lld.md
-          - Greenfield Cloud Platform - Kubernetes LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-kubernetes-lld.md
-          - Greenfield Cloud Platform - Networking LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-networking-lld.md
-          - Greenfield Cloud Platform - Observability LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-observability-lld.md
