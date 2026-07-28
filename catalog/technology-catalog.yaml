@@ -1,16 +1,129 @@
 technologies:
 
-  kubernetes:
-    category: container
+  vsphere:
+    category: Virtualization
+    description: Core VMware virtualization platform.
 
-  kafka:
-    category: messaging
+  esxi:
+    category: Hypervisor
+    description: VMware ESXi hypervisor.
 
-  vector-db:
-    category: ai
+  vcenter:
+    category: Virtualization Management
+    description: Centralized virtual infrastructure management.
 
-  envoy:
-    category: networking
+  vsan:
+    category: Storage
+    description: VMware software-defined storage platform.
 
-  vault:
-    category: security
+  fibre-channel-storage:
+    category: Storage
+    description: External Fibre Channel SAN storage integration.
+
+  nsx-t:
+    category: Networking
+    description: VMware software-defined networking and security platform.
+
+  aria-automation:
+    category: Automation
+    description: Provisioning, orchestration and self-service automation.
+
+  aria-orchestrator:
+    category: Automation
+    description: Workflow automation platform.
+
+  ansible:
+    category: Automation
+    description: Infrastructure configuration and orchestration framework.
+
+  github-actions:
+    category: DevOps
+    description: CI/CD automation workflows.
+
+  aria-operations:
+    category: Monitoring
+    description: Infrastructure monitoring and operational analytics.
+
+  aria-logs:
+    category: Logging
+    description: Centralized log aggregation and analytics.
+
+  aria-network-insight:
+    category: Network Monitoring
+    description: Network visibility and analytics platform.
+
+  trend-micro:
+    category: Security
+    description: Endpoint protection and anti-malware.
+
+  nessus:
+    category: Security
+    description: Vulnerability scanning solution.
+
+  hashicorp-vault:
+    category: Security
+    description: Enterprise secrets and credential management.
+
+  vmware-nkp:
+    category: Security
+    description: Native key management for encryption services.
+
+  srm:
+    category: Disaster Recovery
+    description: VMware Site Recovery Manager.
+
+  vsphere-replication:
+    category: Disaster Recovery
+    description: VM-level replication platform.
+
+  vsan-stretched-cluster:
+    category: Disaster Recovery
+    description: Active-active site resilience.
+
+  canopy-enterprise-backup:
+    category: Backup
+    description: Enterprise backup platform.
+
+  avamar:
+    category: Backup
+    description: Backup and recovery software.
+
+  data-domain:
+    category: Backup
+    description: Backup storage appliance.
+
+  tanzu-kubernetes-grid:
+    category: Containers
+    description: Kubernetes runtime platform.
+
+  tanzu-mission-control:
+    category: Containers
+    description: Tanzu lifecycle and governance platform.
+
+  sddc-manager:
+    category: Lifecycle Management
+    description: VMware Cloud Foundation lifecycle automation.
+
+  vlcm:
+    category: Lifecycle Management
+    description: vSphere Lifecycle Manager.
+
+  aria-suite-lifecycle-manager:
+    category: Lifecycle Management
+    description: VMware Aria Suite lifecycle platform.
+
+  hcx:
+    category: Migration
+    description: Workload mobility and migration platform.
+
+  vmc:
+    category: Public Cloud
+    description: VMware Cloud based public cloud integration.
+
+  service-broker:
+    category: Service Catalog
+    description: Self-service service delivery portal.
+
+  cloud-db:
+    category: Billing
+    description: Usage and chargeback reporting service.
