@@ -1,6 +1,6 @@
 products:
 
-  vmware-cloud-services:
+  greenfield-cloud-platform:
 
     metadata:
       name: VMware Cloud Services
@@ -96,6 +96,7 @@ products:
       - service-broker
 
     architecture:
+
       principles:
         - Security by Design
         - Automation First
@@ -121,3 +122,12 @@ products:
         - Public Cloud Landing Zones
         - VMware Cloud
         - Customer ITSM Platforms
+
+    documents:
+
+      hld:
+        folder: docs/02-Architecture-and-Designs/01-High-Level-Designs
+        file: greenfield-cloud-platform-hld.md
+
+      lld:
+        folder: docs/02-Architecture-and-Designs/02-Low-Level-Designs
