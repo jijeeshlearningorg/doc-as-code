@@ -1,14 +1,14 @@
-# Greenfield Cloud Platform: High Level Design
+# VMware Cloud Services: High Level Design
 
 ## Document Control
 
 | Field | Value |
 |---|---|
-| Product | Greenfield Cloud Platform |
+| Product | VMware Cloud Services |
 | Product Key | `greenfield-cloud-platform` |
-| Version | 1.0 |
+| Version | 2.0 |
 | Status | Active |
-| Owner | Cloud Architecture Team |
+| Owner | Cloud Engineering |
 | Generated Date | 2026-07-28 |
 | Source Repository | `jijeeshlab/greenfield-code` |
 | Source Pull Request | `16/merge` |
@@ -52,30 +52,50 @@
 
 ### Purpose
 
-Provide a scalable, secure and automated cloud platform.
+Provide an enterprise-grade private and hybrid cloud platform capable of delivering virtual machines, container platforms, automation services and cloud integrations.
 
 
 This HLD is generated as a product-centric architecture document. Source code changes are used to identify impacted capabilities, but the HLD remains aligned to the overall product architecture.
 
 ### Audience
 
-- To Be Determined (TBD)
+- Enterprise Architects
+- Solution Architects
+- Cloud Engineers
+- Operations Teams
+- Security Teams
+- Service Delivery Teams
 
 ### Scope
 
 #### Deliverables in Scope
 
-- To Be Determined (TBD)
+- VMware Cloud Foundation
+- Software Defined Networking
+- Compute Virtualization
+- vSAN Storage
+- Container Platform Services
+- API Driven Service Delivery
+- Lifecycle Management
+- Monitoring and Reporting
+- Security and Compliance
+- Disaster Recovery
+- Multi-Tenancy
+- Public Cloud Integration
 
 #### Deliverables Out of Scope
 
-- To Be Determined (TBD)
+- Customer Specific Application Support
+- Customer ITSM Integration Projects
+- Managed Operating System Services
+- Application Development Services
+- Non Standard Hardware Integrations
 
 ---
 
 ## Product Design Overview
 
-Enterprise cloud platform providing networking, security, Kubernetes, observability, AI platform and data platform capabilities.
+VMware Cloud Services (VCS) is a private and hybrid cloud platform built on VMware Cloud Foundation providing compute, storage, networking, automation, monitoring, security, disaster recovery, container and multi-tenancy capabilities.
 
 
 The product is represented as a set of architectural capabilities rather than a one-to-one mapping of source files, functions or playbooks. This allows the HLD to describe the complete product solution.
@@ -86,11 +106,11 @@ The product is represented as a set of architectural capabilities rather than a 
 
 | Capability | Description | Technologies |
 | --- | --- | --- |
-| Ai Platform | AI services | vector-db |
-| Data Platform | Data platform services | kafka, vector-db |
-| Kubernetes | Container platform | kubernetes |
-| Networking | Network services | envoy |
-| Observability | Monitoring platform | TBD |
+| Ai Platform | Ai Platform | TBD |
+| Data Platform | Data Platform | TBD |
+| Kubernetes | Kubernetes | TBD |
+| Networking | NSX-T based virtual networking, routing, segmentation and connectivity services. | nsx-t, aria-network-insight |
+| Observability | Observability | TBD |
 
 ---
 
@@ -98,10 +118,32 @@ The product is represented as a set of architectural capabilities rather than a 
 
 | Technology | Category | Description |
 | --- | --- | --- |
-| Kubernetes | container | TBD |
-| Kafka | messaging | TBD |
-| Vector Db | ai | TBD |
-| Envoy | networking | TBD |
+| Vsphere | Virtualization | Core VMware virtualization platform. |
+| Esxi | Hypervisor | VMware ESXi hypervisor. |
+| Vcenter | Virtualization Management | Centralized virtual infrastructure management. |
+| Vsan | Storage | VMware software-defined storage platform. |
+| Nsx T | Networking | VMware software-defined networking and security platform. |
+| Aria Automation | Automation | Provisioning, orchestration and self-service automation. |
+| Aria Orchestrator | Automation | Workflow automation platform. |
+| Aria Operations | Monitoring | Infrastructure monitoring and operational analytics. |
+| Aria Logs | Logging | Centralized log aggregation and analytics. |
+| Aria Network Insight | Network Monitoring | Network visibility and analytics platform. |
+| Tanzu Kubernetes Grid | Containers | Kubernetes runtime platform. |
+| Tanzu Mission Control | Containers | Tanzu lifecycle and governance platform. |
+| Sddc Manager | Lifecycle Management | VMware Cloud Foundation lifecycle automation. |
+| Vlcm | Lifecycle Management | vSphere Lifecycle Manager. |
+| Aria Suite Lifecycle Manager | Lifecycle Management | VMware Aria Suite lifecycle platform. |
+| Trend Micro | Security | Endpoint protection and anti-malware. |
+| Nessus | Security | Vulnerability scanning solution. |
+| Hashicorp Vault | Security | Enterprise secrets and credential management. |
+| Canopy Enterprise Backup | Backup | Enterprise backup platform. |
+| Avamar | Backup | Backup and recovery software. |
+| Data Domain | Backup | Backup storage appliance. |
+| Srm | Disaster Recovery | VMware Site Recovery Manager. |
+| Vsphere Replication | Disaster Recovery | VM-level replication platform. |
+| Hcx | Migration | Workload mobility and migration platform. |
+| Vmc | Public Cloud | VMware Cloud based public cloud integration. |
+| Service Broker | Service Catalog | Self-service service delivery portal. |
 
 ---
 
@@ -109,13 +151,20 @@ The product is represented as a set of architectural capabilities rather than a 
 
 ### Architecture Principles
 
-- To Be Determined (TBD)
+- Security by Design
+- Automation First
+- API First
+- Infrastructure as Code
+- Documentation as Code
+- Multi-Tenant Ready
+- Lifecycle Managed
+- Cloud Native Ready
 
 ### Conceptual Architecture
 
 ```mermaid
 graph TD
-    Product[Greenfield Cloud Platform] --> Capabilities[Product Capabilities]
+    Product[VMware Cloud Services] --> Capabilities[Product Capabilities]
     Capabilities --> Networking[Networking]
     Capabilities --> Security[Security]
     Capabilities --> Kubernetes[Kubernetes Platform]
@@ -129,11 +178,16 @@ graph TD
 
 ### Integration Overview
 
-- GitHub
-- GitHub Actions
-- MkDocs
-- Documentation Repository
-- Source Code Repositories
+- Active Directory
+- DNS
+- NTP
+- Canopy Enterprise Backup
+- Trend Micro
+- Nessus
+- ServiceNow
+- Public Cloud Landing Zones
+- VMware Cloud
+- Customer ITSM Platforms
 
 ---
 

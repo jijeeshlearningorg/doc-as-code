@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Product | Greenfield Cloud Platform |
+| Product | VMware Cloud Services |
 | Product Key | `greenfield-cloud-platform` |
 | Capability | Data Platform |
 | Capability Key | `data-platform` |
@@ -30,7 +30,7 @@
 
 ## 1. Introduction
 
-Data platform services
+Data Platform
 
 This LLD provides implementation-level traceability for the capability identified from source code changes.
 

@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Product | Greenfield Cloud Platform |
+| Product | VMware Cloud Services |
 | Product Key | `greenfield-cloud-platform` |
 | Capability | Kubernetes |
 | Capability Key | `kubernetes` |
@@ -30,7 +30,7 @@
 
 ## 1. Introduction
 
-Container platform
+Kubernetes
 
 This LLD provides implementation-level traceability for the capability identified from source code changes.
 
