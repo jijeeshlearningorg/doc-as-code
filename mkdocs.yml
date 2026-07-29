@@ -47,8 +47,8 @@ theme:
   icon:
     repo: fontawesome/brands/github
 
-  logo: images/logos/New_Atos_logo_white.png
-  favicon: images/logos/Atos_logo_blue.png
+  logo: images/logos/dummy_logo.png
+  favicon: images/logos/dummy_logo.png
 
 ######### navigation here #######################################################
 # add link to your content here, but do not change any other section in this yaml
