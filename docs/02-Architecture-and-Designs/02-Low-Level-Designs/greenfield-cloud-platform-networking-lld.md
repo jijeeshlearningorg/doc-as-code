@@ -8,9 +8,9 @@
 | Product Key | `greenfield-cloud-platform` |
 | Capability | Networking |
 | Capability Key | `networking` |
-| Generated Date | 2026-07-28 |
-| Source Repository | `jijeeshlab/greenfield-code` |
-| Source Pull Request | `16/merge` |
+| Generated Date | 2026-07-29 |
+| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Source Pull Request | `2/merge` |
 | Source PR Title |  |
 
 ---

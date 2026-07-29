@@ -9,9 +9,9 @@
 | Version | 2.0 |
 | Status | Active |
 | Owner | Cloud Engineering |
-| Generated Date | 2026-07-28 |
-| Source Repository | `jijeeshlab/greenfield-code` |
-| Source Pull Request | `16/merge` |
+| Generated Date | 2026-07-29 |
+| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Source Pull Request | `2/merge` |
 | Source PR Title |  |
 | Generation Mode | `product-centric` |
 
@@ -225,6 +225,7 @@ The platform should support modular scaling according to the capabilities define
 ### Changed Files
 
 - `.github/documentation-map.yaml`
+- `.github/workflows/test.yml`
 - `scripts/detect-impact.py`
 - `src/deploy.py`
 
