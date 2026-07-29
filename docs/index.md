@@ -1,8 +1,8 @@
 # Summary
 
-Welcome to the ATOS VMware Cloud Services (VCS) Documentation Portal.
+Welcome to the Test documentation Portal.
 
-This repository contains the official documentation for **VCS 3.0 and later releases**, including architecture, deployment, operations, security, lifecycle management, and work instructions.
+This repository contains the Test content of documentation as code project, including architecture, deployment, operations, security, lifecycle management, and work instructions.
 
 The documentation is organized into logical sections to help engineers, administrators, architects, and support teams quickly locate the information required to deploy, operate, maintain, and troubleshoot the VCS platform.
 
@@ -23,15 +23,8 @@ The repository is organized into the following areas:
 
 This documentation portal is intended for:
 
-- VCS 3.0 and later releases
 - Current platform architecture and operational procedures
 - Active product lifecycle documentation
-
-## Previous VCS Releases
-
-Documentation for versions prior to VCS 3.0 is maintained in the legacy documentation portal:
-
-👉 **[Legacy VCS Documentation Portal](https://sturdy-telegram-b864ffc2.pages.github.io/)**
 
 ## Recommended Usage
 
@@ -43,7 +36,7 @@ When using this documentation:
 4. Follow Work Instructions for detailed operational procedures.
 
 !!! note
-    Always ensure that the documentation version matches your deployed VCS environment version.
+    Always ensure that the documentation version 
 
 !!! tip
     Use the navigation menu on the left to browse documentation by functional area.
