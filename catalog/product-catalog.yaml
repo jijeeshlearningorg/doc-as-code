@@ -3,14 +3,14 @@ products:
   greenfield-cloud-platform:
 
     metadata:
-      name: VMware Cloud Services
-      version: "2.0"
+      name: My Cloud Services
+      version: "1.0"
       owner: Cloud Engineering
       status: Active
 
     overview:
       description: >
-        VMware Cloud Services (VCS) is a private and hybrid cloud platform
+        My Cloud Services is a private and hybrid cloud platform
         built on VMware Cloud Foundation providing compute, storage,
         networking, automation, monitoring, security, disaster recovery,
         container and multi-tenancy capabilities.
