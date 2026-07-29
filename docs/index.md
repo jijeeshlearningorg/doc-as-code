@@ -4,7 +4,7 @@ Welcome to the Test documentation Portal.
 
 This repository contains the Test content of documentation as code project, including architecture, deployment, operations, security, lifecycle management, and work instructions.
 
-The documentation is organized into logical sections to help engineers, administrators, architects, and support teams quickly locate the information required to deploy, operate, maintain, and troubleshoot the VCS platform.
+The documentation is organized into logical sections to help engineers, administrators, architects, and support teams quickly locate the information required to deploy, operate, maintain, and troubleshoot the cloud platform.
 
 ## Documentation Structure
 
