@@ -51,7 +51,7 @@ jobs:
           rm -rf _actions
 
           git clone \
-            https://x-access-token:${PAT}@github.com/jijeeshlab/Actions.git \
+            https://x-access-token:${PAT}@github.com/jijeeshlearningorg/Actions.git \
             _actions
 
       - name: Clone Template Repository
@@ -61,7 +61,7 @@ jobs:
           rm -rf template
 
           git clone \
-            https://x-access-token:${PAT}@github.com/jijeeshlab/doc-templete.git \
+            https://x-access-token:${PAT}@github.com/jijeeshlearningorg/doc-templete.git \
             template
 
       - name: Verify Catalog Files
