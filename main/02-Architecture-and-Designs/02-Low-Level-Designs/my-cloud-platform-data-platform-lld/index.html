@@ -8,26 +8,28 @@
       
       
       
+        <link rel="prev" href="../my-cloud-platform-ai-platform-lld/">
       
-        <link rel="next" href="02-Architecture-and-Designs/01-High-Level-Designs/my-cloud-platform-hld/">
+      
+        <link rel="next" href="../my-cloud-platform-kubernetes-lld/">
       
       
         
       
       
-      <link rel="icon" href="images/logos/dummy_logo.png">
+      <link rel="icon" href="../../../images/logos/dummy_logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Test Page</title>
+        <title>Low Level Design: Data Platform - Test Page</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -40,15 +42,15 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extended.css">
+      <link rel="stylesheet" href="../../../stylesheets/extended.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
-  <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+  <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
             html.glightbox-open { overflow: initial; height: 100%; }
             .gslide-title { margin-top: 0px; user-select: text; }
             .gslide-desc { color: #666; user-select: text; }
@@ -77,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#summary" class="md-skip">
+        <a href="#low-level-design-data-platform" class="md-skip">
           Skip to content
         </a>
       
@@ -97,9 +99,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Test Page" class="md-header__button md-logo" aria-label="Test Page" data-md-component="logo">
+    <a href="../../.." title="Test Page" class="md-header__button md-logo" aria-label="Test Page" data-md-component="logo">
       
-  <img src="images/logos/dummy_logo.png" alt="logo">
+  <img src="../../../images/logos/dummy_logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -116,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Summary
+              Low Level Design: Data Platform
             
           </span>
         </div>
@@ -232,9 +234,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Test Page" class="md-nav__button md-logo" aria-label="Test Page" data-md-component="logo">
+    <a href="../../.." title="Test Page" class="md-nav__button md-logo" aria-label="Test Page" data-md-component="logo">
       
-  <img src="images/logos/dummy_logo.png" alt="logo">
+  <img src="../../../images/logos/dummy_logo.png" alt="logo">
 
     </a>
     Test Page
@@ -258,37 +260,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Summary
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -304,59 +279,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-      
-        <li class="md-nav__item">
-  <a href="#documentation-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation Structure
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#supported-versions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported Versions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#recommended-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Recommended Usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -365,18 +287,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked="">
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -397,7 +321,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -462,7 +386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/01-High-Level-Designs/my-cloud-platform-hld/" class="md-nav__link">
+      <a href="../../01-High-Level-Designs/my-cloud-platform-hld/" class="md-nav__link">
         
   
   
@@ -495,18 +419,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked="">
         
           
           <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
@@ -527,7 +453,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -545,7 +471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-ai-platform-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-ai-platform-lld/" class="md-nav__link">
         
   
   
@@ -570,10 +496,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-data-platform-lld/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Level Design: Data Platform
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -589,6 +542,65 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#document-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent Context
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agent Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lld-agent-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLD Agent Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -601,7 +613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-kubernetes-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-kubernetes-lld/" class="md-nav__link">
         
   
   
@@ -629,7 +641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-networking-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-networking-lld/" class="md-nav__link">
         
   
   
@@ -657,7 +669,7 @@
   
   
     <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-observability-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-observability-lld/" class="md-nav__link">
         
   
   
@@ -685,7 +697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-security-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-security-lld/" class="md-nav__link">
         
   
   
@@ -775,7 +787,7 @@
   
   
     <li class="md-nav__item">
-      <a href="08-Migrations-and-Projects/migration-platform-hld/" class="md-nav__link">
+      <a href="../../../08-Migrations-and-Projects/migration-platform-hld/" class="md-nav__link">
         
   
   
@@ -803,7 +815,7 @@
   
   
     <li class="md-nav__item">
-      <a href="08-Migrations-and-Projects/migration-platform-lld/" class="md-nav__link">
+      <a href="../../../08-Migrations-and-Projects/migration-platform-lld/" class="md-nav__link">
         
   
   
@@ -858,10 +870,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
-  <a href="#documentation-structure" class="md-nav__link">
+  <a href="#document-control" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation Structure
+        Document Control
       
     </span>
   </a>
@@ -869,24 +881,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#supported-versions" class="md-nav__link">
+  <a href="#agent-context" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supported Versions
+        Agent Context
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agent Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lld-agent-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLD Agent Summary
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#recommended-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Recommended Usage
-      
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -910,44 +928,202 @@
   
 
 
-<h1 id="summary">Summary</h1>
-<p>Welcome to the Test documentation Portal.</p>
-<p>This repository contains the Test content of documentation as code project, including architecture, deployment, operations, security, lifecycle management, and work instructions.</p>
-<p>The documentation is organized into logical sections to help engineers, administrators, architects, and support teams quickly locate the information required to deploy, operate, maintain, and troubleshoot the cloud platform.</p>
-<h2 id="documentation-structure">Documentation Structure</h2>
-<p>The repository is organized into the following areas:</p>
+<h1 id="low-level-design-data-platform">Low Level Design: Data Platform</h1>
+<h2 id="document-control">Document Control</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product</td>
+<td>My Cloud Services</td>
+</tr>
+<tr>
+<td>Product Key</td>
+<td><code>my-cloud-platform</code></td>
+</tr>
+<tr>
+<td>Capability</td>
+<td>Data Platform</td>
+</tr>
+<tr>
+<td>Capability Key</td>
+<td><code>data-platform</code></td>
+</tr>
+<tr>
+<td>Generated Date</td>
+<td>2026-07-30</td>
+</tr>
+<tr>
+<td>Source Repository</td>
+<td><code>jijeeshlearningorg/greenfield-code</code></td>
+</tr>
+<tr>
+<td>Source Pull Request</td>
+<td><code>3/merge</code></td>
+</tr>
+<tr>
+<td>Source PR Title</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="agent-context">Agent Context</h2>
+<table>
+<thead>
+<tr>
+<th>Agent File</th>
+<th>Loaded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lld-agent.md</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>diagram-agent.md</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="lld-agent-summary">LLD Agent Summary</h3>
+<h1 id="low-level-design-agent-role-you-are-a-solution-architect-and-documentation-agent-your-task-is-to-generate-a-complete-low-level-design-document-based-on-source-code-pull-request-details-existing-documentation-lld-template">Low Level Design Agent ## Role You are a Solution Architect and Documentation Agent. Your task is to generate a complete Low-Level Design document based on: - Source code - Pull request details - Existing documentation - LLD template</h1>
+<hr>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>Data Platform</p>
+<p>This LLD provides implementation-level traceability for the capability identified from source code changes.</p>
+<hr>
+<h2 id="2-detailed-design">2. Detailed Design</h2>
+<h3 id="21-source-files">2.1 Source Files</h3>
 <ul>
-<li>Release Notes</li>
-<li>Architecture and Designs</li>
-<li>Service Management</li>
-<li>Build and Installation</li>
-<li>Operations and Support</li>
-<li>Work Instructions</li>
-<li>Security and Compliance</li>
-<li>Migrations and Projects</li>
+<li><code>src/deploy.py</code></li>
 </ul>
-<h2 id="supported-versions">Supported Versions</h2>
-<p>This documentation portal is intended for:</p>
+<h3 id="22-function-inventory">2.2 Function Inventory</h3>
 <ul>
-<li>Current platform architecture and operational procedures</li>
-<li>Active product lifecycle documentation</li>
+<li><code>deploy_clinical_analytics_platform()</code></li>
+<li><code>deploy_core_banking_platform()</code></li>
+<li><code>deploy_credit_processing_service()</code></li>
+<li><code>deploy_ecommerce_platform()</code></li>
+<li><code>deploy_fraud_detection_engine()</code></li>
+<li><code>deploy_inventory_tracking_platform()</code></li>
+<li><code>deploy_loan_management_platform()</code></li>
+<li><code>deploy_medical_record_service()</code></li>
+<li><code>deploy_order_management_service()</code></li>
+<li><code>deploy_patient_management_platform()</code></li>
+<li><code>deploy_payment_gateway_service()</code></li>
+<li><code>deploy_route_optimization_platform()</code></li>
+<li><code>deploy_shipment_tracking_service()</code></li>
+<li><code>deploy_warehouse_management_service()</code></li>
 </ul>
-<h2 id="recommended-usage">Recommended Usage</h2>
-<p>When using this documentation:</p>
-<ol>
-<li>Ensure you are viewing the correct documentation version from the version selector.</li>
-<li>Refer to the associated Release Notes before performing upgrades or lifecycle activities.</li>
-<li>Use Architecture, Build, and Operations documentation together for implementation and support activities.</li>
-<li>Follow Work Instructions for detailed operational procedures.</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Always ensure that the documentation version </p>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Use the navigation menu on the left to browse documentation by functional area.</p>
-</div>
+<h3 id="23-function-details">2.3 Function Details</h3>
+<h3 id="source-file-srcdeploypy">Source File: <code>src/deploy.py</code></h3>
+<p><strong>Parse Status:</strong> <code>ast_success</code></p>
+<h4 id="function-deploy_core_banking_platform">Function: <code>deploy_core_banking_platform</code></h4>
+<p><strong>Description:</strong> Deploys core banking services.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_credit_processing_service">Function: <code>deploy_credit_processing_service</code></h4>
+<p><strong>Description:</strong> Deploys credit processing service.</p>
+<p><strong>Parameters:</strong> service_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_loan_management_platform">Function: <code>deploy_loan_management_platform</code></h4>
+<p><strong>Description:</strong> Deploys loan management services.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_payment_gateway_service">Function: <code>deploy_payment_gateway_service</code></h4>
+<p><strong>Description:</strong> Deploys payment gateway services.</p>
+<p><strong>Parameters:</strong> gateway_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_fraud_detection_engine">Function: <code>deploy_fraud_detection_engine</code></h4>
+<p><strong>Description:</strong> Deploys fraud detection services.</p>
+<p><strong>Parameters:</strong> engine_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_patient_management_platform">Function: <code>deploy_patient_management_platform</code></h4>
+<p><strong>Description:</strong> Deploys patient management platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_medical_record_service">Function: <code>deploy_medical_record_service</code></h4>
+<p><strong>Description:</strong> Deploys medical record services.</p>
+<p><strong>Parameters:</strong> service_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_clinical_analytics_platform">Function: <code>deploy_clinical_analytics_platform</code></h4>
+<p><strong>Description:</strong> Deploys clinical analytics platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_ecommerce_platform">Function: <code>deploy_ecommerce_platform</code></h4>
+<p><strong>Description:</strong> Deploys ecommerce services.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_order_management_service">Function: <code>deploy_order_management_service</code></h4>
+<p><strong>Description:</strong> Deploys order management services.</p>
+<p><strong>Parameters:</strong> service_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_inventory_tracking_platform">Function: <code>deploy_inventory_tracking_platform</code></h4>
+<p><strong>Description:</strong> Deploys inventory tracking platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_shipment_tracking_service">Function: <code>deploy_shipment_tracking_service</code></h4>
+<p><strong>Description:</strong> Deploys shipment tracking services.</p>
+<p><strong>Parameters:</strong> service_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_route_optimization_platform">Function: <code>deploy_route_optimization_platform</code></h4>
+<p><strong>Description:</strong> Deploys route optimization platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_warehouse_management_service">Function: <code>deploy_warehouse_management_service</code></h4>
+<p><strong>Description:</strong> Deploys warehouse management services.</p>
+<p><strong>Parameters:</strong> service_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h3 id="24-sequence-diagram">2.4 Sequence Diagram</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Developer
+    participant SourceRepo
+    participant DocPipeline
+    participant DocsRepo
+    Developer-&gt;&gt;SourceRepo: Submit code change
+    SourceRepo-&gt;&gt;DocPipeline: Detect capability impact
+    DocPipeline-&gt;&gt;DocsRepo: Generate LLD update</code></pre>
+<hr>
+<h2 id="3-database-design">3. Database Design</h2>
+<p>No database schema was detected from the changed files unless explicitly described in source code.</p>
+<hr>
+<h2 id="4-api-endpoint-specification">4. API Endpoint Specification</h2>
+<p>No API endpoint was detected unless explicitly described in source code.</p>
+<hr>
+<h2 id="5-error-handling">5. Error Handling</h2>
+<ul>
+<li>Validate input parameters.</li>
+<li>Log operational events without exposing sensitive data.</li>
+<li>Avoid silent failures.</li>
+<li>Return predictable status values.</li>
+</ul>
+<hr>
+<h2 id="6-security-considerations">6. Security Considerations</h2>
+<ul>
+<li>Do not log secrets, tokens, keys or passwords.</li>
+<li>Use GitHub Secrets for automation credentials.</li>
+<li>Review generated documentation before publication.</li>
+</ul>
+<hr>
+<h2 id="7-unit-test-cases">7. Unit Test Cases</h2>
+<ul>
+<li>Positive path validation.</li>
+<li>Negative path validation.</li>
+<li>Invalid input validation.</li>
+<li>Boundary condition validation.</li>
+</ul>
+<hr>
+<h2 id="8-open-questions">8. Open Questions</h2>
+<ul>
+<li>Are additional implementation details required from the engineering team?</li>
+<li>Should this capability require a dedicated ADR?</li>
+</ul>
 
 
 
@@ -968,7 +1144,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 29, 2026 14:32:13 UTC">July 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 30, 2026 12:00:23 UTC">July 30, 2026</span>
   </span>
 
     
@@ -1022,10 +1198,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   

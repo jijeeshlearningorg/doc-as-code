@@ -8,10 +8,10 @@
       
       
       
-        <link rel="prev" href="../greenfield-cloud-platform-networking-lld/">
+        <link rel="prev" href="../my-cloud-platform-networking-lld/">
       
       
-        <link rel="next" href="../../../08-Migrations-and-Projects/migration-platform-hld/">
+        <link rel="next" href="../my-cloud-platform-security-lld/">
       
       
         
@@ -386,7 +386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../01-High-Level-Designs/greenfield-cloud-platform-hld/" class="md-nav__link">
+      <a href="../../01-High-Level-Designs/my-cloud-platform-hld/" class="md-nav__link">
         
   
   
@@ -471,7 +471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../greenfield-cloud-platform-ai-platform-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-ai-platform-lld/" class="md-nav__link">
         
   
   
@@ -499,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../greenfield-cloud-platform-data-platform-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-data-platform-lld/" class="md-nav__link">
         
   
   
@@ -527,7 +527,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../greenfield-cloud-platform-kubernetes-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-kubernetes-lld/" class="md-nav__link">
         
   
   
@@ -555,7 +555,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../greenfield-cloud-platform-networking-lld/" class="md-nav__link">
+      <a href="../my-cloud-platform-networking-lld/" class="md-nav__link">
         
   
   
@@ -685,6 +685,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../my-cloud-platform-security-lld/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Level Design: Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -916,7 +944,7 @@
 </tr>
 <tr>
 <td>Product Key</td>
-<td><code>greenfield-cloud-platform</code></td>
+<td><code>my-cloud-platform</code></td>
 </tr>
 <tr>
 <td>Capability</td>
@@ -928,7 +956,7 @@
 </tr>
 <tr>
 <td>Generated Date</td>
-<td>2026-07-29</td>
+<td>2026-07-30</td>
 </tr>
 <tr>
 <td>Source Repository</td>
@@ -936,7 +964,7 @@
 </tr>
 <tr>
 <td>Source Pull Request</td>
-<td><code>2/merge</code></td>
+<td><code>3/merge</code></td>
 </tr>
 <tr>
 <td>Source PR Title</td>
@@ -978,139 +1006,79 @@
 </ul>
 <h3 id="22-function-inventory">2.2 Function Inventory</h3>
 <ul>
-<li><code>deploy_ai_gateway()</code></li>
-<li><code>deploy_ai_observability_platform()</code></li>
-<li><code>deploy_api_gateway()</code></li>
-<li><code>deploy_application_load_balancer()</code></li>
-<li><code>deploy_backup_replication_service()</code></li>
-<li><code>deploy_data_lakehouse()</code></li>
-<li><code>deploy_disaster_recovery_gateway()</code></li>
-<li><code>deploy_document_intelligence_service()</code></li>
-<li><code>deploy_event_stream_platform()</code></li>
-<li><code>deploy_ingress_controller()</code></li>
-<li><code>deploy_kubernetes_cluster()</code></li>
-<li><code>deploy_model_serving_endpoint()</code></li>
-<li><code>deploy_observability_stack()</code></li>
-<li><code>deploy_private_dns_zone()</code></li>
-<li><code>deploy_prompt_management_service()</code></li>
-<li><code>deploy_rag_platform()</code></li>
-<li><code>deploy_secrets_management()</code></li>
-<li><code>deploy_security_operations_platform()</code></li>
-<li><code>deploy_service_mesh()</code></li>
-<li><code>deploy_storage_gateway()</code></li>
-<li><code>deploy_stream_analytics_platform()</code></li>
-<li><code>deploy_vector_database()</code></li>
-<li><code>deploy_vpn_gateway()</code></li>
-<li><code>deploy_zero_trust_access_policy()</code></li>
-<li><code>provision_zero_trust_network()</code></li>
-<li><code>validate_network_segmentation()</code></li>
+<li><code>deploy_clinical_analytics_platform()</code></li>
+<li><code>deploy_core_banking_platform()</code></li>
+<li><code>deploy_credit_processing_service()</code></li>
+<li><code>deploy_ecommerce_platform()</code></li>
+<li><code>deploy_fraud_detection_engine()</code></li>
+<li><code>deploy_inventory_tracking_platform()</code></li>
+<li><code>deploy_loan_management_platform()</code></li>
+<li><code>deploy_medical_record_service()</code></li>
+<li><code>deploy_order_management_service()</code></li>
+<li><code>deploy_patient_management_platform()</code></li>
+<li><code>deploy_payment_gateway_service()</code></li>
+<li><code>deploy_route_optimization_platform()</code></li>
+<li><code>deploy_shipment_tracking_service()</code></li>
+<li><code>deploy_warehouse_management_service()</code></li>
 </ul>
 <h3 id="23-function-details">2.3 Function Details</h3>
 <h3 id="source-file-srcdeploypy">Source File: <code>src/deploy.py</code></h3>
 <p><strong>Parse Status:</strong> <code>ast_success</code></p>
-<h4 id="function-provision_zero_trust_network">Function: <code>provision_zero_trust_network</code></h4>
-<p><strong>Description:</strong> Provisions zero trust network segmentation.</p>
-<p><strong>Parameters:</strong> cidr_block</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-validate_network_segmentation">Function: <code>validate_network_segmentation</code></h4>
-<p><strong>Description:</strong> Validates network segmentation policies.</p>
-<p><strong>Parameters:</strong> segment_name</p>
-<p><strong>Returns:</strong> bool</p>
-<h4 id="function-deploy_application_load_balancer">Function: <code>deploy_application_load_balancer</code></h4>
-<p><strong>Description:</strong> Deploys application load balancer.</p>
-<p><strong>Parameters:</strong> load_balancer_name, vip_address</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_private_dns_zone">Function: <code>deploy_private_dns_zone</code></h4>
-<p><strong>Description:</strong> Deploys private DNS services.</p>
-<p><strong>Parameters:</strong> zone_name</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_vpn_gateway">Function: <code>deploy_vpn_gateway</code></h4>
-<p><strong>Description:</strong> Deploys VPN gateway service.</p>
-<p><strong>Parameters:</strong> gateway_name, public_ip</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_storage_gateway">Function: <code>deploy_storage_gateway</code></h4>
-<p><strong>Description:</strong> Deploys storage gateway service.</p>
-<p><strong>Parameters:</strong> gateway_name, storage_pool</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_disaster_recovery_gateway">Function: <code>deploy_disaster_recovery_gateway</code></h4>
-<p><strong>Description:</strong> Deploys disaster recovery gateway services.</p>
-<p><strong>Parameters:</strong> gateway_name, recovery_site</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_backup_replication_service">Function: <code>deploy_backup_replication_service</code></h4>
-<p><strong>Description:</strong> Deploys backup and replication services.</p>
-<p><strong>Parameters:</strong> policy_name, retention_days</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_observability_stack">Function: <code>deploy_observability_stack</code></h4>
-<p><strong>Description:</strong> Deploys observability platform.</p>
-<p><strong>Parameters:</strong> stack_name, monitoring_enabled</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_ai_observability_platform">Function: <code>deploy_ai_observability_platform</code></h4>
-<p><strong>Description:</strong> Deploys AI observability and governance platform.</p>
+<h4 id="function-deploy_core_banking_platform">Function: <code>deploy_core_banking_platform</code></h4>
+<p><strong>Description:</strong> Deploys core banking services.</p>
 <p><strong>Parameters:</strong> platform_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_kubernetes_cluster">Function: <code>deploy_kubernetes_cluster</code></h4>
-<p><strong>Description:</strong> Deploys Kubernetes cluster.</p>
-<p><strong>Parameters:</strong> cluster_name, worker_count</p>
+<h4 id="function-deploy_credit_processing_service">Function: <code>deploy_credit_processing_service</code></h4>
+<p><strong>Description:</strong> Deploys credit processing service.</p>
+<p><strong>Parameters:</strong> service_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_ingress_controller">Function: <code>deploy_ingress_controller</code></h4>
-<p><strong>Description:</strong> Deploys ingress controller.</p>
-<p><strong>Parameters:</strong> controller_name</p>
+<h4 id="function-deploy_loan_management_platform">Function: <code>deploy_loan_management_platform</code></h4>
+<p><strong>Description:</strong> Deploys loan management services.</p>
+<p><strong>Parameters:</strong> platform_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_service_mesh">Function: <code>deploy_service_mesh</code></h4>
-<p><strong>Description:</strong> Deploys service mesh architecture.</p>
-<p><strong>Parameters:</strong> mesh_name</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_api_gateway">Function: <code>deploy_api_gateway</code></h4>
-<p><strong>Description:</strong> Deploys API gateway platform.</p>
+<h4 id="function-deploy_payment_gateway_service">Function: <code>deploy_payment_gateway_service</code></h4>
+<p><strong>Description:</strong> Deploys payment gateway services.</p>
 <p><strong>Parameters:</strong> gateway_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_secrets_management">Function: <code>deploy_secrets_management</code></h4>
-<p><strong>Description:</strong> Deploys secrets management service.</p>
-<p><strong>Parameters:</strong> vault_name</p>
+<h4 id="function-deploy_fraud_detection_engine">Function: <code>deploy_fraud_detection_engine</code></h4>
+<p><strong>Description:</strong> Deploys fraud detection services.</p>
+<p><strong>Parameters:</strong> engine_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_zero_trust_access_policy">Function: <code>deploy_zero_trust_access_policy</code></h4>
-<p><strong>Description:</strong> Deploys zero trust access policies.</p>
-<p><strong>Parameters:</strong> policy_name</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_security_operations_platform">Function: <code>deploy_security_operations_platform</code></h4>
-<p><strong>Description:</strong> Deploys security operations platform.</p>
+<h4 id="function-deploy_patient_management_platform">Function: <code>deploy_patient_management_platform</code></h4>
+<p><strong>Description:</strong> Deploys patient management platform.</p>
 <p><strong>Parameters:</strong> platform_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_event_stream_platform">Function: <code>deploy_event_stream_platform</code></h4>
-<p><strong>Description:</strong> Deploys Kafka event streaming platform.</p>
-<p><strong>Parameters:</strong> cluster_name</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_ai_gateway">Function: <code>deploy_ai_gateway</code></h4>
-<p><strong>Description:</strong> Deploys AI gateway service.</p>
-<p><strong>Parameters:</strong> gateway_name, model_provider</p>
-<p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_document_intelligence_service">Function: <code>deploy_document_intelligence_service</code></h4>
-<p><strong>Description:</strong> Deploys document intelligence services.</p>
+<h4 id="function-deploy_medical_record_service">Function: <code>deploy_medical_record_service</code></h4>
+<p><strong>Description:</strong> Deploys medical record services.</p>
 <p><strong>Parameters:</strong> service_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_model_serving_endpoint">Function: <code>deploy_model_serving_endpoint</code></h4>
-<p><strong>Description:</strong> Deploys AI model serving endpoint.</p>
-<p><strong>Parameters:</strong> endpoint_name, model_name</p>
+<h4 id="function-deploy_clinical_analytics_platform">Function: <code>deploy_clinical_analytics_platform</code></h4>
+<p><strong>Description:</strong> Deploys clinical analytics platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_prompt_management_service">Function: <code>deploy_prompt_management_service</code></h4>
-<p><strong>Description:</strong> Deploys prompt management services.</p>
+<h4 id="function-deploy_ecommerce_platform">Function: <code>deploy_ecommerce_platform</code></h4>
+<p><strong>Description:</strong> Deploys ecommerce services.</p>
+<p><strong>Parameters:</strong> platform_name</p>
+<p><strong>Returns:</strong> dict</p>
+<h4 id="function-deploy_order_management_service">Function: <code>deploy_order_management_service</code></h4>
+<p><strong>Description:</strong> Deploys order management services.</p>
 <p><strong>Parameters:</strong> service_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_data_lakehouse">Function: <code>deploy_data_lakehouse</code></h4>
-<p><strong>Description:</strong> Deploys enterprise data lakehouse platform.</p>
-<p><strong>Parameters:</strong> storage_account, container_name</p>
+<h4 id="function-deploy_inventory_tracking_platform">Function: <code>deploy_inventory_tracking_platform</code></h4>
+<p><strong>Description:</strong> Deploys inventory tracking platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_stream_analytics_platform">Function: <code>deploy_stream_analytics_platform</code></h4>
-<p><strong>Description:</strong> Deploys streaming analytics platform.</p>
-<p><strong>Parameters:</strong> cluster_name</p>
+<h4 id="function-deploy_shipment_tracking_service">Function: <code>deploy_shipment_tracking_service</code></h4>
+<p><strong>Description:</strong> Deploys shipment tracking services.</p>
+<p><strong>Parameters:</strong> service_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_vector_database">Function: <code>deploy_vector_database</code></h4>
-<p><strong>Description:</strong> Deploys vector database service.</p>
-<p><strong>Parameters:</strong> database_name</p>
+<h4 id="function-deploy_route_optimization_platform">Function: <code>deploy_route_optimization_platform</code></h4>
+<p><strong>Description:</strong> Deploys route optimization platform.</p>
+<p><strong>Parameters:</strong> platform_name</p>
 <p><strong>Returns:</strong> dict</p>
-<h4 id="function-deploy_rag_platform">Function: <code>deploy_rag_platform</code></h4>
-<p><strong>Description:</strong> Deploys Retrieval Augmented Generation platform.</p>
-<p><strong>Parameters:</strong> vector_database, embedding_model</p>
+<h4 id="function-deploy_warehouse_management_service">Function: <code>deploy_warehouse_management_service</code></h4>
+<p><strong>Description:</strong> Deploys warehouse management services.</p>
+<p><strong>Parameters:</strong> service_name</p>
 <p><strong>Returns:</strong> dict</p>
 <h3 id="24-sequence-diagram">2.4 Sequence Diagram</h3>
 <pre class="mermaid"><code>sequenceDiagram
@@ -1176,7 +1144,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 29, 2026 14:59:07 UTC">July 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 30, 2026 12:00:23 UTC">July 30, 2026</span>
   </span>
 
     
