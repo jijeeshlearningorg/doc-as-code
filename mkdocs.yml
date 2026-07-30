@@ -110,3 +110,7 @@ plugins:
           - My Cloud Services - Kubernetes LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-kubernetes-lld.md
           - My Cloud Services - Networking LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-networking-lld.md
           - My Cloud Services - Observability LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-observability-lld.md
+
+  - AI Generated Documentation:
+      - My Cloud Services:
+          - My Cloud Services - Security LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-security-lld.md

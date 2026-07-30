@@ -111,6 +111,7 @@ The product is represented as a set of architectural capabilities rather than a 
 | Kubernetes | Kubernetes | TBD |
 | Networking | NSX-T based virtual networking, routing, segmentation and connectivity services. | nsx-t, aria-network-insight |
 | Observability | Observability | TBD |
+| Security | Platform security controls, vulnerability management and compliance automation. | trend-micro, nessus, hashicorp-vault, vmware-nkp |
 
 ---
 
@@ -228,6 +229,7 @@ The platform should support modular scaling according to the capabilities define
 - `.github/workflows/test.yml`
 - `scripts/detect-impact.py`
 - `src/deploy.py`
+- `src/security_vault.py`
 
 ### Impacted Capability Mapping
 
@@ -238,11 +240,13 @@ The platform should support modular scaling according to the capabilities define
 | Kubernetes | `src/deploy.py` |
 | Networking | `src/deploy.py` |
 | Observability | `src/deploy.py` |
+| Security | `src/security_vault.py` |
 
 ### Detected Implementation Functions
 
 The following implementation functions were detected from changed source files. They are supporting traceability only and should not drive the HLD structure.
 
+- `bind_customer_key()`
 - `build_doc_request()`
 - `build_impacted_capabilities()`
 - `deploy_clinical_analytics_platform()`
