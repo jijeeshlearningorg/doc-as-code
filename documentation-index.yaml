@@ -1,9 +1,9 @@
 products:
 
-  greenfield-cloud-platform:
+  my-cloud-platform:
 
     metadata:
-      display_name: Greenfield Cloud Platform
+      display_name: My Cloud Platform
       category: Architecture
       nav_group: Architecture and Designs
 
@@ -19,7 +19,7 @@ products:
       - data-platform
 
     hld:
-      docs/02-Architecture-and-Designs/01-High-Level-Designs/greenfield-cloud-platform-hld.md
+      docs/02-Architecture-and-Designs/01-High-Level-Designs/my-cloud-platform-hld.md
 
     lld_folder:
       docs/02-Architecture-and-Designs/02-Low-Level-Designs
