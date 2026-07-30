@@ -102,28 +102,3 @@ plugins:
       skip_classes:
         - skip-lightbox
 
-  - AI Generated Documentation:
-      - My Cloud Services:
-          - My Cloud Services HLD: 02-Architecture-and-Designs/01-High-Level-Designs/greenfield-cloud-platform-hld.md
-          - My Cloud Services - Ai Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-ai-platform-lld.md
-          - My Cloud Services - Data Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-data-platform-lld.md
-          - My Cloud Services - Kubernetes LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-kubernetes-lld.md
-          - My Cloud Services - Networking LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-networking-lld.md
-          - My Cloud Services - Observability LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-observability-lld.md
-
-  - AI Generated Documentation:
-      - My Cloud Services:
-          - My Cloud Services - Security LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/greenfield-cloud-platform-security-lld.md
-
-  - AI Generated Documentation:
-      - My Cloud Services:
-          - My Cloud Services - Ai Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-ai-platform-lld.md
-          - My Cloud Services - Data Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-data-platform-lld.md
-          - My Cloud Services - Kubernetes LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-kubernetes-lld.md
-          - My Cloud Services - Networking LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-networking-lld.md
-          - My Cloud Services - Observability LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-observability-lld.md
-          - My Cloud Services - Security LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-security-lld.md
-
-  - AI Generated Documentation:
-      - My Cloud Services:
-          - My Cloud Services HLD: 02-Architecture-and-Designs/01-High-Level-Designs/my-cloud-platform-hld.md
