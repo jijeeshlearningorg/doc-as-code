@@ -10,7 +10,7 @@
 | Capability Key | `data-platform` |
 | Generated Date | 2026-07-30 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
-| Source Pull Request | `2/merge` |
+| Source Pull Request | `3/merge` |
 | Source PR Title |  |
 
 ---
@@ -44,32 +44,20 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.2 Function Inventory
 
-- `deploy_ai_gateway()`
-- `deploy_ai_observability_platform()`
-- `deploy_api_gateway()`
-- `deploy_application_load_balancer()`
-- `deploy_backup_replication_service()`
-- `deploy_data_lakehouse()`
-- `deploy_disaster_recovery_gateway()`
-- `deploy_document_intelligence_service()`
-- `deploy_event_stream_platform()`
-- `deploy_ingress_controller()`
-- `deploy_kubernetes_cluster()`
-- `deploy_model_serving_endpoint()`
-- `deploy_observability_stack()`
-- `deploy_private_dns_zone()`
-- `deploy_prompt_management_service()`
-- `deploy_rag_platform()`
-- `deploy_secrets_management()`
-- `deploy_security_operations_platform()`
-- `deploy_service_mesh()`
-- `deploy_storage_gateway()`
-- `deploy_stream_analytics_platform()`
-- `deploy_vector_database()`
-- `deploy_vpn_gateway()`
-- `deploy_zero_trust_access_policy()`
-- `provision_zero_trust_network()`
-- `validate_network_segmentation()`
+- `deploy_clinical_analytics_platform()`
+- `deploy_core_banking_platform()`
+- `deploy_credit_processing_service()`
+- `deploy_ecommerce_platform()`
+- `deploy_fraud_detection_engine()`
+- `deploy_inventory_tracking_platform()`
+- `deploy_loan_management_platform()`
+- `deploy_medical_record_service()`
+- `deploy_order_management_service()`
+- `deploy_patient_management_platform()`
+- `deploy_payment_gateway_service()`
+- `deploy_route_optimization_platform()`
+- `deploy_shipment_tracking_service()`
+- `deploy_warehouse_management_service()`
 
 ### 2.3 Function Details
 
@@ -77,211 +65,115 @@ This LLD provides implementation-level traceability for the capability identifie
 
 **Parse Status:** `ast_success`
 
-#### Function: `provision_zero_trust_network`
+#### Function: `deploy_core_banking_platform`
 
-**Description:** Provisions zero trust network segmentation.
-
-**Parameters:** cidr_block
-
-**Returns:** dict
-
-#### Function: `validate_network_segmentation`
-
-**Description:** Validates network segmentation policies.
-
-**Parameters:** segment_name
-
-**Returns:** bool
-
-#### Function: `deploy_application_load_balancer`
-
-**Description:** Deploys application load balancer.
-
-**Parameters:** load_balancer_name, vip_address
-
-**Returns:** dict
-
-#### Function: `deploy_private_dns_zone`
-
-**Description:** Deploys private DNS services.
-
-**Parameters:** zone_name
-
-**Returns:** dict
-
-#### Function: `deploy_vpn_gateway`
-
-**Description:** Deploys VPN gateway service.
-
-**Parameters:** gateway_name, public_ip
-
-**Returns:** dict
-
-#### Function: `deploy_storage_gateway`
-
-**Description:** Deploys storage gateway service.
-
-**Parameters:** gateway_name, storage_pool
-
-**Returns:** dict
-
-#### Function: `deploy_disaster_recovery_gateway`
-
-**Description:** Deploys disaster recovery gateway services.
-
-**Parameters:** gateway_name, recovery_site
-
-**Returns:** dict
-
-#### Function: `deploy_backup_replication_service`
-
-**Description:** Deploys backup and replication services.
-
-**Parameters:** policy_name, retention_days
-
-**Returns:** dict
-
-#### Function: `deploy_observability_stack`
-
-**Description:** Deploys observability platform.
-
-**Parameters:** stack_name, monitoring_enabled
-
-**Returns:** dict
-
-#### Function: `deploy_ai_observability_platform`
-
-**Description:** Deploys AI observability and governance platform.
+**Description:** Deploys core banking services.
 
 **Parameters:** platform_name
 
 **Returns:** dict
 
-#### Function: `deploy_kubernetes_cluster`
+#### Function: `deploy_credit_processing_service`
 
-**Description:** Deploys Kubernetes cluster.
+**Description:** Deploys credit processing service.
 
-**Parameters:** cluster_name, worker_count
-
-**Returns:** dict
-
-#### Function: `deploy_ingress_controller`
-
-**Description:** Deploys ingress controller.
-
-**Parameters:** controller_name
+**Parameters:** service_name
 
 **Returns:** dict
 
-#### Function: `deploy_service_mesh`
+#### Function: `deploy_loan_management_platform`
 
-**Description:** Deploys service mesh architecture.
+**Description:** Deploys loan management services.
 
-**Parameters:** mesh_name
+**Parameters:** platform_name
 
 **Returns:** dict
 
-#### Function: `deploy_api_gateway`
+#### Function: `deploy_payment_gateway_service`
 
-**Description:** Deploys API gateway platform.
+**Description:** Deploys payment gateway services.
 
 **Parameters:** gateway_name
 
 **Returns:** dict
 
-#### Function: `deploy_secrets_management`
+#### Function: `deploy_fraud_detection_engine`
 
-**Description:** Deploys secrets management service.
+**Description:** Deploys fraud detection services.
 
-**Parameters:** vault_name
-
-**Returns:** dict
-
-#### Function: `deploy_zero_trust_access_policy`
-
-**Description:** Deploys zero trust access policies.
-
-**Parameters:** policy_name
+**Parameters:** engine_name
 
 **Returns:** dict
 
-#### Function: `deploy_security_operations_platform`
+#### Function: `deploy_patient_management_platform`
 
-**Description:** Deploys security operations platform.
+**Description:** Deploys patient management platform.
 
 **Parameters:** platform_name
 
 **Returns:** dict
 
-#### Function: `deploy_event_stream_platform`
+#### Function: `deploy_medical_record_service`
 
-**Description:** Deploys Kafka event streaming platform.
-
-**Parameters:** cluster_name
-
-**Returns:** dict
-
-#### Function: `deploy_ai_gateway`
-
-**Description:** Deploys AI gateway service.
-
-**Parameters:** gateway_name, model_provider
-
-**Returns:** dict
-
-#### Function: `deploy_document_intelligence_service`
-
-**Description:** Deploys document intelligence services.
+**Description:** Deploys medical record services.
 
 **Parameters:** service_name
 
 **Returns:** dict
 
-#### Function: `deploy_model_serving_endpoint`
+#### Function: `deploy_clinical_analytics_platform`
 
-**Description:** Deploys AI model serving endpoint.
+**Description:** Deploys clinical analytics platform.
 
-**Parameters:** endpoint_name, model_name
+**Parameters:** platform_name
 
 **Returns:** dict
 
-#### Function: `deploy_prompt_management_service`
+#### Function: `deploy_ecommerce_platform`
 
-**Description:** Deploys prompt management services.
+**Description:** Deploys ecommerce services.
+
+**Parameters:** platform_name
+
+**Returns:** dict
+
+#### Function: `deploy_order_management_service`
+
+**Description:** Deploys order management services.
 
 **Parameters:** service_name
 
 **Returns:** dict
 
-#### Function: `deploy_data_lakehouse`
+#### Function: `deploy_inventory_tracking_platform`
 
-**Description:** Deploys enterprise data lakehouse platform.
+**Description:** Deploys inventory tracking platform.
 
-**Parameters:** storage_account, container_name
-
-**Returns:** dict
-
-#### Function: `deploy_stream_analytics_platform`
-
-**Description:** Deploys streaming analytics platform.
-
-**Parameters:** cluster_name
+**Parameters:** platform_name
 
 **Returns:** dict
 
-#### Function: `deploy_vector_database`
+#### Function: `deploy_shipment_tracking_service`
 
-**Description:** Deploys vector database service.
+**Description:** Deploys shipment tracking services.
 
-**Parameters:** database_name
+**Parameters:** service_name
 
 **Returns:** dict
 
-#### Function: `deploy_rag_platform`
+#### Function: `deploy_route_optimization_platform`
 
-**Description:** Deploys Retrieval Augmented Generation platform.
+**Description:** Deploys route optimization platform.
 
-**Parameters:** vector_database, embedding_model
+**Parameters:** platform_name
+
+**Returns:** dict
+
+#### Function: `deploy_warehouse_management_service`
+
+**Description:** Deploys warehouse management services.
+
+**Parameters:** service_name
 
 **Returns:** dict
 

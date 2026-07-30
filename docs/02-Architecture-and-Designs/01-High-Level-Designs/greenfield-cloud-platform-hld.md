@@ -11,7 +11,7 @@
 | Owner | Cloud Engineering |
 | Generated Date | 2026-07-30 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
-| Source Pull Request | `2/merge` |
+| Source Pull Request | `3/merge` |
 | Source PR Title |  |
 | Generation Mode | `product-centric` |
 
@@ -245,30 +245,20 @@ The following implementation functions were detected from changed source files. 
 
 - `build_doc_request()`
 - `build_impacted_capabilities()`
-- `deploy_ai_gateway()`
-- `deploy_ai_observability_platform()`
-- `deploy_api_gateway()`
-- `deploy_application_load_balancer()`
-- `deploy_backup_replication_service()`
-- `deploy_data_lakehouse()`
-- `deploy_disaster_recovery_gateway()`
-- `deploy_document_intelligence_service()`
-- `deploy_event_stream_platform()`
-- `deploy_ingress_controller()`
-- `deploy_kubernetes_cluster()`
-- `deploy_model_serving_endpoint()`
-- `deploy_observability_stack()`
-- `deploy_private_dns_zone()`
-- `deploy_prompt_management_service()`
-- `deploy_rag_platform()`
-- `deploy_secrets_management()`
-- `deploy_security_operations_platform()`
-- `deploy_service_mesh()`
-- `deploy_storage_gateway()`
-- `deploy_stream_analytics_platform()`
-- `deploy_vector_database()`
-- `deploy_vpn_gateway()`
-- `deploy_zero_trust_access_policy()`
+- `deploy_clinical_analytics_platform()`
+- `deploy_core_banking_platform()`
+- `deploy_credit_processing_service()`
+- `deploy_ecommerce_platform()`
+- `deploy_fraud_detection_engine()`
+- `deploy_inventory_tracking_platform()`
+- `deploy_loan_management_platform()`
+- `deploy_medical_record_service()`
+- `deploy_order_management_service()`
+- `deploy_patient_management_platform()`
+- `deploy_payment_gateway_service()`
+- `deploy_route_optimization_platform()`
+- `deploy_shipment_tracking_service()`
+- `deploy_warehouse_management_service()`
 - `get_pull_request_number()`
 - `get_pull_request_title()`
 - `get_pull_request_url()`
@@ -276,13 +266,11 @@ The following implementation functions were detected from changed source files. 
 - `get_repository_name()`
 - `main()`
 - `normalize_path()`
-- `provision_zero_trust_network()`
 - `read_changed_files()`
 - `read_yaml()`
 - `resolve_capabilities_for_changed_file()`
 - `resolve_product()`
 - `unique_sorted()`
-- `validate_network_segmentation()`
 - `write_json()`
 
 ---
