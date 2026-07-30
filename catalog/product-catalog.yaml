@@ -127,7 +127,6 @@ products:
 
       hld:
         folder: docs/02-Architecture-and-Designs/01-High-Level-Designs
-        file: greenfield-cloud-platform-hld.md
-
+        
       lld:
         folder: docs/02-Architecture-and-Designs/02-Low-Level-Designs
