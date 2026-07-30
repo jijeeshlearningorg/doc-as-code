@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Product | My Cloud Services |
-| Product Key | `greenfield-cloud-platform` |
+| Product Key | `my-cloud-platform` |
 | Version | 1.0 |
 | Status | Active |
 | Owner | Cloud Engineering |
@@ -226,7 +226,6 @@ The platform should support modular scaling according to the capabilities define
 ### Changed Files
 
 - `.github/documentation-map.yaml`
-- `.github/workflows/test.yml`
 - `scripts/detect-impact.py`
 - `src/deploy.py`
 - `src/security_vault.py`
