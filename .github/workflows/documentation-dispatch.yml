@@ -274,7 +274,12 @@ jobs:
           rm -f doc-request.json
 
       - name: Commit Documentation
+        env:
+          PAT: ${{ secrets.CENTRAL_DOCS_TOKEN }}
         run: |
+
+          set -e
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
@@ -289,23 +294,27 @@ jobs:
           fi
 
           if git diff --cached --quiet; then
-            echo "No documentation changes."
+            echo "=================================="
+            echo "NO DOCUMENTATION CHANGES"
+            echo "=================================="
             exit 0
           fi
 
+          echo "=================================="
+          echo "COMMITTING DOCUMENTATION"
+          echo "=================================="
+
           git commit -m "Generate Copilot architecture documentation"
 
-          for i in 1 2 3
-          do
-            git pull --rebase origin main
+          echo "=================================="
+          echo "PUSHING GENERATED DOCUMENTATION"
+          echo "=================================="
 
-            if git push origin HEAD:main
-            then
-              echo "Push successful"
-              exit 0
-            fi
+          git push \
+            https://x-access-token:${PAT}@github.com/jijeeshlearningorg/doc-as-code.git \
+            HEAD:main \
+            --force-with-lease
 
-            sleep 5
-          done
-
-          exit 1
+          echo "=================================="
+          echo "DOCUMENTATION PUSH COMPLETE"
+          echo "=================================="
