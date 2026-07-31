@@ -58,39 +58,20 @@
 | Field | Value |
 |----------|----------|
 | Product | My Cloud Services |
-| Source Repository | `jijeeshlearningorg/brownfield-code` |
+| Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Generated Date | 2026-07-31 |
 
 ### Impacted Capabilities
 
-- capacity-management
-- lifecycle-management
-- migration
-- observability
+- To Be Determined (TBD)
 
 ### Changed Files
 
-- src/capacity_calc.py
-- src/migrate.py
-- src/patch.py
-- src/rollback.py
-- src/upgrade.py
-- src/validation.py
+- .github/workflows/documentation-impact.yml
 
 ### Detected Functions
 
-- apply_security_patch
-- calculate_energy_savings
-- check_patch_compliance
-- create_restore_point
-- estimate_capacity_growth
-- evacuate_virtual_machines
-- execute_rollback
-- generate_capacity_recommendation
-- migrate_legacy_hardware_node
-- validate_migration_prerequisites
-- validate_patch_success
-- verify_rollback_status
+- To Be Determined (TBD)
 
 ## 3.1 Service Purpose
 
