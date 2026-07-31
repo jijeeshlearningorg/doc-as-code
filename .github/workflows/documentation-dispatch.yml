@@ -307,14 +307,21 @@ jobs:
           git commit -m "Generate Copilot architecture documentation"
 
           echo "=================================="
+          echo "REFRESHING REMOTE STATE"
+          echo "=================================="
+
+          git fetch origin main
+
+          echo "=================================="
           echo "PUSHING GENERATED DOCUMENTATION"
           echo "=================================="
 
           git push \
             https://x-access-token:${PAT}@github.com/jijeeshlearningorg/doc-as-code.git \
             HEAD:main \
-            --force-with-lease
+            --force
 
           echo "=================================="
           echo "DOCUMENTATION PUSH COMPLETE"
           echo "=================================="
+``
