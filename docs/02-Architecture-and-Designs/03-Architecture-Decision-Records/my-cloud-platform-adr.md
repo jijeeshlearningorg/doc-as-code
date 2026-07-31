@@ -15,20 +15,28 @@
 | Field | Value |
 |----------|----------|
 | Product | My Cloud Services |
-| Source Repository | `jijeeshlearningorg/brownfield-code` |
+| Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Generated Date | 2026-07-31 |
 
 ### Impacted Capabilities
 
-- To Be Determined (TBD)
+- ai-platform
+- data-platform
+- kubernetes
+- networking
+- observability
 
 ### Changed Files
 
-- .github/workflows/documentation-impact.yml
+- src/deploy.py
 
 ### Detected Functions
 
-- To Be Determined (TBD)
+- deploy_ai_platform
+- deploy_data_platform
+- deploy_kubernetes_platform
+- deploy_network_foundation
+- validate_platform_observability
 
 Describe the architectural design issue you’re addressing, leaving no questions about why you’re addressing this issue now. Following a minimalist approach, address and document only the issues that need addressing at various points in the life cycle.
 

@@ -240,7 +240,11 @@ Recommended:
 
 | Capability | Description | Technologies |
 | ---------- | ---------- | ---------- |
-|  |  |  |
+| Ai Platform | ai-platform | To Be Determined (TBD) |
+| Data Platform | data-platform | To Be Determined (TBD) |
+| Kubernetes | kubernetes | To Be Determined (TBD) |
+| Networking | NSX-T based virtual networking, routing, segmentation and connectivity services. | nsx-t, aria-network-insight |
+| Observability | observability | To Be Determined (TBD) |
 
 | Component | Purpose | Key Technology |
 |----------|----------|----------|
@@ -549,20 +553,28 @@ Document unresolved decisions and pending discussions.
 | Field | Value |
 |----------|----------|
 | Product | My Cloud Services |
-| Source Repository | `jijeeshlearningorg/brownfield-code` |
+| Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Generated Date | 2026-07-31 |
 
 ### Impacted Capabilities
 
-- To Be Determined (TBD)
+- ai-platform
+- data-platform
+- kubernetes
+- networking
+- observability
 
 ### Changed Files
 
-- .github/workflows/documentation-impact.yml
+- src/deploy.py
 
 ### Detected Functions
 
-- To Be Determined (TBD)
+- deploy_ai_platform
+- deploy_data_platform
+- deploy_kubernetes_platform
+- deploy_network_foundation
+- validate_platform_observability
 
 ## 21.1 Constraints & Limits
 
