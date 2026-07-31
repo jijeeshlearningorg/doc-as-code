@@ -8,9 +8,9 @@
 | Product Key | `my-cloud-platform` |
 | Capability | Data Platform |
 | Capability Key | `data-platform` |
-| Generated Date | 2026-07-30 |
+| Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
-| Source Pull Request | `3/merge` |
+| Source Pull Request | `main` |
 | Source PR Title |  |
 
 ---
@@ -44,20 +44,11 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.2 Function Inventory
 
-- `deploy_clinical_analytics_platform()`
-- `deploy_core_banking_platform()`
-- `deploy_credit_processing_service()`
-- `deploy_ecommerce_platform()`
-- `deploy_fraud_detection_engine()`
-- `deploy_inventory_tracking_platform()`
-- `deploy_loan_management_platform()`
-- `deploy_medical_record_service()`
-- `deploy_order_management_service()`
-- `deploy_patient_management_platform()`
-- `deploy_payment_gateway_service()`
-- `deploy_route_optimization_platform()`
-- `deploy_shipment_tracking_service()`
-- `deploy_warehouse_management_service()`
+- `deploy_ai_platform()`
+- `deploy_data_platform()`
+- `deploy_kubernetes_platform()`
+- `deploy_network_foundation()`
+- `validate_platform_observability()`
 
 ### 2.3 Function Details
 
@@ -65,117 +56,45 @@ This LLD provides implementation-level traceability for the capability identifie
 
 **Parse Status:** `ast_success`
 
-#### Function: `deploy_core_banking_platform`
+#### Function: `deploy_network_foundation`
 
-**Description:** Deploys core banking services.
+**Description:** Deploys core networking components for a new cloud platform.
 
-**Parameters:** platform_name
+**Parameters:** region
 
-**Returns:** dict
+**Returns:** bool
 
-#### Function: `deploy_credit_processing_service`
+#### Function: `deploy_kubernetes_platform`
 
-**Description:** Deploys credit processing service.
+**Description:** Deploys Kubernetes platform services for cloud workloads.
 
-**Parameters:** service_name
+**Parameters:** cluster_name
 
-**Returns:** dict
+**Returns:** bool
 
-#### Function: `deploy_loan_management_platform`
+#### Function: `deploy_ai_platform`
 
-**Description:** Deploys loan management services.
+**Description:** Deploys AI platform services and model hosting infrastructure.
 
-**Parameters:** platform_name
+**Parameters:** environment
 
-**Returns:** dict
+**Returns:** bool
 
-#### Function: `deploy_payment_gateway_service`
+#### Function: `deploy_data_platform`
 
-**Description:** Deploys payment gateway services.
+**Description:** Deploys enterprise data services and analytics platform.
 
-**Parameters:** gateway_name
+**Parameters:** environment
 
-**Returns:** dict
+**Returns:** bool
 
-#### Function: `deploy_fraud_detection_engine`
+#### Function: `validate_platform_observability`
 
-**Description:** Deploys fraud detection services.
+**Description:** Validates monitoring, logging and observability configuration.
 
-**Parameters:** engine_name
+**Parameters:** environment
 
-**Returns:** dict
-
-#### Function: `deploy_patient_management_platform`
-
-**Description:** Deploys patient management platform.
-
-**Parameters:** platform_name
-
-**Returns:** dict
-
-#### Function: `deploy_medical_record_service`
-
-**Description:** Deploys medical record services.
-
-**Parameters:** service_name
-
-**Returns:** dict
-
-#### Function: `deploy_clinical_analytics_platform`
-
-**Description:** Deploys clinical analytics platform.
-
-**Parameters:** platform_name
-
-**Returns:** dict
-
-#### Function: `deploy_ecommerce_platform`
-
-**Description:** Deploys ecommerce services.
-
-**Parameters:** platform_name
-
-**Returns:** dict
-
-#### Function: `deploy_order_management_service`
-
-**Description:** Deploys order management services.
-
-**Parameters:** service_name
-
-**Returns:** dict
-
-#### Function: `deploy_inventory_tracking_platform`
-
-**Description:** Deploys inventory tracking platform.
-
-**Parameters:** platform_name
-
-**Returns:** dict
-
-#### Function: `deploy_shipment_tracking_service`
-
-**Description:** Deploys shipment tracking services.
-
-**Parameters:** service_name
-
-**Returns:** dict
-
-#### Function: `deploy_route_optimization_platform`
-
-**Description:** Deploys route optimization platform.
-
-**Parameters:** platform_name
-
-**Returns:** dict
-
-#### Function: `deploy_warehouse_management_service`
-
-**Description:** Deploys warehouse management services.
-
-**Parameters:** service_name
-
-**Returns:** dict
+**Returns:** bool
 
 
 ### 2.4 Sequence Diagram
@@ -235,4 +154,3 @@ No API endpoint was detected unless explicitly described in source code.
 
 - Are additional implementation details required from the engineering team?
 - Should this capability require a dedicated ADR?
-

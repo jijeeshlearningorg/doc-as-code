@@ -111,3 +111,15 @@ plugins:
   - AI Generated Documentation:
       - My Cloud Services:
           - My Cloud Services - Migration LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-migration-lld.md
+
+  - AI Generated Documentation:
+      - My Cloud Services:
+          - My Cloud Services - Ai Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-ai-platform-lld.md
+          - My Cloud Services - Api Service Broker LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-api-service-broker-lld.md
+          - My Cloud Services - Automation LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-automation-lld.md
+          - My Cloud Services - Backup LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-backup-lld.md
+          - My Cloud Services - Data Platform LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-data-platform-lld.md
+          - My Cloud Services - Disaster Recovery LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-disaster-recovery-lld.md
+          - My Cloud Services - Kubernetes LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-kubernetes-lld.md
+          - My Cloud Services - Networking LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-networking-lld.md
+          - My Cloud Services - Observability LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-observability-lld.md

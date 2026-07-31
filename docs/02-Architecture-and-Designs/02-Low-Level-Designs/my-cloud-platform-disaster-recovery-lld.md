@@ -1,4 +1,4 @@
-# Low Level Design: Security
+# Low Level Design: Disaster Recovery
 
 ## Document Control
 
@@ -6,8 +6,8 @@
 |---|---|
 | Product | My Cloud Services |
 | Product Key | `my-cloud-platform` |
-| Capability | Security |
-| Capability Key | `security` |
+| Capability | Disaster Recovery |
+| Capability Key | `disaster-recovery` |
 | Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Source Pull Request | `main` |
@@ -30,7 +30,7 @@
 
 ## 1. Introduction
 
-Platform security controls, vulnerability management and compliance automation.
+Site protection, workload replication and recovery capabilities.
 
 This LLD provides implementation-level traceability for the capability identified from source code changes.
 
@@ -40,61 +40,52 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.1 Source Files
 
-- `src/security_vault.py`
+- `src/dr_platform.py`
 
 ### 2.2 Function Inventory
 
-- `assign_key_to_service()`
-- `create_customer_managed_key()`
-- `create_vault_namespace()`
-- `rotate_encryption_key()`
-- `validate_vault_policy()`
+- `create_recovery_plan()`
+- `execute_site_failover()`
+- `generate_dr_readiness_report()`
+- `validate_recovery_objectives()`
 
 ### 2.3 Function Details
 
-### Source File: `src/security_vault.py`
+### Source File: `src/dr_platform.py`
 
-**Parse Status:** `ast_success`
+**Parse Status:** `ast_failed_regex_fallback`
 
-#### Function: `create_vault_namespace`
+#### Function: `create_recovery_plan`
 
-**Description:** Creates a secure namespace within the enterprise vault platform.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** namespace_name
+**Parameters:** application_name
 
-**Returns:** bool
+**Returns:** Not detected
 
-#### Function: `create_customer_managed_key`
+#### Function: `execute_site_failover`
 
-**Description:** Creates a customer-managed encryption key.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** key_name
+**Parameters:** target_site
 
-**Returns:** str
+**Returns:** Not detected
 
-#### Function: `rotate_encryption_key`
+#### Function: `validate_recovery_objectives`
 
-**Description:** Rotates an existing encryption key.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** key_name
+**Parameters:** application_name
 
-**Returns:** bool
+**Returns:** Not detected
 
-#### Function: `assign_key_to_service`
+#### Function: `generate_dr_readiness_report`
 
-**Description:** Associates an encryption key with a platform service.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** key_name, service_name
+**Parameters:** None
 
-**Returns:** bool
-
-#### Function: `validate_vault_policy`
-
-**Description:** Validates vault security policy assignment.
-
-**Parameters:** policy_name
-
-**Returns:** bool
+**Returns:** Not detected
 
 
 ### 2.4 Sequence Diagram

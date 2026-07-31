@@ -1,4 +1,4 @@
-# Low Level Design: Security
+# Low Level Design: Automation
 
 ## Document Control
 
@@ -6,8 +6,8 @@
 |---|---|
 | Product | My Cloud Services |
 | Product Key | `my-cloud-platform` |
-| Capability | Security |
-| Capability Key | `security` |
+| Capability | Automation |
+| Capability Key | `automation` |
 | Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Source Pull Request | `main` |
@@ -30,7 +30,7 @@
 
 ## 1. Introduction
 
-Platform security controls, vulnerability management and compliance automation.
+Automated provisioning, lifecycle management and service delivery.
 
 This LLD provides implementation-level traceability for the capability identified from source code changes.
 
@@ -40,59 +40,51 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.1 Source Files
 
-- `src/security_vault.py`
+- `src/automation.py`
 
 ### 2.2 Function Inventory
 
-- `assign_key_to_service()`
-- `create_customer_managed_key()`
-- `create_vault_namespace()`
-- `rotate_encryption_key()`
-- `validate_vault_policy()`
+- `deploy_configuration_baseline()`
+- `execute_platform_workflow()`
+- `provision_infrastructure()`
+- `validate_automation_results()`
 
 ### 2.3 Function Details
 
-### Source File: `src/security_vault.py`
+### Source File: `src/automation.py`
 
 **Parse Status:** `ast_success`
 
-#### Function: `create_vault_namespace`
+#### Function: `provision_infrastructure`
 
-**Description:** Creates a secure namespace within the enterprise vault platform.
+**Description:** Automates infrastructure provisioning using
+infrastructure-as-code principles.
 
-**Parameters:** namespace_name
-
-**Returns:** bool
-
-#### Function: `create_customer_managed_key`
-
-**Description:** Creates a customer-managed encryption key.
-
-**Parameters:** key_name
-
-**Returns:** str
-
-#### Function: `rotate_encryption_key`
-
-**Description:** Rotates an existing encryption key.
-
-**Parameters:** key_name
+**Parameters:** environment_name
 
 **Returns:** bool
 
-#### Function: `assign_key_to_service`
+#### Function: `execute_platform_workflow`
 
-**Description:** Associates an encryption key with a platform service.
+**Description:** Executes platform automation workflows.
 
-**Parameters:** key_name, service_name
+**Parameters:** workflow_name
 
 **Returns:** bool
 
-#### Function: `validate_vault_policy`
+#### Function: `deploy_configuration_baseline`
 
-**Description:** Validates vault security policy assignment.
+**Description:** Applies standard platform configuration baselines.
 
-**Parameters:** policy_name
+**Parameters:** environment_name
+
+**Returns:** bool
+
+#### Function: `validate_automation_results`
+
+**Description:** Validates automation execution outcome.
+
+**Parameters:** workflow_name
 
 **Returns:** bool
 

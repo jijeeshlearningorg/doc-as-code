@@ -1,4 +1,4 @@
-# Low Level Design: Security
+# Low Level Design: Api Service Broker
 
 ## Document Control
 
@@ -6,8 +6,8 @@
 |---|---|
 | Product | My Cloud Services |
 | Product Key | `my-cloud-platform` |
-| Capability | Security |
-| Capability Key | `security` |
+| Capability | Api Service Broker |
+| Capability Key | `api-service-broker` |
 | Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Source Pull Request | `main` |
@@ -30,7 +30,7 @@
 
 ## 1. Introduction
 
-Platform security controls, vulnerability management and compliance automation.
+Service consumption layer exposing VCS functionality through APIs and service catalog.
 
 This LLD provides implementation-level traceability for the capability identified from source code changes.
 
@@ -40,59 +40,50 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.1 Source Files
 
-- `src/security_vault.py`
+- `src/service_broker.py`
 
 ### 2.2 Function Inventory
 
-- `assign_key_to_service()`
-- `create_customer_managed_key()`
-- `create_vault_namespace()`
-- `rotate_encryption_key()`
-- `validate_vault_policy()`
+- `create_service_offering()`
+- `publish_service_catalog()`
+- `register_platform_api()`
+- `validate_api_subscription()`
 
 ### 2.3 Function Details
 
-### Source File: `src/security_vault.py`
+### Source File: `src/service_broker.py`
 
 **Parse Status:** `ast_success`
 
-#### Function: `create_vault_namespace`
+#### Function: `publish_service_catalog`
 
-**Description:** Creates a secure namespace within the enterprise vault platform.
+**Description:** Publishes a cloud service catalog.
 
-**Parameters:** namespace_name
-
-**Returns:** bool
-
-#### Function: `create_customer_managed_key`
-
-**Description:** Creates a customer-managed encryption key.
-
-**Parameters:** key_name
-
-**Returns:** str
-
-#### Function: `rotate_encryption_key`
-
-**Description:** Rotates an existing encryption key.
-
-**Parameters:** key_name
+**Parameters:** catalog_name
 
 **Returns:** bool
 
-#### Function: `assign_key_to_service`
+#### Function: `register_platform_api`
 
-**Description:** Associates an encryption key with a platform service.
+**Description:** Registers a new platform API endpoint.
 
-**Parameters:** key_name, service_name
+**Parameters:** api_name
 
 **Returns:** bool
 
-#### Function: `validate_vault_policy`
+#### Function: `create_service_offering`
 
-**Description:** Validates vault security policy assignment.
+**Description:** Creates a self-service catalog offering.
 
-**Parameters:** policy_name
+**Parameters:** service_name
+
+**Returns:** bool
+
+#### Function: `validate_api_subscription`
+
+**Description:** Validates API consumer subscriptions.
+
+**Parameters:** subscription_id
 
 **Returns:** bool
 
