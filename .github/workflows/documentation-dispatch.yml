@@ -167,6 +167,8 @@ jobs:
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_MODEL: openrouter/free
+          OPENROUTER_MAX_TOKENS: "8192"
+          OPENROUTER_TEMPERATURE: "0.2"
           FAIL_ON_AI_ERROR: false
         run: |
           echo "=================================="
