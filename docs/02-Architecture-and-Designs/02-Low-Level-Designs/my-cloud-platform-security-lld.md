@@ -8,9 +8,9 @@
 | Product Key | `my-cloud-platform` |
 | Capability | Security |
 | Capability Key | `security` |
-| Generated Date | 2026-07-30 |
+| Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
-| Source Pull Request | `3/merge` |
+| Source Pull Request | `main` |
 | Source PR Title |  |
 
 ---

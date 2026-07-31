@@ -102,3 +102,8 @@ plugins:
       skip_classes:
         - skip-lightbox
 
+
+  - AI Generated Documentation:
+      - My Cloud Services:
+          - My Cloud Services HLD: 02-Architecture-and-Designs/01-High-Level-Designs/my-cloud-platform-hld.md
+          - My Cloud Services - Security LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-security-lld.md

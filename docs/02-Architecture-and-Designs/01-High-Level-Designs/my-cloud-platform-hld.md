@@ -9,9 +9,9 @@
 | Version | 1.0 |
 | Status | Active |
 | Owner | Cloud Engineering |
-| Generated Date | 2026-07-30 |
+| Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
-| Source Pull Request | `3/merge` |
+| Source Pull Request | `main` |
 | Source PR Title |  |
 | Generation Mode | `product-centric` |
 
@@ -106,11 +106,6 @@ The product is represented as a set of architectural capabilities rather than a 
 
 | Capability | Description | Technologies |
 | --- | --- | --- |
-| Ai Platform | Ai Platform | TBD |
-| Data Platform | Data Platform | TBD |
-| Kubernetes | Kubernetes | TBD |
-| Networking | NSX-T based virtual networking, routing, segmentation and connectivity services. | nsx-t, aria-network-insight |
-| Observability | Observability | TBD |
 | Security | Platform security controls, vulnerability management and compliance automation. | trend-micro, nessus, hashicorp-vault, vmware-nkp |
 
 ---
@@ -225,20 +220,12 @@ The platform should support modular scaling according to the capabilities define
 
 ### Changed Files
 
-- `.github/documentation-map.yaml`
-- `scripts/detect-impact.py`
-- `src/deploy.py`
 - `src/security_vault.py`
 
 ### Impacted Capability Mapping
 
 | Capability | Changed Files |
 | --- | --- |
-| Ai Platform | `src/deploy.py` |
-| Data Platform | `src/deploy.py` |
-| Kubernetes | `src/deploy.py` |
-| Networking | `src/deploy.py` |
-| Observability | `src/deploy.py` |
 | Security | `src/security_vault.py` |
 
 ### Detected Implementation Functions
@@ -246,35 +233,6 @@ The platform should support modular scaling according to the capabilities define
 The following implementation functions were detected from changed source files. They are supporting traceability only and should not drive the HLD structure.
 
 - `bind_customer_key()`
-- `build_doc_request()`
-- `build_impacted_capabilities()`
-- `deploy_clinical_analytics_platform()`
-- `deploy_core_banking_platform()`
-- `deploy_credit_processing_service()`
-- `deploy_ecommerce_platform()`
-- `deploy_fraud_detection_engine()`
-- `deploy_inventory_tracking_platform()`
-- `deploy_loan_management_platform()`
-- `deploy_medical_record_service()`
-- `deploy_order_management_service()`
-- `deploy_patient_management_platform()`
-- `deploy_payment_gateway_service()`
-- `deploy_route_optimization_platform()`
-- `deploy_shipment_tracking_service()`
-- `deploy_warehouse_management_service()`
-- `get_pull_request_number()`
-- `get_pull_request_title()`
-- `get_pull_request_url()`
-- `get_repository_full_name()`
-- `get_repository_name()`
-- `main()`
-- `normalize_path()`
-- `read_changed_files()`
-- `read_yaml()`
-- `resolve_capabilities_for_changed_file()`
-- `resolve_product()`
-- `unique_sorted()`
-- `write_json()`
 
 ---
 
