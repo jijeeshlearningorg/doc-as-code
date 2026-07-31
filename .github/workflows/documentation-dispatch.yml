@@ -25,7 +25,10 @@ jobs:
 
       - name: Checkout Documentation Repository
         uses: actions/checkout@v4
-
+        with:
+          ref: ${{ github.event.client_payload.dispatch_data.branch }}
+          token: ${{ secrets.CENTRAL_DOCS_TOKEN }}
+          
       - name: Show Payload
         run: |
           echo "=================================="
@@ -83,11 +86,14 @@ jobs:
         run: |
           rm -rf source
 
+          BRANCH="${{ github.event.client_payload.dispatch_data.branch }}"
+
           echo "=================================="
           echo "SOURCE REPOSITORY"
           echo "=================================="
 
           echo "${{ github.event.client_payload.dispatch_data.source_repo_full }}"
+          echo "Branch : $BRANCH"
 
           git clone \
             https://x-access-token:${PAT}@github.com/${{ github.event.client_payload.dispatch_data.source_repo_full }}.git \
@@ -319,7 +325,15 @@ jobs:
           echo "FORCE PUSH GENERATED DOCUMENTATION"
           echo "=================================="
 
-          git push origin main --force
+          BRANCH="${{ github.event.client_payload.dispatch_data.branch }}"
+          
+          echo "=================================="
+          echo "TARGET DOCUMENTATION BRANCH"
+          echo "=================================="
+
+          echo "$BRANCH"
+
+          git push origin HEAD:$BRANCH --force
 
           echo "=================================="
           echo "DOCUMENTATION PUSH COMPLETE"
