@@ -240,10 +240,9 @@ Recommended:
 
 | Capability | Description | Technologies |
 | ---------- | ---------- | ---------- |
-| Ai Platform | ai-platform | To Be Determined (TBD) |
-| Data Platform | data-platform | To Be Determined (TBD) |
-| Kubernetes | kubernetes | To Be Determined (TBD) |
-| Networking | NSX-T based virtual networking, routing, segmentation and connectivity services. | nsx-t, aria-network-insight |
+| Capacity Management | capacity-management | To Be Determined (TBD) |
+| Lifecycle Management | Automated patching, upgrades and platform lifecycle operations. | sddc-manager, vlcm, aria-suite-lifecycle-manager |
+| Migration | migration | To Be Determined (TBD) |
 | Observability | observability | To Be Determined (TBD) |
 
 | Component | Purpose | Key Technology |
@@ -553,28 +552,39 @@ Document unresolved decisions and pending discussions.
 | Field | Value |
 |----------|----------|
 | Product | My Cloud Services |
-| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Source Repository | `jijeeshlearningorg/brownfield-code` |
 | Generated Date | 2026-07-31 |
 
 ### Impacted Capabilities
 
-- ai-platform
-- data-platform
-- kubernetes
-- networking
+- capacity-management
+- lifecycle-management
+- migration
 - observability
 
 ### Changed Files
 
-- src/deploy.py
+- src/capacity_calc.py
+- src/migrate.py
+- src/patch.py
+- src/rollback.py
+- src/upgrade.py
+- src/validation.py
 
 ### Detected Functions
 
-- deploy_ai_platform
-- deploy_data_platform
-- deploy_kubernetes_platform
-- deploy_network_foundation
-- validate_platform_observability
+- apply_security_patch
+- calculate_energy_savings
+- check_patch_compliance
+- create_restore_point
+- estimate_capacity_growth
+- evacuate_virtual_machines
+- execute_rollback
+- generate_capacity_recommendation
+- migrate_legacy_hardware_node
+- validate_migration_prerequisites
+- validate_patch_success
+- verify_rollback_status
 
 ## 21.1 Constraints & Limits
 
