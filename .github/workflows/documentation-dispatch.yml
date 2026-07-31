@@ -157,8 +157,10 @@ jobs:
 
       - name: Invoke Copilot AI
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_MODELS_MODEL: openai/gpt-4.1
+          COPILOT_API_TOKEN: ${{ secrets.COPILOT_API_TOKEN }}
+          COPILOT_API_ENDPOINT: https://api.githubcopilot.com/chat/completions
+          COPILOT_MODEL: gpt-4o
+          FAIL_ON_AI_ERROR: false
         run: |
           echo "=================================="
           echo "COPILOT AI GENERATION"
