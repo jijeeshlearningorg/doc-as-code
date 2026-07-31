@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  models: read
 
 concurrency:
   group: documentation-generation
@@ -82,7 +83,10 @@ jobs:
         run: |
           rm -rf source
 
-          echo "SOURCE REPOSITORY:"
+          echo "=================================="
+          echo "SOURCE REPOSITORY"
+          echo "=================================="
+
           echo "${{ github.event.client_payload.dispatch_data.source_repo_full }}"
 
           git clone \
@@ -107,31 +111,132 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml
 
-      - name: Verify Agent Files
+      - name: Verify Actions Repository
         run: |
-          find _actions/agents -type f | sort || true
+          echo "=================================="
+          echo "ACTIONS CONTENT"
+          echo "=================================="
 
-      - name: Generate Agent Documentation
+          find _actions -type f | sort || true
+
+      - name: Verify Templates
         run: |
-          python _actions/scripts/generate-agent-docs.py
+          echo "=================================="
+          echo "TEMPLATE CONTENT"
+          echo "=================================="
+
+          find template -type f | sort || true
+
+      - name: Build Documentation Context
+        run: |
+          echo "=================================="
+          echo "BUILD DOCUMENTATION CONTEXT"
+          echo "=================================="
+
+          python _actions/scripts/build-document-context.py
+
+          echo "=================================="
+          echo "GENERATED CONTEXT"
+          echo "=================================="
+
+          cat generated-context.json
+
+      - name: Generate Copilot Prompts
+        run: |
+          echo "=================================="
+          echo "GENERATE COPILOT PROMPTS"
+          echo "=================================="
+
+          python _actions/scripts/copilot-generator.py
+
+          echo "=================================="
+          echo "PROMPT FILES"
+          echo "=================================="
+
+          find _actions/prompts -type f | sort || true
+
+      - name: Invoke Copilot AI
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_MODELS_MODEL: openai/gpt-4.1
+        run: |
+          echo "=================================="
+          echo "COPILOT AI GENERATION"
+          echo "=================================="
+
+          python _actions/scripts/invoke-copilot.py
+
+      - name: Show Generated AI Files
+        run: |
+          echo "=================================="
+          echo "AI GENERATED FILES"
+          echo "=================================="
+
+          find generated -type f | sort || true
+
+      - name: Render Documentation Templates
+        run: |
+          echo "=================================="
+          echo "RENDER DOCUMENTATION"
+          echo "=================================="
+
+          python _actions/scripts/template-renderer.py
 
       - name: Verify Generated HLD Files
         run: |
+          echo "=================================="
+          echo "HLD FILES"
+          echo "=================================="
+
           find docs/02-Architecture-and-Designs/01-High-Level-Designs \
             -name "*.md" \
-            -type f
+            -type f \
+            | sort || true
 
       - name: Verify Generated LLD Files
         run: |
+          echo "=================================="
+          echo "LLD FILES"
+          echo "=================================="
+
           find docs/02-Architecture-and-Designs/02-Low-Level-Designs \
             -name "*.md" \
-            -type f
+            -type f \
+            | sort || true
+
+      - name: Verify Generated BIG Files
+        run: |
+          echo "=================================="
+          echo "BIG FILES"
+          echo "=================================="
+
+          find docs -iname "*big*.md" | sort || true
+
+      - name: Verify Generated OPG Files
+        run: |
+          echo "=================================="
+          echo "OPG FILES"
+          echo "=================================="
+
+          find docs -iname "*opg*.md" | sort || true
+
+      - name: Verify Generated Lifecycle Files
+        run: |
+          echo "=================================="
+          echo "LIFECYCLE FILES"
+          echo "=================================="
+
+          find docs -iname "*lifecycle*.md" | sort || true
 
       - name: Validate Documentation Content
         run: |
-          HLD_COUNT=$(find docs/02-Architecture-and-Designs/01-High-Level-Designs -name "*.md" | wc -l)
+          HLD_COUNT=$(find docs/02-Architecture-and-Designs/01-High-Level-Designs -name "*.md" 2>/dev/null | wc -l)
 
-          LLD_COUNT=$(find docs/02-Architecture-and-Designs/02-Low-Level-Designs -name "*.md" | wc -l)
+          LLD_COUNT=$(find docs/02-Architecture-and-Designs/02-Low-Level-Designs -name "*.md" 2>/dev/null | wc -l)
+
+          echo "=================================="
+          echo "DOCUMENT COUNTS"
+          echo "=================================="
 
           echo "HLD FILES: $HLD_COUNT"
           echo "LLD FILES: $LLD_COUNT"
@@ -148,15 +253,22 @@ jobs:
 
       - name: Update Navigation
         run: |
+          echo "=================================="
+          echo "UPDATE NAVIGATION"
+          echo "=================================="
+
           python _actions/scripts/update-navigation.py
 
-      - name: Show Generated Files
+      - name: Show Generated Documentation
         run: |
+          echo "=================================="
+          echo "GENERATED DOCUMENTS"
+          echo "=================================="
+
           find docs -type f | sort
 
       - name: Cleanup Temporary Files
         run: |
-          rm -rf _actions
           rm -rf source
           rm -rf template
           rm -f doc-request.json
@@ -181,7 +293,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Generate product-centric architecture documentation"
+          git commit -m "Generate Copilot architecture documentation"
 
           for i in 1 2 3
           do
