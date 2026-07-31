@@ -77,7 +77,7 @@
 | Field | Value |
 |----------|----------|
 | Product | My Cloud Services |
-| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Source Repository | `jijeeshlearningorg/brownfield-code` |
 | Generated Date | 2026-07-31 |
 
 ### Impacted Capabilities
