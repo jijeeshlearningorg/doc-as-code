@@ -96,6 +96,8 @@ jobs:
           echo "Branch : $BRANCH"
 
           git clone \
+            --single-branch \
+            --branch "$BRANCH" \
             https://x-access-token:${PAT}@github.com/${{ github.event.client_payload.dispatch_data.source_repo_full }}.git \
             source
 
