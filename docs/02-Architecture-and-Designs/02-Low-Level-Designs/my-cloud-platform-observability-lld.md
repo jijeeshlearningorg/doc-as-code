@@ -9,7 +9,7 @@
 | Capability | Observability |
 | Capability Key | `observability` |
 | Generated Date | 2026-07-31 |
-| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Source Repository | `jijeeshlearningorg/brownfield-code` |
 | Source Pull Request | `main` |
 | Source PR Title |  |
 
@@ -40,61 +40,52 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.1 Source Files
 
-- `src/deploy.py`
+- `src/validation.py`
 
 ### 2.2 Function Inventory
 
-- `deploy_ai_platform()`
-- `deploy_data_platform()`
-- `deploy_kubernetes_platform()`
-- `deploy_network_foundation()`
-- `validate_platform_observability()`
+- `generate_validation_report()`
+- `validate_backup_status()`
+- `validate_monitoring_status()`
+- `validate_platform_health()`
 
 ### 2.3 Function Details
 
-### Source File: `src/deploy.py`
+### Source File: `src/validation.py`
 
-**Parse Status:** `ast_success`
+**Parse Status:** `ast_failed_regex_fallback`
 
-#### Function: `deploy_network_foundation`
+#### Function: `validate_platform_health`
 
-**Description:** Deploys core networking components for a new cloud platform.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** region
+**Parameters:** None
 
-**Returns:** bool
+**Returns:** Not detected
 
-#### Function: `deploy_kubernetes_platform`
+#### Function: `validate_monitoring_status`
 
-**Description:** Deploys Kubernetes platform services for cloud workloads.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** cluster_name
+**Parameters:** None
 
-**Returns:** bool
+**Returns:** Not detected
 
-#### Function: `deploy_ai_platform`
+#### Function: `validate_backup_status`
 
-**Description:** Deploys AI platform services and model hosting infrastructure.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** environment
+**Parameters:** None
 
-**Returns:** bool
+**Returns:** Not detected
 
-#### Function: `deploy_data_platform`
+#### Function: `generate_validation_report`
 
-**Description:** Deploys enterprise data services and analytics platform.
+**Description:** Function detected by fallback parser.
 
-**Parameters:** environment
+**Parameters:** None
 
-**Returns:** bool
-
-#### Function: `validate_platform_observability`
-
-**Description:** Validates monitoring, logging and observability configuration.
-
-**Parameters:** environment
-
-**Returns:** bool
+**Returns:** Not detected
 
 
 ### 2.4 Sequence Diagram

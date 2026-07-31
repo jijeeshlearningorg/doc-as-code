@@ -1,4 +1,4 @@
-# Low Level Design: Migration
+# Low Level Design: Capacity Management
 
 ## Document Control
 
@@ -6,8 +6,8 @@
 |---|---|
 | Product | My Cloud Services |
 | Product Key | `my-cloud-platform` |
-| Capability | Migration |
-| Capability Key | `migration` |
+| Capability | Capacity Management |
+| Capability Key | `capacity-management` |
 | Generated Date | 2026-07-31 |
 | Source Repository | `jijeeshlearningorg/brownfield-code` |
 | Source Pull Request | `main` |
@@ -30,7 +30,7 @@
 
 ## 1. Introduction
 
-Migration
+Capacity Management
 
 This LLD provides implementation-level traceability for the capability identified from source code changes.
 
@@ -40,45 +40,44 @@ This LLD provides implementation-level traceability for the capability identifie
 
 ### 2.1 Source Files
 
-- `src/migrate.py`
+- `src/capacity_calc.py`
 
 ### 2.2 Function Inventory
 
-- `evacuate_virtual_machines()`
-- `migrate_legacy_hardware_node()`
-- `validate_migration_prerequisites()`
+- `calculate_energy_savings()`
+- `estimate_capacity_growth()`
+- `generate_capacity_recommendation()`
 
 ### 2.3 Function Details
 
-### Source File: `src/migrate.py`
+### Source File: `src/capacity_calc.py`
 
 **Parse Status:** `ast_success`
 
-#### Function: `migrate_legacy_hardware_node`
+#### Function: `calculate_energy_savings`
 
-**Description:** Performs migration of a legacy server workload
-into the modernized infrastructure platform.
+**Description:** Calculates estimated energy savings
+after hardware consolidation.
 
-**Parameters:** server_id, target_zone
+**Parameters:** decommissioned_hosts
 
-**Returns:** bool
+**Returns:** float
 
-#### Function: `evacuate_virtual_machines`
+#### Function: `estimate_capacity_growth`
 
-**Description:** Evacuates virtual machines before maintenance or migration.
+**Description:** Estimates future infrastructure capacity demand.
 
-**Parameters:** cluster_name
+**Parameters:** current_cpu_usage, annual_growth_percent
 
-**Returns:** bool
+**Returns:** float
 
-#### Function: `validate_migration_prerequisites`
+#### Function: `generate_capacity_recommendation`
 
-**Description:** Validates migration prerequisites including backups,
-network connectivity and platform readiness.
+**Description:** Generates a capacity management recommendation.
 
-**Parameters:** server_id
+**Parameters:** projected_cpu_usage
 
-**Returns:** bool
+**Returns:** str
 
 
 ### 2.4 Sequence Diagram

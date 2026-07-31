@@ -123,3 +123,8 @@ plugins:
           - My Cloud Services - Kubernetes LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-kubernetes-lld.md
           - My Cloud Services - Networking LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-networking-lld.md
           - My Cloud Services - Observability LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-observability-lld.md
+
+  - AI Generated Documentation:
+      - My Cloud Services:
+          - My Cloud Services - Capacity Management LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-capacity-management-lld.md
+          - My Cloud Services - Lifecycle Management LLD: 02-Architecture-and-Designs/02-Low-Level-Designs/my-cloud-platform-lifecycle-management-lld.md
