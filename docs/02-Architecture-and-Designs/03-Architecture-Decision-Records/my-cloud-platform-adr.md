@@ -1,70 +1,71 @@
 # 02. Architecture Decision Record (ADR) template
 
-* Status: Proposed  
-* Owner: architecture-team  
-* Deciders: Architecture Review Board  
-* Working group: Platform Engineering Team  
-* Creation Date: 2024-09-26  
-* Last Revisited: 2024-09-26  
-* Revision: 1  
+* **Status:** Draft  
+* **Owner:** Enterprise Architecture Team  
+* **Deciders:** Lead Architect, Cloud Ops Lead  
+* **Working group:** Cloud Platform Deployment Team  
+* **Creation Date:** 2024-02-08  
+* **Last Revisited:** 2024-02-08  
+* **Revision:** 1  
 
 ## Context and Problem Statement
 
-The My Cloud Services product (key: my-cloud-platform) is being extended with a new networking foundation that must be deployed consistently across the ai‑platform, data‑platform, and kubernetes environments. Recent changes in the source repository (`src/deploy.py`) introduce automated deployment logic for network services, but there is no agreed‑upon approach for integrating NSX‑T based virtual networking with aria‑network‑insight observability while ensuring the impacted capabilities (ai‑platform, data‑platform, kubernetes, networking, observability) remain functional.
-
-The decision must define how the networking foundation will be provisioned, monitored, and integrated into the existing CI/CD pipeline, addressing the need for repeatable, observable, and supportable network configuration in the greenfield codebase.
+The My Cloud Services platform is undergoing a greenfield deployment of its network foundation. The current repository `jijeeshlearningorg/greenfield-code` contains a new deployment script `src/deploy.py` that introduces network provisioning logic. The architectural design issue is how to integrate VMware NSX‑T with network visibility and monitoring capabilities while maintaining automation and observability across the platform. This decision is required now to align the deployment pipeline with the product’s networking and observability capabilities and to ensure that future platform expansions can leverage automated, monitored network infrastructure.
 
 ## Assumptions (Optional)
 
-- The environment already includes a VMware vSphere foundation with NSX‑T installed and licensed.  
-- aria‑network‑insight is available for network telemetry and analytics.  
-- The CI/CD pipeline uses GitHub Actions for automation.  
-- No additional networking technologies beyond those listed in the technology catalog may be introduced.  
-- The deployment scripts must be idempotent and compatible with existing `deploy_*` functions.
+* The platform will run on VMware vSphere infrastructure with NSX‑T as the primary SDN solution.  
+* Aria Automation and Aria Network Insight are available and licensed.  
+* CI/CD will continue to use GitHub Actions.  
+* The deployment will be executed in a greenfield environment with no legacy network constraints.
 
 ## Constraints (Optional)
 
-- Must leverage only technologies present in the `technology_catalog` (e.g., nsx‑t, aria‑network‑insight).  
-- Changes to `src/deploy.py` must not break existing deployments of ai‑platform, data‑platform, or kubernetes.  
-- The solution must provide observability hooks for the networking layer to support future troubleshooting.  
-- Implementation timeline is limited to the current sprint (2 weeks).
+* Licensing limits for Aria Network Insight may restrict the number of monitored segments.  
+* The deployment must not disrupt existing AI, data, or Kubernetes workloads.  
+* The solution must be compatible with the existing `deploy_ai_platform`, `deploy_data_platform`, and `deploy_kubernetes_platform` functions.
 
 ## Considered Options
 
-| Option | Description | Concerns / Trade‑offs |
-|--------|-------------|-----------------------|
-| **1. Deploy NSX‑T via Ansible playbooks** | Use existing Ansible inventory to provision NSX‑T segments, then integrate aria‑network‑insight for monitoring. | Requires maintenance of Ansible scripts; may increase deployment time. |
-| **2. Use VMware HCX for network abstraction** | Leverage HCX to manage network services as a higher‑level abstraction. | Introduces an additional VMware product not currently in the catalog; may add licensing overhead. |
-| **3. Stick with manual NSX‑T configuration** | Continue manual network setup performed by operations staff. | Not repeatable, conflicts with automation goals, increases risk of drift. |
-
-The team evaluated each option against the impacted capabilities (ai‑platform, data‑platform, kubernetes, networking, observability) and the constraints listed above. Option 1 aligns best with the need for automated, observable, and supportable networking while staying within the approved technology set.
+| Option | Description | Pros | Cons |
+|--------|-------------|------|------|
+| **1. NSX‑T + Aria Network Insight via Aria Automation** | Automate NSX‑T deployment and integrate network visibility through Aria Network Insight using Aria Automation workflows. | • Full automation, minimal manual steps.<br>• Built‑in observability for network traffic.<br>• Consistent with existing Aria Automation usage. | • Requires Aria Network Insight licensing.<br>• Additional learning curve for automation scripts. |
+| **2. NSX‑T standalone with manual configuration** | Deploy NSX‑T using standard vSphere tools and manually configure network segments. | • No extra licensing.<br>• Simpler initial setup. | • High operational overhead.<br>• No automated observability. |
+| **3. VMware vSphere networking (no NSX‑T)** | Use vSphere standard networking instead of NSX‑T. | • Lower complexity.<br>• No additional licensing. | • Lacks advanced SDN features.<br>• Limited observability. |
+| **4. External SDN solution (e.g., OpenDaylight)** | Replace NSX‑T with an open‑source SDN controller. | • Potential cost savings.<br>• Flexibility. | • Requires significant integration effort.<br>• Not aligned with existing VMware stack. |
 
 ## Proposed Design (Optional)
 
-Adopt NSX‑T as the underlying virtual networking substrate, extend the existing deployment pipeline to include:
-
-1. **Network Foundation Deployment** – Add a new function `deploy_network_foundation` that configures NSX‑T segments, edge services, and security policies using Ansible.  
-2. **Observability Integration** – Configure aria‑network‑insight to collect flow and performance metrics, exposing them to the `observability` capability.  
-3. **Update Deployment Scripts** – Modify `src/deploy.py` to call `deploy_network_foundation` before `deploy_ai_platform`, `deploy_data_platform`, and `deploy_kubernetes_platform`.  
-4. **Validation** – Add a validation step `validate_platform_observability` to verify that network telemetry is correctly reported.
+Adopt **Option 1**: Deploy NSX‑T with Aria Network Insight integrated via Aria Automation. The `src/deploy.py` script will invoke Aria Automation workflows that provision NSX‑T components, configure logical switches, routers, and security policies, and register the network with Aria Network Insight for continuous monitoring. The CI/CD pipeline (GitHub Actions) will trigger this script during the deployment phase.
 
 ## Decision Outcome
 
-**Accepted:** The Architecture will use NSX‑T based virtual networking integrated with aria‑network‑insight for observability. The deployment scripts will be updated to include a dedicated `deploy_network_foundation` step, and the existing `src/deploy.py` file will be modified accordingly. This choice satisfies the impacted capabilities (ai‑platform, data‑platform, kubernetes, networking, observability) and adheres to the defined constraints.
+The architecture will **automatically provision NSX‑T and integrate Aria Network Insight** using Aria Automation. This approach aligns with the product’s networking and observability capabilities, reduces manual effort, and ensures consistent network visibility across the platform.
 
 ## Related Artifacts (Optional)
 
-- High Level Design: `template/docs/docs/01. Architecture & Designs/01. High Level Designs/index.md`  
-- Low Level Design: `template/docs/docs/01. Architecture & Designs/02. Low Level Designs/index.md`  
-- Build & Installation Specifications: `template/docs/docs/02. Build & Installation specifications/index.md`  
-- Operations & Support: `template/docs/docs/03. Operations & Support/index.md`  
-- Knowledge Base: `template/docs/docs/04. Knowledge Base/index.md`  
+* ADR-001: Network Foundation Deployment Strategy  
+* ADR-002: Observability Integration for Network Traffic  
+* High‑Level Design: `template/docs/docs/01. Architecture & Designs/01. High Level Designs/index.md`  
+* Low‑Level Design: `template/docs/docs/01. Architecture & Designs/02. Low Level Designs/index.md`
 
 ## Comments (Optional)
 
-*Comment from Network Engineering Lead:* "We need to ensure that the NSX‑T segment IDs are documented in the service catalog to avoid conflicts with existing workloads."  
-*Comment from Security Team:* "Review the security policies applied via NSX‑T to confirm compliance with internal hardening standards."  
+* **Lead Architect:** “Automation is critical for scaling the platform. This decision will reduce deployment time by ~70%.”  
+* **Cloud Ops Lead:** “We need to ensure Aria Network Insight licensing is secured before finalizing the rollout.”  
+* **DevOps Engineer:** “GitHub Actions workflow will need to be updated to include the new deployment script.”  
 
 ---  
 
-*All author guidance blocks have been removed per instructions.*
+**Impacted Capabilities**  
+- **Networking** – Automated NSX‑T provisioning and configuration.  
+- **Observability** – Continuous network traffic monitoring via Aria Network Insight.  
+
+**Source Repository Changes**  
+- `src/deploy.py` – Updated to invoke Aria Automation workflows for NSX‑T and Aria Network Insight.  
+
+**Architectural Consequences**  
+- Increased reliance on Aria Automation and Aria Network Insight.  
+- Additional licensing and operational overhead for network monitoring.  
+- CI/CD pipeline modifications to support automated deployment.  
+- Enhanced observability across the platform, enabling proactive network issue detection.
