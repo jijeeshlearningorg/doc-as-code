@@ -163,17 +163,14 @@ jobs:
 
           find _actions/prompts -type f | sort || true
 
-      - name: Invoke Gemini AI
+      - name: Invoke OpenRouter AI
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-2.0-flash
-          GEMINI_API_VERSION: v1beta
-          GEMINI_TEMPERATURE: "0.2"
-          GEMINI_MAX_TOKENS: "8192"
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: openrouter/free
           FAIL_ON_AI_ERROR: false
         run: |
           echo "=================================="
-          echo "GEMINI AI GENERATION"
+          echo "OPENROUTER AI GENERATION"
           echo "=================================="
 
           python _actions/scripts/invoke-copilot.py
