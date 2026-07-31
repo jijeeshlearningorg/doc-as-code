@@ -1,12 +1,12 @@
 # AI Generation Unavailable
 
-Prompt File: lld-prompt.md
+Prompt File: adr-prompt.md
 
 GitHub Models endpoint is currently unavailable.
 
 Generated fallback content.
 
-Timestamp: 2026-07-31 09:31:36
+Timestamp: 2026-07-31 09:31:39
 
 Error:
 
