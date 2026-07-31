@@ -2,12 +2,15 @@
 
 Prompt File: big-prompt.md
 
-GitHub Models endpoint is currently unavailable.
+GitHub Copilot API did not return generated content.
 
 Generated fallback content.
 
-Timestamp: 2026-07-31 09:31:37
+Timestamp: 2026-07-31 10:20:32
 
-Error:
+Reason:
 
-GitHub Models request failed. HTTP status: 410. Response: {"error":{"code":"github_models_retirement_brownout","message":"GitHub Models is temporarily unavailable as part of a scheduled retirement brownout."}}
+GitHub Copilot API request failed. HTTP status: 400. Response: checking server-to-server token: bad request: GitHub App Server-To-Server Tokens are not supported for this endpoint
+
+
+The template-renderer.py step should ignore this fallback file or use template-based generation.
