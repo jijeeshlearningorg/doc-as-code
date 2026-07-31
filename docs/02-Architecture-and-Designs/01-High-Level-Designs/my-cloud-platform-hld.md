@@ -10,7 +10,7 @@
 | Status | Active |
 | Owner | Cloud Engineering |
 | Generated Date | 2026-07-31 |
-| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Source Repository | `jijeeshlearningorg/brownfield-code` |
 | Source Pull Request | `main` |
 | Source PR Title |  |
 | Generation Mode | `product-centric` |
@@ -106,7 +106,7 @@ The product is represented as a set of architectural capabilities rather than a 
 
 | Capability | Description | Technologies |
 | --- | --- | --- |
-| Security | Platform security controls, vulnerability management and compliance automation. | trend-micro, nessus, hashicorp-vault, vmware-nkp |
+| Migration | Migration | TBD |
 
 ---
 
@@ -220,19 +220,19 @@ The platform should support modular scaling according to the capabilities define
 
 ### Changed Files
 
-- `src/security_vault.py`
+- `src/migrate.py`
 
 ### Impacted Capability Mapping
 
 | Capability | Changed Files |
 | --- | --- |
-| Security | `src/security_vault.py` |
+| Migration | `src/migrate.py` |
 
 ### Detected Implementation Functions
 
 The following implementation functions were detected from changed source files. They are supporting traceability only and should not drive the HLD structure.
 
-- `bind_customer_key()`
+- `migrate_legacy_hardware_node()`
 
 ---
 
