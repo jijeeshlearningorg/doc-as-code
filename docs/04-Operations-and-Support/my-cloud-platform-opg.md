@@ -1,4 +1,4 @@
-# Operations Guide (OPG): My Cloud Services
+# Operations Guide (OPG): My Cloud Platform
 
 **Author:** Copilot Documentation Agent  
 **Date:** 2026-08-04  
@@ -57,7 +57,7 @@
 
 | Field | Value |
 |----------|----------|
-| Product | My Cloud Services |
+| Product | My Cloud Platform |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Generated Date | 2026-08-04 |
 
@@ -75,11 +75,7 @@
 
 ### Detected Functions
 
-- deploy_ai_platform
-- deploy_data_platform
-- deploy_kubernetes_platform
-- deploy_network_foundation
-- validate_platform_observability
+- To Be Determined (TBD)
 
 ## 3.1 Service Purpose
 

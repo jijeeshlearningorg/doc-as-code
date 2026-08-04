@@ -14,7 +14,7 @@
 
 | Field | Value |
 |----------|----------|
-| Product | My Cloud Services |
+| Product | My Cloud Platform |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Generated Date | 2026-08-04 |
 
@@ -32,11 +32,7 @@
 
 ### Detected Functions
 
-- deploy_ai_platform
-- deploy_data_platform
-- deploy_kubernetes_platform
-- deploy_network_foundation
-- validate_platform_observability
+- To Be Determined (TBD)
 
 Describe the architectural design issue you’re addressing, leaving no questions about why you’re addressing this issue now. Following a minimalist approach, address and document only the issues that need addressing at various points in the life cycle.
 

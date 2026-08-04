@@ -1,4 +1,4 @@
-# High-Level Design (HLD): My Cloud Services
+# High-Level Design (HLD): My Cloud Platform
 
 **Author:** Copilot Documentation Agent  
 **Date:** 2026-08-04  
@@ -240,11 +240,7 @@ Recommended:
 
 | Capability | Description | Technologies |
 | ---------- | ---------- | ---------- |
-| Ai Platform | ai-platform | To Be Determined (TBD) |
-| Data Platform | data-platform | To Be Determined (TBD) |
-| Kubernetes | kubernetes | To Be Determined (TBD) |
-| Networking | NSX-T based virtual networking, routing, segmentation and connectivity services. | nsx-t, aria-network-insight |
-| Observability | observability | To Be Determined (TBD) |
+|  |  |  |
 
 | Component | Purpose | Key Technology |
 |----------|----------|----------|
@@ -552,7 +548,7 @@ Document unresolved decisions and pending discussions.
 
 | Field | Value |
 |----------|----------|
-| Product | My Cloud Services |
+| Product | My Cloud Platform |
 | Source Repository | `jijeeshlearningorg/greenfield-code` |
 | Generated Date | 2026-08-04 |
 
@@ -570,11 +566,7 @@ Document unresolved decisions and pending discussions.
 
 ### Detected Functions
 
-- deploy_ai_platform
-- deploy_data_platform
-- deploy_kubernetes_platform
-- deploy_network_foundation
-- validate_platform_observability
+- To Be Determined (TBD)
 
 ## 21.1 Constraints & Limits
 
