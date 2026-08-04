@@ -169,6 +169,23 @@ jobs:
 
           cat generated-context.json
 
+      - name: Verify Templates
+        run: |
+          echo "=================================="
+          echo "VERIFY TEMPLATE FILES"
+          echo "=================================="
+
+          test -f "template/docs/docs/01. Architecture & Designs/01. High Level Designs/index.md"
+          test -f "template/docs/docs/01. Architecture & Designs/02. Low Level Designs/index.md"
+          test -f "template/docs/docs/01. Architecture & Designs/03. Architecture Decision Records/index.md"
+          test -f "template/docs/docs/02. Build & Installation specifications/index.md"
+          test -f "template/docs/docs/03. Operations & Support/index.md"
+
+          echo "=================================="
+          echo "TEMPLATES VERIFIED"
+          echo "=================================="
+
+
       - name: Generate AI Prompts
         run: |
           echo "=================================="
