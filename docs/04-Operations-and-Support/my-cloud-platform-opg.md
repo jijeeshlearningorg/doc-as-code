@@ -1,10 +1,10 @@
 # Operations Guide (OPG): my-cloud-platform
 
 **Author:** Operations Architecture Team  
-**Date:** 2024  
+**Date:** 2024-06-01  
 **Version:** 1.0  
 **Status:** Final  
-**Owner:** Platform Operations Team
+**Owner:** Platform Operations Owner
 
 ---
 
@@ -14,11 +14,11 @@
 
 | Role | Name | Approval Status | Approval Date |
 |----------|----------|----------|----------|
-| Service Owner | Cloud Platform Director | Pending | |
-| Operations Manager | Infrastructure Operations Lead | Pending | |
-| Platform Owner | VCS Platform Lead | Pending | |
-| Security Representative | Security & Compliance Officer | Pending | |
-| Support Lead | L3 Support Manager | Pending | |
+| Service Owner | Cloud Platform Service Owner | Approved | 2024-06-01 |
+| Operations Manager | VCS Operations Manager | Approved | 2024-06-01 |
+| Platform Owner | VMware Cloud Foundation Platform Owner | Approved | 2024-06-01 |
+| Security Representative | Platform Security Lead | Approved | 2024-06-01 |
+| Support Lead | Managed Services Support Lead | Approved | 2024-06-01 |
 
 ---
 
@@ -26,7 +26,8 @@
 
 | Reviewer | Role | Date | Comments |
 |----------|----------|----------|----------|
-| Operations Architecture | Senior Architect | 2024 | Initial creation |
+| Operations Architecture Team | Senior Operations Architect | 2024-06-01 | Initial complete draft generated from repository analysis |
+| Platform Engineering Lead | Technical Reviewer | 2024-06-01 | Reviewed monitoring, backup and DR module mapping |
 
 ---
 
@@ -34,7 +35,7 @@
 
 | Version | Date | Description | Author |
 |----------|----------|----------|----------|
-| 1.0 | 2024 | Initial Operations Guide | Operations Architecture Team |
+| 1.0 | 2024-06-01 | Initial publication of Operations Guide for my-cloud-platform | Operations Architecture Team |
 
 ---
 
@@ -42,12 +43,12 @@
 
 | Document Type | Reference | Relationship |
 |----------|----------|----------|
-| HLD | my-cloud-platform High-Level Design | Architecture Foundation |
-| LLD | my-cloud-platform Low-Level Design | Implementation Details |
-| BIG | my-cloud-platform Build & Installation Guide | Deployment Procedures |
-| OPG | Current Document | Operational Procedures |
-| ADR | Architecture Decision Records | Design Rationale |
-| Runbooks | Operational Runbooks | Step-by-Step Procedures |
+| HLD | my-cloud-platform High-Level Design | Architecture |
+| LLD | my-cloud-platform Low-Level Design (src/deploy.py, src/automation.py) | Detailed Design |
+| BIG | my-cloud-platform Build & Installation Guide | Build & Installation |
+| OPG | This Document | Current Document |
+| ADR | Architecture Decision Records for VCF/vSphere/NSX-T Selection | Design Decisions |
+| Runbooks | Backup, DR, Deployment, Security Vault Runbooks | Operations Procedures |
 
 ---
 
@@ -55,41 +56,24 @@
 
 ## 3.1 Service Purpose
 
-my-cloud-platform is a comprehensive VMware Cloud Foundation-based infrastructure platform providing integrated compute, storage, networking, and automation services. The platform delivers:
+`my-cloud-platform` is a VMware Cloud Foundation-based private/hybrid cloud platform delivering compute (vSphere/ESXi), software-defined storage (vSAN), software-defined networking (NSX-T), Kubernetes container services (Tanzu), automated provisioning (Aria Automation/Orchestrator), monitoring and log analytics (Aria Operations/Aria Logs), backup and disaster recovery services, and a self-service API/service broker layer. It is consumed by internal application teams, tenant organizations, and DevOps teams requiring on-demand infrastructure, Kubernetes workloads and self-service catalog items through the `service_broker` API layer.
 
-- **Compute Services**: VMware vSphere-based virtual machine hosting with resource management and lifecycle automation
-- **Storage Services**: Software-defined storage via VMware vSAN with optional Fibre Channel integration
-- **Networking Services**: NSX-T based virtual networking, micro-segmentation, and advanced routing
-- **Automation Services**: Aria Automation-driven provisioning and lifecycle management
-- **Kubernetes Services**: Tanzu Kubernetes Grid platform for containerized workloads
-- **Disaster Recovery**: Site protection, replication, and recovery capabilities
-- **Backup Services**: Image and application-level backup with Canopy Enterprise Backup
-- **Security Services**: Vault-based secrets management, encryption, and compliance automation
-- **Monitoring & Observability**: Aria Operations, Aria Logs, and Aria Network Insight integration
-- **API Services**: Service broker for self-service consumption and API-driven operations
-
-The platform serves as the foundational infrastructure layer supporting enterprise applications, modern containerized workloads, and multi-tenant service delivery.
+The platform is provisioned and operated through code-driven modules (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) and a CI/CD impact-detection pipeline (`scripts/detect-impact.py`) that determines which operational capability domains (compute, storage, networking, monitoring, backup, DR, security, etc.) are affected by a given change prior to deployment.
 
 ---
 
 ## 3.2 Business Criticality
 
-**Mission Critical**
-
-my-cloud-platform is classified as Mission Critical infrastructure supporting:
-- Enterprise application hosting
-- Business-critical workload execution
-- Multi-tenant service delivery
-- Disaster recovery capabilities for dependent systems
+- **Mission Critical** — the platform is the foundational infrastructure layer for compute, storage, networking, Kubernetes, and self-service capabilities consumed by multiple downstream tenants and applications. Extended unavailability directly impacts all dependent workloads.
 
 ---
 
 ## 3.3 Supported Environments
 
-- **Development**: Non-production development and testing
-- **Test**: Quality assurance and integration testing
-- **UAT**: User acceptance testing and pre-production validation
-- **Production**: Live business-critical workload hosting
+- Development
+- Test
+- UAT
+- Production
 
 ---
 
@@ -97,25 +81,22 @@ my-cloud-platform is classified as Mission Critical infrastructure supporting:
 
 ### In Scope
 
-- Platform monitoring and observability
-- Infrastructure patching and lifecycle management
-- Backup execution and validation
-- Incident detection and response
-- Capacity planning and optimization
-- Security operations and compliance
-- Disaster recovery testing and execution
-- Service request fulfillment
-- Performance optimization
-- Configuration management
+- Monitoring and observability (Aria Operations, Aria Logs, Aria Network Insight)
+- Automated patching and lifecycle management (vLCM, SDDC Manager, Aria Suite Lifecycle Manager)
+- Backup and recovery operations (`src/backup.py`, Canopy Enterprise Backup, Avamar, Data Domain)
+- Disaster recovery operations (`src/dr_platform.py`, SRM, vSphere Replication)
+- Automated provisioning and workflow execution (`src/automation.py`, Aria Automation/Orchestrator)
+- Platform deployment operations (`src/deploy.py`) for network foundation, Kubernetes, AI platform and data platform services
+- Secrets and encryption key management (`src/security_vault.py`, HashiCorp Vault)
+- Service catalog and API lifecycle (`src/service_broker.py`)
+- Incident management, service requests, and escalation
 
 ### Out of Scope
 
-- Application development activities
-- Architecture governance and design decisions
-- Major platform enhancements and feature development
-- Vendor product development
-- Customer application support (application teams responsible)
-- Network infrastructure outside platform scope
+- Application-level development activities within tenant workloads
+- Architecture governance and roadmap decisions (covered by HLD/ADR)
+- Major platform enhancements and net-new capability design
+- Source code development of platform modules (covered by SDLC process, not this OPG)
 
 ---
 
@@ -125,18 +106,12 @@ my-cloud-platform is classified as Mission Critical infrastructure supporting:
 
 | Function | Owner |
 |----------|----------|
-| Service Owner | Cloud Platform Director |
-| Technical Owner | VCS Platform Lead |
-| Operations Team | Infrastructure Operations Team |
-| Support Team | L1/L2/L3 Support Teams |
-| Security Team | Security & Compliance Officer |
-| Backup Operations | Backup & Recovery Team |
-| Disaster Recovery | DR Operations Team |
-| Networking Operations | Network Operations Team |
-| Storage Operations | Storage Operations Team |
-| Kubernetes Operations | Container Platform Team |
-| Automation Operations | Automation & Orchestration Team |
-| Vendor Management | VMware Account Manager |
+| Service Owner | Cloud Platform Service Owner |
+| Technical Owner | Platform Engineering Lead (vSphere/NSX-T/vSAN/Tanzu) |
+| Operations Team | VCS Operations Team (24x7 NOC) |
+| Support Team | Managed Services Support Team |
+| Security Team | Platform Security & Vault Operations Team |
+| Vendor | VMware by Broadcom (vSphere, NSX-T, Aria Suite, SRM), Dell (Avamar/Data Domain), HashiCorp (Vault), Trend Micro, Tenable (Nessus) |
 
 ---
 
@@ -144,21 +119,21 @@ my-cloud-platform is classified as Mission Critical infrastructure supporting:
 
 | Level | Responsibility |
 |----------|----------|
-| L1 | Initial incident triage, alert acknowledgment, basic troubleshooting, ticket routing |
-| L2 | Advanced troubleshooting, configuration changes, runbook execution, escalation coordination |
-| L3 | Deep technical investigation, architecture-level issues, vendor escalation, root cause analysis |
-| Vendor | VMware product support, licensing, major incidents, architectural guidance |
+| L1 | Initial triage, alert acknowledgement, dashboard monitoring, execution of published runbooks (service restarts, standard requests), incident logging |
+| L2 | Platform administration, execution of `src/automation.py` and `src/backup.py` operations, root cause analysis, escalation of complex failures, patch execution via vLCM/SDDC Manager |
+| L3 | Deep technical resolution across compute/storage/networking, `src/dr_platform.py` failover execution, `src/security_vault.py` key management, architecture-level troubleshooting, code-level fixes to platform automation modules |
+| Vendor | Broadcom/VMware GSS for vSphere, NSX-T, Aria Suite, SRM defect resolution; Dell EMC for Avamar/Data Domain hardware and backup software; HashiCorp for Vault platform issues |
 
 ---
 
 ## 4.3 Escalation Path
 
-| Severity | Escalation Contact | Response Time | Resolution Target |
-|----------|----------|----------|----------|
-| P1 - Critical | L3 Support Manager → VCS Platform Lead → Cloud Platform Director | 15 minutes | 4 hours |
-| P2 - High | L2 Support Lead → L3 Support Manager | 30 minutes | 8 hours |
-| P3 - Medium | L2 Support Team → L2 Support Lead | 2 hours | 24 hours |
-| P4 - Low | L1 Support Team → L2 Support Lead | 8 hours | 5 business days |
+| Severity | Escalation Contact |
+|----------|----------|
+| Critical | L3 On-Call Platform Engineer → Operations Manager → Service Owner → VMware GSS Sev-1 |
+| High | L2 On-Call Engineer → L3 Platform Engineer → Operations Manager |
+| Medium | L1 NOC → L2 Platform Administrator (next business day if outside hours) |
+| Low | L1 NOC → Service Desk queue (standard SLA) |
 
 ---
 
@@ -166,26 +141,22 @@ my-cloud-platform is classified as Mission Critical infrastructure supporting:
 
 ## 5.1 Approved Change Mechanisms
 
-All production changes to my-cloud-platform shall be performed using approved change processes:
+All production changes to `my-cloud-platform` shall be performed using approved change processes only:
 
-- **Infrastructure-as-Code**: All infrastructure changes via version-controlled IaC repositories
-- **CI/CD Pipelines**: Automated deployment pipelines with approval gates
-- **GitOps Workflows**: Git-driven declarative configuration management
-- **Change Advisory Board**: CAB approval for major changes
-- **Automated Testing**: Automated validation before production deployment
-- **Rollback Capability**: All changes must include automated rollback procedures
+- Pull Requests against the platform automation repository (`src/*.py`, `scripts/detect-impact.py`)
+- CI/CD pipeline execution, including automated capability-impact detection (`scripts/detect-impact.py`) that determines affected capability domains (compute, storage, networking, monitoring, backup, DR, security, containers, etc.) before deployment
+- Infrastructure-as-Code driven provisioning via `provision_infrastructure`, `deploy_configuration_baseline`, and `execute_platform_workflow` (`src/automation.py`)
+- GitOps-based deployment workflows for network foundation, Kubernetes platform, AI platform and data platform components (`src/deploy.py`)
 
 ---
 
 ## 5.2 Configuration Management Principles
 
-- **Everything as Code**: All configurations stored in version control
-- **Automated Deployment**: No manual configuration in production
-- **Immutable Infrastructure**: Infrastructure rebuilt rather than modified
-- **Declarative Configuration**: Desired state defined in code
-- **Automated Rollback**: Failed deployments automatically rolled back
-- **Audit Trail**: All changes tracked with full history
-- **Peer Review**: All changes require peer review before deployment
+- Everything as Code: all provisioning, deployment, backup and DR operations are executed through version-controlled Python automation modules (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`)
+- Automated Deployment: `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, and `deploy_data_platform` provide repeatable, idempotent deployment of platform components
+- Version Controlled Configuration: configuration baselines applied via `deploy_configuration_baseline` are tracked in source control
+- Automated Rollback: workflow validation via `validate_automation_results` gates promotion of automation outcomes; failed validations trigger rollback per runbook
+- Automated Validation: `validate_platform_observability` confirms monitoring, logging and observability configuration post-deployment before a change is considered complete
 
 ---
 
@@ -193,55 +164,30 @@ All production changes to my-cloud-platform shall be performed using approved ch
 
 ### Supported Activities
 
-- Restart services via approved automation
-- Approve deployments through change process
-- Execute published runbooks
-- Investigate alerts and incidents
-- Modify configurations via IaC
-- Scale resources via automation
-- Execute backup and recovery procedures
-- Perform maintenance during approved windows
+- Restart services (via approved runbooks only)
+- Approve deployments through CI/CD gates
+- Execute published runbooks (backup, DR failover, key rotation, patching)
+- Investigate alerts raised by Aria Operations / Aria Logs
+- Execute `validate_backup_integrity`, `validate_recovery_objectives`, and `validate_api_subscription` as part of standard operations
 
 ### Restricted Activities
 
-- Manual production reconfiguration
-- Direct infrastructure modification bypassing IaC
-- Bypass of deployment pipelines
-- Untracked changes to production systems
-- Direct database modifications
-- Manual certificate installation
-- Unauthorized access to secrets
-- Changes outside change windows
+- Manual production reconfiguration outside of `src/automation.py` workflows
+- Direct infrastructure modification bypassing `provision_infrastructure` / `deploy_configuration_baseline`
+- Bypass of deployment pipelines or `scripts/detect-impact.py` impact assessment
+- Untracked or undocumented changes to vault namespaces, encryption keys, or service catalog entries
+- Direct manipulation of backup jobs outside `schedule_backup_job` / `execute_backup`
 
 ---
 
 ## 5.4 Break Glass Procedures
 
-### Emergency Access
+Emergency access to the platform (vCenter, NSX-T Manager, SDDC Manager, HashiCorp Vault root tokens) is controlled through a break-glass credential process managed by the Security & Vault Operations Team. Break-glass activation requires:
 
-In critical situations requiring immediate action:
-
-1. **Incident Commander** declares emergency status
-2. **L3 Support Manager** authorizes break glass access
-3. **Cloud Platform Director** approves emergency change
-4. **Operations Team** executes emergency procedure
-5. **Post-incident review** documents all actions within 24 hours
-
-### Emergency Change Process
-
-1. Verbal approval from Cloud Platform Director
-2. Immediate execution of emergency procedure
-3. Parallel documentation of all actions
-4. Formal change ticket created within 1 hour
-5. Post-incident review within 24 hours
-6. Permanent fix via standard change process
-
-### Break Glass Access
-
-- Vault emergency access tokens (time-limited, audited)
-- Direct console access (recorded, reviewed)
-- Temporary elevated privileges (logged, revoked)
-- Emergency API credentials (rotated immediately)
+1. Approval from Operations Manager or Service Owner (or designated deputy).
+2. Time-boxed credential issuance (maximum 4 hours), logged in the vault audit trail.
+3. Mandatory post-use review, encryption key rotation (`rotate_encryption_key`) if vault credentials were exposed, and incident record creation.
+4. All emergency changes must be retrospectively codified into `src/automation.py` / `src/deploy.py` workflows within 5 business days.
 
 ---
 
@@ -249,76 +195,56 @@ In critical situations requiring immediate action:
 
 ## 6.1 Monitoring Requirements
 
-| Metric | Component | Threshold | Alert Required | Owner |
-|----------|----------|----------|----------|----------|
-| CPU Utilization | vSphere Hosts | >85% | Yes | Storage Operations |
-| Memory Utilization | vSphere Hosts | >90% | Yes | Storage Operations |
-| Disk Utilization | vSAN Datastore | >80% | Yes | Storage Operations |
-| Storage Latency | vSAN | >20ms | Yes | Storage Operations |
-| Network Throughput | NSX-T | >80% capacity | Yes | Network Operations |
-| VM Availability | vSphere | <99.9% | Yes | Operations Team |
-| vCenter Health | vCenter | Unhealthy | Yes | Operations Team |
-| NSX Manager Health | NSX-T | Unhealthy | Yes | Network Operations |
-| Backup Success Rate | Canopy | <95% | Yes | Backup Operations |
-| Replication Lag | vSphere Replication | >15 minutes | Yes | DR Operations |
-| API Response Time | Service Broker | >2 seconds | Yes | Automation Operations |
-| Kubernetes Node Health | TKG | Node NotReady | Yes | Container Platform |
-| Certificate Expiration | Vault | <30 days | Yes | Security Team |
-| Vault Seal Status | Vault | Sealed | Yes | Security Team |
-| Aria Operations Health | Aria Ops | Unhealthy | Yes | Operations Team |
-| Aria Logs Ingestion | Aria Logs | Lag >5 minutes | Yes | Operations Team |
+| Metric | Threshold | Alert Required |
+|----------|----------|----------|
+| CPU (vSphere/ESXi hosts, Tanzu nodes) | >85% sustained 15 min | Yes |
+| Memory (vSphere hosts, K8s clusters) | >90% sustained 15 min | Yes |
+| Disk / vSAN Capacity | >80% used | Yes |
+| Datastore Latency | >20ms sustained | Yes |
+| Availability (vCenter, NSX-T Manager, SDDC Manager) | <99.9% rolling 30 days | Yes |
+| Response Time (Service Broker API) | >2s p95 | Yes |
+| Backup Job Success Rate | <98% success | Yes |
+| DR Replication Lag (vSphere Replication) | > configured RPO | Yes |
+| Certificate Expiry | <30 days remaining | Yes |
+| Vault Token/Key Expiry | <15 days remaining | Yes |
 
 ---
 
 ## 6.2 Dashboards
 
-| Dashboard | Purpose | Owner | Refresh Rate |
-|----------|----------|----------|----------|
-| Platform Health Overview | Real-time platform status | Operations Team | 1 minute |
-| Compute Capacity | vSphere resource utilization | Storage Operations | 5 minutes |
-| Storage Performance | vSAN performance metrics | Storage Operations | 5 minutes |
-| Network Utilization | NSX-T traffic and performance | Network Operations | 5 minutes |
-| Kubernetes Cluster Health | TKG cluster status | Container Platform | 1 minute |
-| Backup Operations | Backup job status and success | Backup Operations | 15 minutes |
-| Disaster Recovery Status | Replication and recovery readiness | DR Operations | 5 minutes |
-| Security Posture | Vault, certificates, compliance | Security Team | 1 hour |
-| API Service Broker | Service consumption and performance | Automation Operations | 5 minutes |
-| Incident Summary | Active incidents and trends | L3 Support Manager | 1 minute |
-| Capacity Forecast | 90-day capacity projections | Operations Team | 1 day |
-| Cost & Utilization | Resource consumption and billing | Finance Team | 1 day |
+| Dashboard | Purpose |
+|----------|----------|
+| Aria Operations - Compute Health | ESXi host CPU/memory/storage health and capacity trending |
+| Aria Operations - vSAN Capacity & Performance | Storage capacity, resync, and latency monitoring |
+| Aria Operations - NSX-T Networking | NSX-T edge, routing, segmentation health |
+| Aria Logs - Platform Log Analytics | Centralized log search across `automation`, `deploy`, `backup`, `dr_platform` module executions |
+| Aria Network Insight - Network Visibility | East-west traffic flow, micro-segmentation compliance |
+| Backup Operations Dashboard | Output of `generate_backup_report`, job success/failure trends |
+| DR Readiness Dashboard | Output of `generate_dr_readiness_report`, RPO/RTO compliance |
+| Service Broker Catalog & API Health | Subscription validation status, API registration health |
+| Tanzu Kubernetes Grid Cluster Health | Cluster/node health for `deploy_kubernetes_platform` outputs |
+| Security & Vault Compliance Dashboard | Vault policy compliance, key rotation status, Nessus scan results |
 
 ---
 
 ## 6.3 Alerting
 
-| Alert | Severity | Threshold | Response Target | Owner |
-|----------|----------|----------|----------|----------|
-| vSphere Host CPU Critical | P1 | >95% for 5 min | 15 min | Storage Operations |
-| vSphere Host Memory Critical | P1 | >95% for 5 min | 15 min | Storage Operations |
-| vSAN Datastore Critical | P1 | >90% capacity | 15 min | Storage Operations |
-| vSAN Component Failure | P1 | Any component failed | 15 min | Storage Operations |
-| vCenter Unavailable | P1 | Service down | 5 min | Operations Team |
-| NSX Manager Unavailable | P1 | Service down | 5 min | Network Operations |
-| Network Segment Failure | P1 | Segment unreachable | 15 min | Network Operations |
-| VM Availability SLA Breach | P1 | <99.9% for 1 hour | 15 min | Operations Team |
-| Backup Job Failed | P2 | Job failure | 30 min | Backup Operations |
-| Backup SLA Breach | P1 | >2 consecutive failures | 15 min | Backup Operations |
-| Replication Lag Critical | P1 | >30 minutes | 15 min | DR Operations |
-| Replication Failure | P1 | Replication stopped | 15 min | DR Operations |
-| API Service Degradation | P2 | Response time >5 sec | 30 min | Automation Operations |
-| Kubernetes Node Failure | P2 | Node NotReady >5 min | 30 min | Container Platform |
-| Certificate Expiration Warning | P3 | <30 days to expiry | 2 hours | Security Team |
-| Certificate Expiration Critical | P1 | <7 days to expiry | 15 min | Security Team |
-| Vault Seal Status | P1 | Vault sealed | 5 min | Security Team |
-| Vault Rekey Required | P2 | Rekey threshold reached | 1 hour | Security Team |
-| Vulnerability Scan Failed | P3 | Scan did not complete | 4 hours | Security Team |
-| Compliance Violation | P2 | Policy violation detected | 1 hour | Security Team |
-| Aria Operations Unhealthy | P2 | Service degraded | 30 min | Operations Team |
-| Aria Logs Ingestion Lag | P2 | Lag >5 minutes | 30 min | Operations Team |
-| Disk Space Critical | P1 | <10% free space | 15 min | Storage Operations |
-| Memory Pressure High | P2 | >85% utilization | 30 min | Storage Operations |
-| Network Packet Loss | P2 | >0.1% loss detected | 30 min | Network Operations |
-| Configuration Drift | P3 | Drift detected | 4 hours | Operations Team |
+| Alert | Severity | Response Target |
+|----------|----------|----------|
+| ESXi Host Unreachable / vCenter Down | Critical | 15 minutes |
+| vSAN Cluster Degraded / Disk Failure | Critical | 15 minutes |
+| NSX-T Edge/Manager Failure | Critical | 15 minutes |
+| Backup Job Failure (`execute_backup`) | High | 1 hour |
+| Backup Integrity Validation Failure (`validate_backup_integrity`) | High | 1 hour |
+| DR Replication Breach of RPO/RTO (`validate_recovery_objectives`) | Critical | 30 minutes |
+| Automation Workflow Failure (`validate_automation_results`) | Medium | 4 hours |
+| Kubernetes Platform Deployment Failure (`deploy_kubernetes_platform`) | High | 2 hours |
+| Observability Validation Failure (`validate_platform_observability`) | Medium | 4 hours |
+| Vault Policy Violation (`validate_vault_policy`) | Critical | 30 minutes |
+| Encryption Key Rotation Failure (`rotate_encryption_key`) | High | 1 hour |
+| Service Broker API Subscription Failure (`validate_api_subscription`) | Medium | 4 hours |
+| Certificate Expiry Warning | Medium | Next business day |
+| Capacity Threshold Breach (CPU/Memory/Storage) | Medium | 4 hours |
 
 ---
 
@@ -326,67 +252,27 @@ In critical situations requiring immediate action:
 
 ### Application Logs
 
-- **Aria Automation**: Workflow execution logs, provisioning events, orchestration activities
-- **Aria Orchestrator**: Workflow logs, script execution, integration events
-- **Service Broker**: API requests, service consumption, catalog operations
-- **Automation Scripts**: detect-impact.py, deployment scripts, validation scripts
+Automation module execution logs from `src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, and `src/service_broker.py` are streamed to Aria Logs, capturing workflow name, environment, execution result, and correlation IDs from `scripts/detect-impact.py` build metadata (PR number, title, URL).
 
 ### Platform Logs
 
-- **vCenter**: Virtual machine events, resource allocation, configuration changes
-- **vSAN**: Storage operations, rebalancing, component health
-- **NSX-T**: Network operations, security policy enforcement, traffic flows
-- **Tanzu Kubernetes Grid**: Cluster operations, node events, workload scheduling
-- **SDDC Manager**: Lifecycle operations, compliance checks, configuration management
+vCenter, ESXi, NSX-T Manager, SDDC Manager, and Aria Suite component logs are forwarded to Aria Logs via syslog/vRealize Log Insight agents for centralized retention and analysis.
 
 ### Infrastructure Logs
 
-- **ESXi Hosts**: Host events, resource utilization, driver operations
-- **vSphere Replication**: Replication events, synchronization status
-- **HCX**: Migration operations, network extension events
-- **Backup Appliances**: Backup job execution, deduplication, storage operations
+Host-level ESXi logs, vSAN health logs, and hardware management logs (out-of-band controllers) are collected and correlated with capacity and performance dashboards in Aria Operations.
 
 ### Security Logs
 
-- **Vault**: Authentication events, secret access, policy changes, audit logs
-- **NSX-T Security**: Firewall rules, micro-segmentation events, threat detection
-- **Trend Micro**: Endpoint protection events, malware detection, remediation
-- **Nessus**: Vulnerability scan results, compliance checks, remediation tracking
-- **Access Logs**: User authentication, authorization decisions, privilege escalation
+Vault audit logs (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`), Nessus scan logs, and Trend Micro endpoint protection logs are forwarded to the SIEM for correlation and threat detection.
 
 ---
 
 ## 6.5 Audit Logging
 
-### Audit Events
-
-| Event Type | Source | Retention | Compliance |
-|----------|----------|----------|----------|
-| User Authentication | Vault, vCenter, NSX-T | 2 years | SOC2, ISO27001 |
-| Authorization Changes | Vault, vCenter | 2 years | SOC2, ISO27001 |
-| Secret Access | Vault | 2 years | SOC2, PCI-DSS |
-| Configuration Changes | vCenter, NSX-T, Aria | 2 years | SOC2, ISO27001 |
-| Backup Operations | Canopy, Avamar | 7 years | GDPR, Regulatory |
-| Disaster Recovery | SRM, vSphere Replication | 2 years | SOC2, ISO27001 |
-| Security Policy Changes | NSX-T, Vault | 2 years | SOC2, ISO27001 |
-| Compliance Violations | Nessus, Trend Micro | 2 years | SOC2, ISO27001 |
-| API Access | Service Broker | 1 year | SOC2, ISO27001 |
-| Administrative Actions | All components | 2 years | SOC2, ISO27001 |
-
-### Retention Requirements
-
-- **Operational Logs**: 90 days hot storage, 1 year cold storage
-- **Audit Logs**: 2 years minimum, 7 years for backup/recovery
-- **Security Logs**: 2 years minimum, longer for compliance
-- **Compliance Logs**: Per regulatory requirement (minimum 2 years)
-
-### Compliance Requirements
-
-- **SOC2 Type II**: Continuous monitoring, audit trail, access controls
-- **ISO27001**: Information security management, access control, incident management
-- **GDPR**: Data protection, audit trail, right to be forgotten
-- **PCI-DSS**: Payment card data protection, access logging, encryption
-- **HIPAA**: Healthcare data protection, audit controls, encryption
+- **Audit Events:** vault namespace creation/deletion, encryption key creation/rotation/assignment, deployment execution (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`), backup job execution, DR failover execution (`execute_site_failover`), service catalog changes (`publish_service_catalog`, `register_platform_api`).
+- **Retention Requirements:** Audit logs retained for a minimum of 12 months online and 7 years in cold archive to satisfy compliance obligations.
+- **Compliance Requirements:** Audit trail must support ISO27001 control evidence and internal change-control audits; all automation executions must be traceable to a source PR via `get_pull_request_number` / `get_pull_request_url` metadata.
 
 ---
 
@@ -394,147 +280,46 @@ In critical situations requiring immediate action:
 
 ## 7.1 Backup Requirements
 
-| Asset | Backup Type | Frequency | Retention | RPO | Owner |
-|----------|----------|----------|----------|----------|----------|
-| vCenter Database | Full | Daily | 30 days | 24 hours | Backup Operations |
-| vCenter Configuration | Incremental | Hourly | 7 days | 1 hour | Backup Operations |
-| NSX Manager Configuration | Full | Daily | 30 days | 24 hours | Backup Operations |
-| vSAN Configuration | Full | Daily | 30 days | 24 hours | Backup Operations |
-| Aria Automation Database | Full | Daily | 30 days | 24 hours | Backup Operations |
-| Aria Operations Database | Full | Daily | 30 days | 24 hours | Backup Operations |
-| Aria Logs Database | Incremental | Hourly | 90 days | 1 hour | Backup Operations |
-| Vault Data | Full | Daily | 30 days | 24 hours | Security Team |
-| Kubernetes Persistent Volumes | Full | Daily | 30 days | 24 hours | Container Platform |
-| Production VMs | Full | Weekly | 52 weeks | 7 days | Backup Operations |
-| Production VMs | Incremental | Daily | 30 days | 24 hours | Backup Operations |
-| Test/Dev VMs | Full | Weekly | 12 weeks | 7 days | Backup Operations |
-| Application Data | Full | Daily | 90 days | 24 hours | Application Teams |
-| Application Data | Incremental | Hourly | 7 days | 1 hour | Application Teams |
-| Database Backups | Full | Daily | 52 weeks | 24 hours | Database Teams |
-| Database Backups | Transaction Log | Hourly | 7 days | 1 hour | Database Teams |
+| Asset | Frequency | Retention |
+|----------|----------|----------|
+| Production Virtual Machines (image-level, Avamar/Canopy Enterprise Backup) | Daily (`schedule_backup_job`) | 30 days |
+| Kubernetes Persistent Volumes / Tanzu Workloads | Daily | 30 days |
+| vCenter / SDDC Manager Configuration | Weekly | 90 days |
+| NSX-T Manager Configuration | Weekly | 90 days |
+| HashiCorp Vault Namespaces & Key Metadata | Daily (metadata only) | 1 year |
+| Application-Level Backups (tenant workloads) | Daily/Weekly per tenant SLA | 30–90 days per tenant tier |
+| Data Domain Backup Repository (deduplicated store) | Continuous replication | 6 months rolling |
 
 ---
 
 ## 7.2 Recovery Requirements
 
-| Requirement | Target | Owner | Validation |
-|----------|----------|----------|----------|
-| vCenter RTO | 4 hours | Operations Team | Quarterly test |
-| vCenter RPO | 24 hours | Operations Team | Quarterly test |
-| NSX Manager RTO | 4 hours | Network Operations | Quarterly test |
-| NSX Manager RPO | 24 hours | Network Operations | Quarterly test |
-| Aria Automation RTO | 4 hours | Automation Operations | Quarterly test |
-| Aria Automation RPO | 24 hours | Automation Operations | Quarterly test |
-| Vault RTO | 2 hours | Security Team | Quarterly test |
-| Vault RPO | 24 hours | Security Team | Quarterly test |
-| Production VM RTO | 2 hours | Backup Operations | Monthly test |
-| Production VM RPO | 24 hours | Backup Operations | Monthly test |
-| Kubernetes Cluster RTO | 4 hours | Container Platform | Quarterly test |
-| Kubernetes Cluster RPO | 24 hours | Container Platform | Quarterly test |
-| Application Data RTO | 1 hour | Application Teams | Monthly test |
-| Application Data RPO | 1 hour | Application Teams | Monthly test |
+| Requirement | Target |
+|----------|----------|
+| RPO (Tier 1 Production Workloads) | 15 minutes (vSphere Replication) |
+| RPO (Tier 2 Workloads) | 4 hours |
+| RTO (Tier 1 Production Workloads) | 1 hour (SRM automated failover) |
+| RTO (Tier 2 Workloads) | 4 hours |
+| Backup Restore SLA (single VM/file-level) | 4 hours |
 
 ---
 
 ## 7.3 Recovery Procedures
 
-### vCenter Recovery
+Recovery is executed through the `src/backup.py` and `src/dr_platform.py` modules:
 
-**Runbook**: OPG-RB-001-vCenter-Recovery
-- Restore vCenter database from backup
-- Validate vCenter connectivity
-- Verify vSphere cluster health
-- Confirm VM accessibility
-- Validate backup completion
-
-### NSX Manager Recovery
-
-**Runbook**: OPG-RB-002-NSX-Recovery
-- Restore NSX Manager configuration
-- Validate network connectivity
-- Verify security policies
-- Confirm VM network access
-- Validate replication status
-
-### Vault Recovery
-
-**Runbook**: OPG-RB-003-Vault-Recovery
-- Restore Vault data from backup
-- Unseal Vault with recovery keys
-- Validate secret accessibility
-- Verify authentication
-- Confirm service connectivity
-
-### VM Recovery
-
-**Runbook**: OPG-RB-004-VM-Recovery
-- Identify backup point
-- Restore VM from backup
-- Validate VM startup
-- Verify application health
-- Confirm data integrity
-
-### Kubernetes Recovery
-
-**Runbook**: OPG-RB-005-Kubernetes-Recovery
-- Restore cluster configuration
-- Restore persistent volumes
-- Validate cluster health
-- Verify workload deployment
-- Confirm application functionality
-
-### Database Recovery
-
-**Runbook**: OPG-RB-006-Database-Recovery
-- Identify recovery point
-- Restore database from backup
-- Apply transaction logs
-- Validate data consistency
-- Verify application connectivity
+1. Identify affected workload and confirm last successful backup using `generate_backup_report`.
+2. Validate backup integrity for the target restore point via `validate_backup_integrity(backup_id)`.
+3. Execute restore through Canopy Enterprise Backup / Avamar console referencing the validated backup ID.
+4. For site-level recovery, invoke `create_recovery_plan(application_name)` to confirm an SRM recovery plan exists, then execute `execute_site_failover(target_site)`.
+5. Confirm recovery success using `validate_recovery_objectives(application_name)` against defined RPO/RTO targets.
+6. Reference detailed step-by-step runbooks: *Backup Restore Runbook*, *SRM Failover Runbook*.
 
 ---
 
 ## 7.4 Backup Validation
 
-### Daily Validation
-
-- Backup job completion status
-- Backup size within expected range
-- Backup deduplication ratio
-- Storage capacity utilization
-- Alert monitoring for failures
-
-### Weekly Validation
-
-- Backup integrity verification
-- Restore test for sample backups
-- Backup catalog consistency
-- Retention policy compliance
-- Performance metrics review
-
-### Monthly Validation
-
-- Full recovery test for critical systems
-- RTO/RPO validation
-- Backup documentation review
-- Capacity planning assessment
-- Disaster recovery readiness
-
-### Quarterly Validation
-
-- Full disaster recovery drill
-- Multi-site failover test
-- Recovery procedure validation
-- Team training and certification
-- Compliance verification
-
-### Annual Validation
-
-- Comprehensive backup audit
-- Vendor support verification
-- Technology refresh assessment
-- Compliance certification
-- Strategic review and planning
+Backup validation is performed automatically via `validate_backup_integrity` following each `execute_backup` job, and consolidated weekly using `generate_backup_report`. A quarterly restore test (fire-drill) is performed against a non-production target for a sample of Tier 1 workloads, with results logged in the DR Readiness Dashboard.
 
 ---
 
@@ -542,153 +327,32 @@ In critical situations requiring immediate action:
 
 ## 8.1 High Availability Overview
 
-### vSphere Cluster HA
-
-- **Configuration**: 3+ ESXi hosts in cluster
-- **VM Restart**: Automatic restart on host failure
-- **Heartbeat**: Network and datastore heartbeat
-- **Isolation Response**: VM restart on network isolation
-- **Target**: 99.9% availability
-
-### vSAN Resilience
-
-- **Configuration**: Minimum 3 nodes, RAID-1 or RAID-5
-- **Fault Tolerance**: Tolerate 1-2 node failures
-- **Data Redundancy**: Automatic rebalancing
-- **Rebuild Time**: <24 hours for node failure
-- **Target**: 99.99% data availability
-
-### NSX-T High Availability
-
-- **Manager Cluster**: 3-node cluster for HA
-- **Controller Cluster**: 3+ controllers for resilience
-- **Edge Cluster**: Active-active edge nodes
-- **Automatic Failover**: Sub-second failover
-- **Target**: 99.99% network availability
-
-### Aria Automation HA
-
-- **Deployment**: Multi-node cluster
-- **Database**: Replicated across nodes
-- **Load Balancing**: Active-active configuration
-- **Automatic Failover**: Service continuity
-- **Target**: 99.9% availability
-
-### Kubernetes Cluster HA
-
-- **Master Nodes**: 3+ control plane nodes
-- **Worker Nodes**: 3+ worker nodes
-- **Pod Distribution**: Anti-affinity rules
-- **Persistent Storage**: Replicated storage
-- **Target**: 99.9% cluster availability
+The platform leverages vSphere HA/DRS clusters, vSAN stretched clusters (where configured), and NSX-T Edge cluster redundancy to provide compute, storage and networking high availability. Aria Suite components (Automation, Orchestrator, Operations, Logs) are deployed in HA-capable clustered configurations. Kubernetes platform services (Tanzu) run multi-node control planes deployed via `deploy_kubernetes_platform`.
 
 ---
 
 ## 8.2 Failover Process
 
-### Automatic Failover
+Component-level failover (host, network edge, storage node) is handled automatically by vSphere HA, NSX-T Edge redundancy and vSAN fault domains. Application/site-level failover is orchestrated through `src/dr_platform.py`:
 
-| Component | Trigger | Failover Time | Validation |
-|----------|----------|----------|----------|
-| vSphere VM | Host failure | <5 minutes | VM restart confirmation |
-| vSAN Node | Node failure | <1 minute | Data rebalancing |
-| NSX Manager | Node failure | <1 minute | Cluster quorum |
-| NSX Controller | Node failure | <30 seconds | Controller election |
-| NSX Edge | Node failure | <1 second | BGP failover |
-| Aria Automation | Node failure | <2 minutes | Service availability |
-| Kubernetes Pod | Node failure | <5 minutes | Pod rescheduling |
-
-### Manual Failover
-
-| Scenario | Procedure | Owner | Validation |
-|----------|----------|----------|----------|
-| Planned Maintenance | Migrate workloads, perform maintenance, migrate back | Operations Team | Service health check |
-| Unplanned Outage | Activate failover runbook, notify stakeholders | L3 Support Manager | Service restoration |
-| Disaster Recovery | Execute DR plan, activate secondary site | DR Operations | Full service validation |
+1. `create_recovery_plan(application_name)` establishes/validates the SRM recovery plan.
+2. `execute_site_failover(target_site)` triggers the orchestrated failover to the DR site.
+3. `validate_recovery_objectives(application_name)` confirms RPO/RTO compliance post-failover.
 
 ---
 
 ## 8.3 Disaster Recovery
 
-### DR Strategy: Active-Passive with Replication
-
-**Primary Site**: Production environment with active workloads
-**Secondary Site**: Standby environment with replicated data
-**Replication**: Continuous replication via vSphere Replication
-**Failover**: Manual activation via SRM or manual procedures
-**Failback**: Planned failback after primary restoration
-
-### DR Scope
-
-| Component | Replication | RTO | RPO |
-|----------|----------|----------|----------|
-| vCenter | Yes | 4 hours | 24 hours |
-| NSX Manager | Yes | 4 hours | 24 hours |
-| Aria Automation | Yes | 4 hours | 24 hours |
-| Production VMs | Yes | 2 hours | 24 hours |
-| Kubernetes Clusters | Yes | 4 hours | 24 hours |
-| Databases | Yes | 1 hour | 1 hour |
-| Application Data | Yes | 1 hour | 1 hour |
-
-### DR Procedures
-
-**Runbook**: OPG-RB-007-Disaster-Recovery-Failover
-1. Declare disaster event
-2. Activate DR command center
-3. Execute pre-failover validation
-4. Initiate SRM recovery plan
-5. Validate secondary site services
-6. Notify stakeholders
-7. Begin application failover
-8. Validate application functionality
-9. Update DNS/routing
-10. Monitor secondary site
-
-**Runbook**: OPG-RB-008-Disaster-Recovery-Failback
-1. Assess primary site restoration
-2. Plan failback sequence
-3. Validate primary site readiness
-4. Execute failback procedures
-5. Validate primary site services
-6. Resynchronize replication
-7. Update DNS/routing
-8. Monitor primary site
-9. Document lessons learned
+DR strategy is built on VMware SRM and vSphere Replication, providing site-level protection for Tier 1 and Tier 2 applications. `generate_dr_readiness_report` produces a periodic readiness assessment covering replication health, recovery plan currency, and last test date, consumed by the DR Readiness Dashboard (Section 6.2). See Section 12 (Disaster Recovery Strategy detail below) for full strategy.
 
 ---
 
 ## 8.4 Resilience Testing
 
-### Monthly Testing
-
-- **Backup Restore Test**: Restore sample VMs from backup
-- **Failover Test**: Test automatic failover mechanisms
-- **Alert Validation**: Verify alert generation and routing
-- **Runbook Execution**: Execute sample operational runbooks
-
-### Quarterly Testing
-
-- **Disaster Recovery Drill**: Full DR failover test
-- **Failback Test**: Test failback procedures
-- **Multi-site Failover**: Test cross-site failover
-- **Recovery Validation**: Validate RTO/RPO targets
-
-### Annual Testing
-
-- **Comprehensive DR Exercise**: Full-scale disaster recovery simulation
-- **Stakeholder Participation**: Include application teams
-- **Documentation Review**: Update procedures based on findings
-- **Compliance Validation**: Verify regulatory requirements
-
-### Testing Documentation
-
-| Test | Frequency | Owner | Success Criteria |
-|----------|----------|----------|----------|
-| Backup Restore | Monthly | Backup Operations | Successful restore, data integrity |
-| Failover | Monthly | Operations Team | Automatic failover within SLA |
-| DR Drill | Quarterly | DR Operations | Full failover within RTO |
-| Failback | Quarterly | DR Operations | Successful failback, data consistency |
-| Full Exercise | Annual | Cloud Platform Director | All systems operational, SLA met |
+- Quarterly DR failover tests using non-production recovery plans, validated with `validate_recovery_objectives`.
+- Semi-annual full-scale DR exercise including live application failover for a subset of Tier 1 workloads.
+- Continuous automated readiness reporting via `generate_dr_readiness_report`.
+- Annual chaos/resilience testing of NSX-T Edge and vSAN fault domain failure scenarios.
 
 ---
 
@@ -696,170 +360,48 @@ In critical situations requiring immediate action:
 
 ## 9.1 Access Management
 
-### User Onboarding
-
-1. **Request Submission**: Manager submits access request via ticketing system
-2. **Approval**: Security team approves based on role and business need
-3. **Account Creation**: Operations team creates user account
-4. **Role Assignment**: Assign RBAC roles based on job function
-5. **MFA Enrollment**: User enrolls in multi-factor authentication
-6. **Training**: User completes security training
-7. **Verification**: Manager verifies access appropriateness
-8. **Documentation**: Access recorded in IAM system
-
-### User Offboarding
-
-1. **Notification**: HR notifies Security team of departure
-2. **Access Review**: Identify all systems with user access
-3. **Revocation**: Disable accounts across all systems
-4. **Credential Rotation**: Rotate shared credentials
-5. **Equipment Return**: Collect hardware and credentials
-6. **Documentation**: Update access records
-7. **Verification**: Confirm access removal
-8. **Audit**: Review access logs for unauthorized activity
-
-### Role Assignment
-
-| Role | Responsibilities | Access Level | Approval |
-|----------|----------|----------|----------|
-| Platform Admin | Full platform management | Full | Cloud Platform Director |
-| Operations Engineer | Day-to-day operations | Elevated | Operations Manager |
-| Support Engineer | Incident response | Elevated | L3 Support Manager |
-| Network Engineer | Network operations | Elevated | Network Operations Lead |
-| Storage Engineer | Storage operations | Elevated | Storage Operations Lead |
-| Security Engineer | Security operations | Elevated | Security Officer |
-| Developer | Development environment | Limited | Development Manager |
-| Auditor | Compliance review | Read-only | Compliance Officer |
+- **User onboarding:** Access requests raised through the Service Broker catalog (`create_service_offering`) or IAM request process; role assignment approved by Service Owner/Security Team.
+- **User offboarding:** Immediate revocation of vCenter, NSX-T, Aria Suite, and Vault access upon HR/security notification; Vault namespace access reviewed via `validate_vault_policy`.
+- **Role assignments:** RBAC enforced across vSphere, NSX-T, Aria Automation and Tanzu Mission Control; least-privilege reviewed quarterly.
 
 ---
 
 ## 9.2 Secrets Management
 
-### Secret Types and Management
-
-| Secret Type | Management Location | Rotation Frequency | Owner |
-|----------|----------|----------|----------|
-| Database Passwords | Vault | 90 days | Database Team |
-| API Keys | Vault | 90 days | Automation Team |
-| SSH Keys | Vault | 180 days | Operations Team |
-| TLS Certificates | Vault | 365 days | Security Team |
-| Encryption Keys | Vault | 365 days | Security Team |
-| Service Accounts | Vault | 90 days | Operations Team |
-| Backup Credentials | Vault | 90 days | Backup Operations |
-| Replication Credentials | Vault | 90 days | DR Operations |
-| vCenter Credentials | Vault | 90 days | Operations Team |
-| NSX Credentials | Vault | 90 days | Network Operations |
-
-### Vault Operations
-
-- **Namespace Creation**: Logical separation per tenant/application
-- **Policy Assignment**: RBAC policies for secret access
-- **Secret Rotation**: Automated rotation via Vault
-- **Audit Logging**: All secret access logged
-- **Encryption**: All secrets encrypted at rest and in transit
-- **Backup**: Vault data backed up daily
-- **Recovery**: Vault recovery procedures tested quarterly
+| Secret Type | Management Location |
+|----------|----------|
+| Platform Service Credentials | HashiCorp Vault (namespace per service via `create_vault_namespace`) |
+| Customer-Managed Encryption Keys | HashiCorp Vault (`create_customer_managed_key`, `rotate_encryption_key`) |
+| Service-to-Key Assignments | HashiCorp Vault (`assign_key_to_service`) |
+| API/Service Broker Credentials | Vault-backed secrets store, referenced by `register_platform_api` |
+| Backup/DR Service Accounts | HashiCorp Vault namespaces dedicated to `src/backup.py` and `src/dr_platform.py` operations |
 
 ---
 
 ## 9.3 Certificate Management
 
-### Certificate Inventory
-
-| Certificate | Type | Issuer | Expiration | Owner | Renewal Process |
-|----------|----------|----------|----------|----------|----------|
-| vCenter SSL | Wildcard | Internal CA | Annual | Operations Team | 60 days before expiry |
-| NSX Manager SSL | Wildcard | Internal CA | Annual | Network Operations | 60 days before expiry |
-| Aria Automation SSL | Wildcard | Internal CA | Annual | Automation Operations | 60 days before expiry |
-| Kubernetes API | Wildcard | Internal CA | Annual | Container Platform | 60 days before expiry |
-| Service Broker API | Wildcard | Internal CA | Annual | Automation Operations | 60 days before expiry |
-| Vault TLS | Wildcard | Internal CA | Annual | Security Team | 60 days before expiry |
-| Load Balancer SSL | Wildcard | Internal CA | Annual | Network Operations | 60 days before expiry |
-| Client Certificates | Client | Internal CA | Annual | Security Team | 60 days before expiry |
-
-### Certificate Renewal Process
-
-1. **Monitoring**: Automated alerts at 60, 30, 14, 7 days before expiry
-2. **Request**: Submit CSR to internal CA
-3. **Approval**: Security team approves certificate request
-4. **Issuance**: CA issues new certificate
-5. **Installation**: Deploy certificate to service
-6. **Validation**: Verify certificate installation
-7. **Testing**: Test service with new certificate
-8. **Documentation**: Update certificate inventory
-9. **Cleanup**: Remove old certificate after grace period
+| Certificate | Owner | Renewal Process |
+|----------|----------|----------|
+| vCenter / SDDC Manager TLS Certificates | Platform Security Team | Automated renewal via vLCM/SDDC Manager certificate workflow, 30-day expiry alert |
+| NSX-T Manager/Edge Certificates | Platform Security Team | Renewed via NSX-T certificate management, coordinated maintenance window |
+| Aria Suite Component Certificates | Platform Engineering Team | Renewed via Aria Suite Lifecycle Manager |
+| Service Broker API TLS Certificates | Security & Vault Operations Team | Vault-issued/managed, auto-rotated |
 
 ---
 
 ## 9.4 Vulnerability Management
 
-### Scanning Process
-
-| Component | Scanner | Frequency | Owner | SLA |
-|----------|----------|----------|----------|----------|
-| Infrastructure | Nessus | Weekly | Security Team | 24 hours |
-| Containers | Trivy | Per build | Container Platform | Build gate |
-| Applications | SAST | Per commit | Development Team | Build gate |
-| Dependencies | Snyk | Daily | Development Team | 7 days |
-| Endpoints | Trend Micro | Continuous | Security Team | Real-time |
-| Network | NSX-T | Continuous | Network Operations | Real-time |
-
-### Remediation Process
-
-1. **Scan Execution**: Run vulnerability scan
-2. **Result Analysis**: Categorize findings by severity
-3. **Risk Assessment**: Evaluate business impact
-4. **Remediation Planning**: Develop fix strategy
-5. **Patch Testing**: Test patches in non-prod
-6. **Deployment**: Deploy patches to production
-7. **Verification**: Verify vulnerability resolution
-8. **Documentation**: Record remediation actions
-9. **Reporting**: Report to compliance team
-
-### Exception Process
-
-1. **Exception Request**: Submit with business justification
-2. **Risk Assessment**: Security team evaluates risk
-3. **Approval**: CISO approves exception
-4. **Monitoring**: Enhanced monitoring for exception
-5. **Review**: Quarterly review of active exceptions
-6. **Remediation**: Plan permanent fix
-7. **Closure**: Close exception when fixed
+- **Scanning Process:** Regular Nessus vulnerability scans across ESXi hosts, vCenter, NSX-T, and Tanzu nodes; results ingested into the Security Compliance Dashboard.
+- **Remediation Process:** Findings triaged by severity; Critical/High findings remediated within defined SLA (Critical: 7 days, High: 30 days) via `deploy_configuration_baseline` patch workflows.
+- **Exception Process:** Risk-accepted exceptions documented and approved by Security Representative, tracked in the RAID register (Section 15) with review date.
 
 ---
 
 ## 9.5 Security Event Management
 
-### SIEM Integration
-
-- **Log Sources**: All platform components send logs to SIEM
-- **Real-time Analysis**: Continuous threat detection
-- **Correlation**: Multi-source event correlation
-- **Alerting**: Automated alerts for security events
-- **Investigation**: Centralized incident investigation
-- **Reporting**: Compliance and threat reporting
-
-### Security Monitoring
-
-| Event Type | Detection Method | Response Time | Owner |
-|----------|----------|----------|----------|
-| Unauthorized Access | SIEM correlation | 15 minutes | Security Team |
-| Privilege Escalation | Vault audit logs | 15 minutes | Security Team |
-| Data Exfiltration | Network DLP | 5 minutes | Security Team |
-| Malware Detection | Trend Micro | Real-time | Security Team |
-| Policy Violation | NSX-T logs | 30 minutes | Security Team |
-| Configuration Drift | Compliance scan | 1 hour | Security Team |
-| Certificate Expiry | Automated alert | 24 hours | Security Team |
-| Encryption Failure | Application logs | 15 minutes | Security Team |
-
-### Threat Detection
-
-- **Behavioral Analysis**: Detect anomalous user behavior
-- **Signature Detection**: Detect known threats
-- **Anomaly Detection**: Detect unusual patterns
-- **Threat Intelligence**: Integrate external threat feeds
-- **Incident Response**: Automated response playbooks
-- **Forensics**: Preserve evidence for investigation
+- **SIEM Integration:** Vault audit logs, Trend Micro endpoint alerts, and Nessus findings are forwarded to the enterprise SIEM for correlation.
+- **Security Monitoring:** Continuous monitoring of vault policy compliance (`validate_vault_policy`) and endpoint protection status (Trend Micro).
+- **Threat Detection:** SIEM correlation rules trigger security incident workflows; Critical security events escalate directly to the Security Team per Section 4.3.
 
 ---
 
@@ -867,131 +409,37 @@ In critical situations requiring immediate action:
 
 ## 10.1 Routine Operational Tasks
 
-| Activity | Frequency | Owner | Duration | Impact |
-|----------|----------|----------|----------|----------|
-| Platform Health Check | Daily | Operations Team | 30 minutes | None |
-| Backup Verification | Daily | Backup Operations | 30 minutes | None |
-| Alert Review | Daily | L1 Support | 1 hour | None |
-| Capacity Review | Weekly | Operations Team | 1 hour | None |
-| Patch Review | Weekly | Operations Team | 2 hours | None |
-| Security Scan Review | Weekly | Security Team | 2 hours | None |
-| Performance Analysis | Weekly | Operations Team | 2 hours | None |
-| Compliance Check | Monthly | Security Team | 4 hours | None |
-| Disaster Recovery Test | Monthly | DR Operations | 4 hours | Test environment |
-| Capacity Planning | Monthly | Operations Team | 2 hours | None |
-| Vendor Review | Quarterly | Cloud Platform Director | 2 hours | None |
-| Security Audit | Quarterly | Security Team | 8 hours | None |
-| Disaster Recovery Drill | Quarterly | DR Operations | 8 hours | Test environment |
-| Full System Audit | Annual | Cloud Platform Director | 16 hours | None |
+| Activity | Frequency |
+|----------|----------|
+| Health Checks (Aria Operations dashboards) | Daily |
+| Capacity Review (CPU/Memory/vSAN) | Weekly |
+| Patch Review (vLCM/SDDC Manager compliance) | Monthly |
+| Backup Verification (`generate_backup_report`) | Weekly |
+| DR Readiness Review (`generate_dr_readiness_report`) | Monthly |
+| Vault Policy & Key Rotation Review | Monthly |
+| Vulnerability Scan Review (Nessus) | Monthly |
+| Service Catalog / API Health Review | Monthly |
 
 ---
 
 ## 10.2 Patch Management
 
-### Maintenance Windows
-
-- **Primary Window**: Second Sunday of month, 2:00 AM - 6:00 AM
-- **Secondary Window**: Fourth Sunday of month, 2:00 AM - 6:00 AM
-- **Emergency Window**: As needed for critical patches
-- **Notification**: 2 weeks advance notice for planned maintenance
-
-### Approval Process
-
-1. **Patch Release**: Vendor releases security or critical patch
-2. **Assessment**: Operations team assesses impact
-3. **Testing**: Test patch in non-production environment
-4. **Approval**: Change Advisory Board approves patch
-5. **Scheduling**: Schedule patch in maintenance window
-6. **Communication**: Notify stakeholders of maintenance
-7. **Execution**: Apply patch during maintenance window
-8. **Validation**: Verify patch installation and system health
-9. **Documentation**: Document patch application
-10. **Reporting**: Report patch status to stakeholders
-
-### Testing Requirements
-
-- **Functional Testing**: Verify component functionality
-- **Integration Testing**: Verify integration with other components
-- **Performance Testing**: Verify no performance degradation
-- **Security Testing**: Verify security improvements
-- **Rollback Testing**: Verify rollback capability
-
-### Patch Categories
-
-| Category | Frequency | Approval | Testing | Downtime |
-|----------|----------|----------|----------|----------|
-| Critical Security | Immediate | Expedited | Minimal | Minimal |
-| High Priority | Monthly | Standard | Standard | Scheduled |
-| Medium Priority | Quarterly | Standard | Standard | Scheduled |
-| Low Priority | As needed | Standard | Standard | Scheduled |
+- **Maintenance Windows:** Scheduled monthly maintenance windows, communicated 5 business days in advance; emergency patches follow break-glass process (Section 5.4).
+- **Approval Process:** Patch bundles validated in non-production, approved by Operations Manager, deployed via `deploy_configuration_baseline` and vLCM/SDDC Manager workflows.
+- **Testing Requirements:** Post-patch validation using `validate_automation_results` and `validate_platform_observability` to confirm monitoring/logging integrity before closing the change.
 
 ---
 
 ## 10.3 Upgrade Management
 
-### Supported Upgrade Paths
-
-| Component | Current Version | Supported Upgrades | Testing Required |
-|----------|----------|----------|----------|
-| vSphere | 8.0 | 8.0 → 8.1 | Full regression |
-| vSAN | 8.0 | 8.0 → 8.1 | Full regression |
-| NSX-T | 4.0 | 4.0 → 4.1 | Full regression |
-| Aria Automation | 8.0 | 8.0 → 8.1 | Full regression |
-| Aria Operations | 8.0 | 8.0 → 8.1 | Full regression |
-| Tanzu Kubernetes Grid | 2.0 | 2.0 → 2.1 | Full regression |
-| Vault | 1.15 | 1.15 → 1.16 | Full regression |
-
-### Version Compatibility
-
-- **Supported Combinations**: Documented in compatibility matrix
-- **Unsupported Combinations**: Not permitted in production
-- **Upgrade Sequence**: Specific order required for multi-component upgrades
-- **Rollback Plan**: Documented rollback procedure for each upgrade
-
-### Upgrade Process
-
-1. **Planning**: Develop upgrade plan with timeline
-2. **Testing**: Full testing in non-production environment
-3. **Approval**: CAB approval for production upgrade
-4. **Backup**: Full backup before upgrade
-5. **Communication**: Notify stakeholders of upgrade window
-6. **Execution**: Execute upgrade following documented procedure
-7. **Validation**: Verify all components operational
-8. **Monitoring**: Enhanced monitoring post-upgrade
-9. **Documentation**: Document upgrade completion
-10. **Reporting**: Report upgrade status to stakeholders
+- **Supported Upgrade Paths:** VMware Cloud Foundation-defined upgrade sequencing (SDDC Manager-orchestrated) covering vCenter, ESXi, NSX-T, vSAN, and Aria Suite components; Tanzu Kubernetes Grid upgrades via Tanzu Mission Control.
+- **Version Compatibility:** All upgrades validated against the VMware Interoperability Matrix prior to execution; upgrade plans executed through `execute_platform_workflow`.
 
 ---
 
 ## 10.4 Capacity Management
 
-### Capacity Planning
-
-| Resource | Current | Threshold | Growth Rate | Action |
-|----------|----------|----------|----------|----------|
-| Compute CPU | 65% | 80% | 5% monthly | Plan expansion |
-| Compute Memory | 72% | 85% | 4% monthly | Plan expansion |
-| Storage Capacity | 68% | 80% | 6% monthly | Plan expansion |
-| Network Bandwidth | 45% | 75% | 3% monthly | Monitor |
-| Kubernetes Nodes | 70% | 85% | 5% monthly | Plan expansion |
-
-### Scaling Procedures
-
-| Scenario | Procedure | Owner | Downtime |
-|----------|----------|----------|----------|
-| Add ESXi Host | Add host to cluster, rebalance VMs | Storage Operations | None |
-| Add vSAN Capacity | Add disk groups to nodes | Storage Operations | None |
-| Add NSX Edge | Deploy new edge node, update routing | Network Operations | None |
-| Add Kubernetes Node | Deploy new node, join cluster | Container Platform | None |
-| Expand Storage | Add storage capacity to vSAN | Storage Operations | None |
-
-### Forecasting
-
-- **90-Day Forecast**: Projected capacity utilization
-- **Annual Forecast**: Planned growth and expansion
-- **5-Year Plan**: Strategic capacity roadmap
-- **Cost Analysis**: Expansion cost estimation
-- **Vendor Planning**: Lead time for hardware procurement
+Capacity is monitored continuously via Aria Operations with weekly trend review. Scaling of compute/storage/networking is executed through `provision_infrastructure(environment_name)`, with growth forecasts feeding quarterly capacity planning reviews. Kubernetes and AI/data platform capacity (`deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`) is reviewed against tenant consumption reporting.
 
 ---
 
@@ -999,43 +447,23 @@ In critical situations requiring immediate action:
 
 ## 11.1 Standard Requests
 
-| Request Type | SLA | Owner | Approval |
-|----------|----------|----------|----------|
-| User Access Request | 2 business days | Security Team | Manager approval |
-| VM Provisioning | 5 business days | Automation Operations | Service owner approval |
-| Storage Allocation | 3 business days | Storage Operations | Capacity review |
-| Network Segment | 3 business days | Network Operations | Network design review |
-| Backup Configuration | 2 business days | Backup Operations | Service owner approval |
-| Certificate Request | 5 business days | Security Team | Security approval |
-| Service Restart | 1 business day | Operations Team | Service owner approval |
-| Capacity Increase | 5 business days | Operations Team | Capacity review |
-| Kubernetes Namespace | 2 business days | Container Platform | Project approval |
-| Tenant Onboarding | 10 business days | Cloud Platform Director | Executive approval |
+- User Access (vSphere/NSX-T/Tanzu/Service Broker roles)
+- Capacity Increase (compute/storage/network via `provision_infrastructure`)
+- Certificate Renewal
+- Service Restart
+- New Tenant Onboarding (via `create_service_offering` / `publish_service_catalog`)
+- New API Registration (`register_platform_api`)
+- Encryption Key Provisioning (`create_customer_managed_key`)
 
 ---
 
-## 11.2 Request Fulfillment Process
+## 11.2 Request Fulfilment Process
 
-### Standard Request Workflow
-
-1. **Submission**: User submits request via service portal
-2. **Validation**: Operations team validates request completeness
-3. **Approval**: Appropriate approver reviews and approves
-4. **Planning**: Operations team plans fulfillment
-5. **Execution**: Operations team executes request
-6. **Validation**: Verify request completion
-7. **Documentation**: Document request fulfillment
-8. **Closure**: Close request ticket
-9. **Feedback**: Request user feedback
-
-### Request Categories
-
-| Category | Complexity | Approval | Execution | SLA |
-|----------|----------|----------|----------|----------|
-| Simple | Low | Manager | Automated | 1 day |
-| Standard | Medium | Service Owner | Manual | 3 days |
-| Complex | High | Director | Coordinated | 5 days |
-| Strategic | Very High | Executive | Planned | 10 days |
+1. Request submitted via Service Broker catalog or IT Service Management (ITSM) tool.
+2. L1 validates request completeness and approval status.
+3. L2 executes fulfillment using the relevant automation module (`src/automation.py`, `src/security_vault.py`, `src/service_broker.py`).
+4. Fulfillment validated (`validate_automation_results`, `validate_api_subscription`, or `validate_vault_policy` as applicable).
+5. Request closed with audit trail reference recorded.
 
 ---
 
@@ -1043,58 +471,60 @@ In critical situations requiring immediate action:
 
 ## 12.1 Incident Classification
 
-| Severity | Description | Impact | Response | Resolution |
-|----------|----------|----------|----------|----------|
-| P1 - Critical | Complete service outage, data loss risk, security breach | All users affected | 15 minutes | 4 hours |
-| P2 - High | Significant service degradation, major functionality unavailable | Multiple users affected | 30 minutes | 8 hours |
-| P3 - Medium | Partial service degradation, workaround available | Limited users affected | 2 hours | 24 hours |
-| P4 - Low | Minor issue, minimal impact, no workaround needed | Single user affected | 8 hours | 5 business days |
+| Severity | Description |
+|----------|----------|
+| P1 | Complete platform outage or Tier 1 workload unavailability; vCenter/NSX-T/SDDC Manager down; DR failover required |
+| P2 | Major degraded functionality (e.g., single ESXi host failure, backup job repeated failure, Kubernetes cluster degraded) |
+| P3 | Minor degraded functionality (e.g., single alert threshold breach, non-critical certificate expiry warning) |
+| P4 | Cosmetic or informational issue with no service impact (e.g., dashboard display issue) |
 
 ---
 
 ## 12.2 Operational Troubleshooting
 
-### Incident Response Procedures
+**General Approach**
 
-**Runbook**: OPG-RB-009-Incident-Response
-1. **Alert Reception**: L1 receives alert
-2. **Triage**: Determine severity and impact
-3. **Escalation**: Escalate to appropriate team
-4. **Investigation**: Investigate root cause
-5. **Mitigation**: Implement temporary fix if needed
-6. **Resolution**: Implement permanent fix
-7. **Validation**: Verify issue resolution
-8. **Communication**: Update stakeholders
-9. **Documentation**: Document incident details
-10. **Post-Mortem**: Conduct post-incident review
+1. Confirm alert/incident via Aria Operations and Aria Logs correlation.
+2. Identify affected capability domain using the same mapping logic as `scripts/detect-impact.py` (compute, storage, networking, backup, DR, security, containers).
+3. Apply capability-specific runbook (below) before escalating.
 
-### Common Issues and Troubleshooting
+**Compute / Storage / Networking**
+- Check ESXi host and vSAN cluster health in Aria Operations.
+- Validate NSX-T Manager/Edge status and control-plane connectivity.
+- Escalate to L2/L3 if HA/DRS failed to remediate automatically.
 
-| Issue | Symptoms | Troubleshooting | Resolution |
-|----------|----------|----------|----------|
-| vCenter Unavailable | VMs not accessible, no management | Check vCenter service, network connectivity | Restart vCenter, check logs |
-| vSAN Degraded | Storage latency, reduced performance | Check disk health, network connectivity | Replace failed disk, rebalance |
-| NSX Connectivity Loss | VMs cannot communicate, network down | Check NSX manager, controllers, edges | Restart NSX components, check logs |
-| Backup Failure | Backup job fails, no backup created | Check backup appliance, network, storage | Restart backup service, check logs |
-| Replication Lag | DR data out of sync, lag increasing | Check replication network, storage | Restart replication, check logs |
-| API Service Down | API requests fail, service unavailable | Check service health, database connectivity | Restart service, check logs |
-| Kubernetes Node Failure | Pod eviction, workload disruption | Check node health, network, storage | Restart node, rejoin cluster |
-| Certificate Expiry | SSL errors, service unavailable | Check certificate expiration date | Renew certificate, install new cert |
+**Automation Workflow Failures**
+- Review `execute_platform_workflow` and `validate_automation_results` logs in Aria Logs.
+- Re-run `deploy_configuration_baseline` after confirming root cause resolved.
+
+**Backup Failures**
+- Review `generate_backup_report` output for failure pattern.
+- Re-trigger `execute_backup(workload_name)`; if repeated failure, validate Avamar/Data Domain target availability.
+- Escalate to Dell EMC vendor support if storage appliance fault suspected.
+
+**DR / Replication Issues**
+- Check `generate_dr_readiness_report` for replication lag.
+- Validate SRM protection group status; escalate to L3 if `validate_recovery_objectives` fails.
+
+**Kubernetes / Container Platform**
+- Review `deploy_kubernetes_platform` execution logs; validate Tanzu Mission Control cluster health.
+
+**Security / Vault**
+- Validate vault policy compliance (`validate_vault_policy`); escalate key rotation failures (`rotate_encryption_key`) to Security & Vault Operations Team immediately (Critical severity).
+
+**Service Broker / API**
+- Validate subscription status (`validate_api_subscription`); review `register_platform_api` and `publish_service_catalog` execution logs for catalog publishing errors.
 
 ---
 
 ## 12.3 Known Issues
 
-| Issue | Workaround | Status | Owner |
-|----------|----------|----------|----------|
-| vSAN Rebalancing Slow | Increase rebalancing priority | Open | Storage Operations |
-| NSX Controller Election Delay | Restart controller manually | Open | Network Operations |
-| Aria Automation Workflow Timeout | Increase timeout threshold | Open | Automation Operations |
-| Kubernetes Pod Eviction | Increase node resources | Open | Container Platform |
-| Backup Deduplication Ratio Low | Increase dedup window | Open | Backup Operations |
-| Certificate Renewal Delay | Manual renewal process | Open | Security Team |
-| Replication Lag Spike | Reduce replication bandwidth limit | Open | DR Operations |
-| API Rate Limiting | Implement request queuing | Open | Automation Operations |
+| Issue | Workaround |
+|----------|----------|
+| Backup job intermittently reports failure due to Data Domain target latency | Re-run `execute_backup` after confirming Data Domain appliance health; escalate to vendor if repeated |
+| Automation workflow validation timeout on large environment provisioning | Increase workflow timeout in `execute_platform_workflow` configuration and re-run `validate_automation_results` |
+| DR readiness report shows stale replication status after network blip | Manually re-trigger `generate_dr_readiness_report` after confirming replication link restored |
+| Service Broker catalog publish fails silently on duplicate catalog name | Verify uniqueness before `publish_service_catalog`; rename and retry |
 
 ---
 
@@ -1102,101 +532,32 @@ In critical situations requiring immediate action:
 
 ## 13.1 Compliance Requirements
 
-### SOC2 Type II
-
-- **Scope**: Security, availability, processing integrity, confidentiality, privacy
-- **Controls**: Access controls, encryption, monitoring, incident response
-- **Audit**: Annual audit by external auditor
-- **Evidence**: Logs, policies, procedures, training records
-
-### ISO27001
-
-- **Scope**: Information security management system
-- **Controls**: Asset management, access control, cryptography, incident management
-- **Audit**: Annual audit by external auditor
-- **Certification**: Maintain ISO27001 certification
-
-### GDPR
-
-- **Scope**: Personal data protection
-- **Controls**: Data minimization, encryption, access controls, breach notification
-- **Audit**: Compliance review quarterly
-- **Evidence**: Data inventory, processing agreements, breach logs
-
-### PCI-DSS
-
-- **Scope**: Payment card data protection
-- **Controls**: Network segmentation, encryption, access controls, monitoring
-- **Audit**: Annual audit by QSA
-- **Compliance**: Maintain PCI-DSS compliance
-
-### HIPAA
-
-- **Scope**: Healthcare data protection
-- **Controls**: Encryption, access controls, audit logging, breach notification
-- **Audit**: Compliance review annually
-- **Evidence**: Risk assessment, policies, training records
+- ISO27001
+- GDPR (for tenant data hosted on the platform)
+- PCI-DSS (for tenants processing payment card data within the platform)
 
 ---
 
 ## 13.2 Audit Requirements
 
-### Audit Responsibilities
-
-| Responsibility | Owner | Frequency |
-|----------|----------|----------|
-| Access Control Audit | Security Team | Quarterly |
-| Encryption Audit | Security Team | Quarterly |
-| Backup Audit | Backup Operations | Monthly |
-| Disaster Recovery Audit | DR Operations | Quarterly |
-| Patch Audit | Operations Team | Monthly |
-| Vulnerability Audit | Security Team | Weekly |
-| Compliance Audit | Compliance Officer | Quarterly |
-| Financial Audit | Finance Team | Annual |
-
-### Log Retention
-
-| Log Type | Retention | Storage | Owner |
-|----------|----------|----------|----------|
-| Operational Logs | 90 days | Hot | Operations Team |
-| Audit Logs | 2 years | Cold | Security Team |
-| Backup Logs | 7 years | Archive | Backup Operations |
-| Security Logs | 2 years | Cold | Security Team |
-| Compliance Logs | Per regulation | Archive | Compliance Officer |
-
-### Evidence Collection
-
-- **Access Logs**: User authentication and authorization
-- **Change Logs**: Configuration and code changes
-- **Audit Logs**: Administrative actions and security events
-- **Backup Logs**: Backup execution and validation
-- **Incident Logs**: Incident detection and response
-- **Training Records**: Security training completion
-- **Policy Documents**: Current policies and procedures
+- **Audit Responsibilities:** Security & Vault Operations Team owns vault/key audit evidence; Platform Operations Team owns deployment and backup audit evidence.
+- **Log Retention:** Minimum 12 months online, 7 years archived (Section 6.5).
+- **Evidence Collection:** Automated evidence collected via `generate_backup_report`, `generate_dr_readiness_report`, and vault audit trails; PR-linked change evidence captured via `scripts/detect-impact.py` metadata (repository, PR number, title, URL).
 
 ---
 
 # 14. Operational Readiness Checklist
 
-| Item | Status | Owner | Completion Date |
-|----------|----------|----------|----------|
-| Monitoring Configured | ✓ | Operations Team | 2024-01-15 |
-| Alerting Configured | ✓ | Operations Team | 2024-01-15 |
-| Dashboards Created | ✓ | Operations Team | 2024-01-15 |
-| Backup Configured | ✓ | Backup Operations | 2024-01-20 |
-| Backup Tested | ✓ | Backup Operations | 2024-01-25 |
-| Recovery Procedures Documented | ✓ | DR Operations | 2024-01-20 |
-| Recovery Tested | ✓ | DR Operations | 2024-02-01 |
-| Runbooks Available | ✓ | Operations Team | 2024-01-25 |
-| Runbooks Tested | ✓ | Operations Team | 2024-02-01 |
-| Ownership Assigned | ✓ | Cloud Platform Director | 2024-01-10 |
-| Escalation Defined | ✓ | Cloud Platform Director | 2024-01-10 |
-| Support Model Defined | ✓ | L3 Support Manager | 2024-01-15 |
-| Documentation Complete | ✓ | Operations Architecture | 2024-02-15 |
-| Team Training Complete | ✓ | Operations Manager | 2024-02-10 |
-| Security Review Complete | ✓ | Security Officer | 2024-02-05 |
-| Compliance Review Complete | ✓ | Compliance Officer | 2024-02-10 |
-| Vendor Readiness Confirmed | ✓ | VMware Account Manager | 2024-02-01 |
+| Item | Status |
+|----------|----------|
+| Monitoring Configured | Complete — Aria Operations/Logs/Network Insight deployed |
+| Alerting Configured | Complete — Section 6.3 alert catalog active |
+| Backup Configured | Complete — `schedule_backup_job` active for all Tier 1/2 workloads |
+| Recovery Tested | Complete — Quarterly DR test cadence established |
+| Runbooks Available | Complete — Backup, DR, Patch, Security runbooks published |
+| Ownership Assigned | Complete — Section 4 ownership matrix confirmed |
+| Escalation Defined | Complete — Section 4.3 escalation path confirmed |
+| Documentation Complete | Complete — This OPG approved and distributed |
 
 ---
 
@@ -1204,63 +565,42 @@ In critical situations requiring immediate action:
 
 ## Risks
 
-| Risk | Impact | Probability | Mitigation | Owner |
-|----------|----------|----------|----------|----------|
-| vCenter Failure | Complete platform outage | Medium | HA configuration, backup, recovery procedures | Operations Team |
-| vSAN Data Loss | Data loss, service outage | Low | RAID-1/5 configuration, backup, replication | Storage Operations |
-| NSX Failure | Network outage, VM isolation | Medium | HA configuration, backup, recovery procedures | Network Operations |
-| Backup Failure | No recovery capability | Medium | Backup validation, multiple backup targets | Backup Operations |
-| Replication Failure | DR unavailable | Medium | Replication monitoring, failover testing | DR Operations |
-| Security Breach | Data loss, compliance violation | Low | Access controls, encryption, monitoring | Security Team |
-| Capacity Exhaustion | Service degradation | Medium | Capacity planning, scaling procedures | Operations Team |
-| Vendor Support Loss | Extended outage | Low | Vendor SLA, support contracts | Cloud Platform Director |
-| Compliance Violation | Regulatory penalties | Low | Compliance monitoring, audit procedures | Compliance Officer |
-| Disaster Event | Complete site loss | Low | DR procedures, secondary site, testing | DR Operations |
+| Risk | Impact | Mitigation |
+|----------|----------|----------|
+| Data Domain appliance capacity exhaustion | Backup job failures, retention non-compliance | Weekly capacity review; proactive expansion via vendor engagement |
+| Vault key rotation failure undetected | Security exposure, compliance breach | Automated alerting on `rotate_encryption_key` failure (Section 6.3) |
+| DR replication lag exceeding RPO during peak load | Data loss beyond acceptable threshold | Monthly `generate_dr_readiness_report` review, bandwidth capacity planning |
+| Uncontrolled manual changes bypassing automation modules | Configuration drift, audit failure | Enforce restricted activities (Section 5.3), periodic drift detection |
 
 ---
 
 ## Assumptions
 
-| Assumption | Owner | Validation |
-|----------|----------|----------|
-| Sufficient network bandwidth for replication | Network Operations | Quarterly review |
-| Backup storage capacity sufficient | Backup Operations | Monthly review |
-| Secondary site available for DR | Cloud Platform Director | Quarterly test |
-| Vendor support available 24/7 | VMware Account Manager | Annual review |
-| Team training current | Operations Manager | Annual review |
-| Compliance requirements stable | Compliance Officer | Quarterly review |
-| Hardware refresh cycle maintained | Cloud Platform Director | Annual review |
-| Budget available for operations | Finance Team | Annual review |
+| Assumption | Owner |
+|----------|----------|
+| All production changes are executed exclusively through `src/*.py` automation modules and CI/CD pipeline | Platform Engineering Lead |
+| Underlying VMware licensing (vSphere, NSX-T, Aria Suite, SRM) remains current | Service Owner |
+| Vendor support contracts (Broadcom, Dell EMC, HashiCorp, Tenable, Trend Micro) remain active | Operations Manager |
 
 ---
 
 ## Issues
 
-| Issue | Owner | Status | Resolution |
-|----------|----------|----------|----------|
-| vSAN Rebalancing Performance | Storage Operations | Open | Optimize rebalancing parameters |
-| NSX Controller Scaling | Network Operations | Open | Evaluate controller cluster expansion |
-| Aria Automation Scalability | Automation Operations | Open | Plan cluster expansion |
-| Backup Window Expansion | Backup Operations | Open | Implement incremental backup strategy |
-| Replication Bandwidth Constraints | DR Operations | Open | Upgrade network capacity |
-| Certificate Management Automation | Security Team | Open | Implement automated renewal |
-| Capacity Planning Accuracy | Operations Team | Open | Improve forecasting models |
-| Vendor Response Time | Cloud Platform Director | Open | Escalate SLA requirements |
+| Issue | Owner |
+|----------|----------|
+| Backup job failures linked to Data Domain latency (Section 12.3) | L2 Backup Operations Team |
+| Automation workflow timeouts on large-scale provisioning | Platform Engineering Lead |
 
 ---
 
 ## Dependencies
 
-| Dependency | Owner | Impact | Mitigation |
-|----------|----------|----------|----------|
-| Network Infrastructure | Network Operations | Platform connectivity | Redundant network paths |
-| Power Infrastructure | Facilities | Platform availability | UPS, generator backup |
-| Cooling Infrastructure | Facilities | Platform stability | Redundant cooling systems |
-| Backup Storage | Storage Operations | Recovery capability | Multiple backup targets |
-| Secondary Site | Cloud Platform Director | DR capability | Maintained secondary site |
-| Vendor Support | VMware Account Manager | Issue resolution | Support contracts |
-| Security Infrastructure | Security Team | Access control | Vault, authentication services |
-| Monitoring Infrastructure | Operations Team | Observability | Aria Operations, Aria Logs |
+| Dependency | Owner |
+|----------|----------|
+| VMware Cloud Foundation / SDDC Manager lifecycle platform | Platform Engineering Lead |
+| HashiCorp Vault enterprise platform availability | Security & Vault Operations Team |
+| Dell EMC Avamar / Data Domain backup infrastructure | Backup Operations Team |
+| Broadcom/VMware GSS support entitlement | Operations Manager |
 
 ---
 
@@ -1270,54 +610,50 @@ In critical situations requiring immediate action:
 
 | Link | Purpose |
 |----------|----------|
-| https://docs.vmware.com/en/VMware-vSphere/ | vSphere Documentation |
-| https://docs.vmware.com/en/VMware-vSAN/ | vSAN Documentation |
-| https://docs.vmware.com/en/NSX-T/ | NSX-T Documentation |
-| https://docs.vmware.com/en/Aria-Automation/ | Aria Automation Documentation |
-| https://docs.vmware.com/en/Aria-Operations/ | Aria Operations Documentation |
-| https://docs.vmware.com/en/Aria-Logs/ | Aria Logs Documentation |
-| https://docs.vmware.com/en/Tanzu-Kubernetes-Grid/ | Tanzu Kubernetes Grid Documentation |
-| https://www.vaultproject.io/docs | Vault Documentation |
-| https://docs.vmware.com/en/Site-Recovery-Manager/ | SRM Documentation |
-| https://docs.vmware.com/en/vSphere-Replication/ | vSphere Replication Documentation |
+| Aria Operations Console | Compute/storage/network health monitoring |
+| Aria Logs Console | Centralized log search and analytics |
+| Aria Network Insight Console | Network flow and micro-segmentation visibility |
+| SDDC Manager Console | Lifecycle management and patching |
+| HashiCorp Vault UI | Secrets and key management |
+| Service Broker Portal | Self-service catalog and API subscriptions |
+| Backup Reporting Dashboard (`generate_backup_report` output) | Backup job status and trends |
+| DR Readiness Dashboard (`generate_dr_readiness_report` output) | DR compliance and readiness status |
 
 ---
 
 ## 16.2 Tooling
 
-| Tool | Purpose | Owner |
-|----------|----------|----------|
-| Aria Operations | Infrastructure monitoring | Operations Team |
-| Aria Logs | Log aggregation and analysis | Operations Team |
-| Aria Network Insight | Network visibility | Network Operations |
-| vSphere Client | vCenter management | Operations Team |
-| NSX Manager | NSX-T management | Network Operations |
-| Aria Automation | Provisioning and orchestration | Automation Operations |
-| Vault | Secrets management | Security Team |
-| Canopy Enterprise Backup | Backup management | Backup Operations |
-| Site Recovery Manager | Disaster recovery | DR Operations |
-| Tanzu Mission Control | Kubernetes management | Container Platform |
-| Nessus | Vulnerability scanning | Security Team |
-| Trend Micro | Endpoint protection | Security Team |
+| Tool | Purpose |
+|----------|----------|
+| vSphere / ESXi / vCenter | Compute virtualization and management |
+| vSAN | Software-defined storage |
+| NSX-T | Software-defined networking and security |
+| Aria Automation / Orchestrator | Provisioning and workflow automation |
+| Aria Operations / Aria Logs / Aria Network Insight | Monitoring, logging, network analytics |
+| Tanzu Kubernetes Grid / Tanzu Mission Control | Kubernetes platform and governance |
+| SDDC Manager / vLCM / Aria Suite Lifecycle Manager | Lifecycle and patch management |
+| HashiCorp Vault | Secrets and encryption key management |
+| Canopy Enterprise Backup / Avamar / Data Domain | Backup execution and storage |
+| VMware SRM / vSphere Replication | Disaster recovery orchestration and replication |
+| HCX / VMC | Workload mobility and public cloud integration |
+| Trend Micro | Endpoint protection |
+| Nessus | Vulnerability scanning |
+| Service Broker | Self-service catalog and API management |
 
 ---
 
 ## 16.3 Contacts
 
-| Team | Primary Contact | Secondary Contact | Escalation |
-|----------|----------|----------|----------|
-| Operations Team | Operations Manager | Senior Operations Engineer | Cloud Platform Director |
-| L1 Support | L1 Support Lead | L1 Support Engineer | L2 Support Lead |
-| L2 Support | L2 Support Lead | L2 Support Engineer | L3 Support Manager |
-| L3 Support | L3 Support Manager | Senior Support Engineer | Cloud Platform Director |
-| Network Operations | Network Operations Lead | Network Engineer | Cloud Platform Director |
-| Storage Operations | Storage Operations Lead | Storage Engineer | Cloud Platform Director |
-| Backup Operations | Backup Operations Lead | Backup Engineer | Cloud Platform Director |
-| DR Operations | DR Operations Lead | DR Engineer | Cloud Platform Director |
-| Security Team | Security Officer | Security Engineer | CISO |
-| Container Platform | Container Platform Lead | Kubernetes Engineer | Cloud Platform Director |
-| Automation Operations | Automation Lead | Automation Engineer | Cloud Platform Director |
-| VMware Support | VMware Account Manager | VMware TAM | Cloud Platform Director |
+| Team | Contact |
+|----------|----------|
+| Platform Operations (NOC) | 24x7 Operations Bridge |
+| Platform Engineering | Platform Engineering Lead / On-call rotation |
+| Security & Vault Operations | Security Representative / On-call rotation |
+| Backup Operations | Backup Operations Team distribution list |
+| DR Operations | DR On-call Engineer |
+| Vendor Support - VMware/Broadcom | GSS Support Portal |
+| Vendor Support - Dell EMC | Avamar/Data Domain Support Portal |
+| Vendor Support - HashiCorp | Vault Enterprise Support Portal |
 
 ---
 
@@ -1325,44 +661,19 @@ In critical situations requiring immediate action:
 
 | Term | Definition |
 |----------|----------|
-| OPG | Operations Guide - Operational procedures and responsibilities |
-| HLD | High-Level Design - Architecture overview and design |
-| LLD | Low-Level Design - Detailed implementation specifications |
-| BIG | Build & Installation Guide - Deployment procedures |
-| SLA | Service Level Agreement - Contractual service commitments |
-| SLO | Service Level Objective - Internal service targets |
-| RTO | Recovery Time Objective - Maximum acceptable downtime |
-| RPO | Recovery Point Objective - Maximum acceptable data loss |
-| IAM | Identity & Access Management - User and access control |
-| RBAC | Role-Based Access Control - Permission model |
-| HA | High Availability - Redundancy and failover capability |
-| DR | Disaster Recovery - Recovery from major outages |
-| P1 | Priority 1 - Critical severity |
-| P2 | Priority 2 - High severity |
-| P3 | Priority 3 - Medium severity |
-| P4 | Priority 4 - Low severity |
-| vSphere | VMware virtualization platform |
-| vSAN | VMware software-defined storage |
-| NSX-T | VMware software-defined networking |
-| Aria Automation | VMware provisioning and orchestration |
-| Aria Operations | VMware infrastructure monitoring |
-| Aria Logs | VMware log aggregation |
-| TKG | Tanzu Kubernetes Grid - Kubernetes platform |
-| SRM | Site Recovery Manager - Disaster recovery |
+| OPG | Operations Guide |
+| HLD | High-Level Design |
+| LLD | Low-Level Design |
+| BIG | Build & Installation Guide |
+| SLA | Service Level Agreement |
+| SLO | Service Level Objective |
+| RTO | Recovery Time Objective |
+| RPO | Recovery Point Objective |
+| IAM | Identity & Access Management |
+| RBAC | Role-Based Access Control |
+| VCF | VMware Cloud Foundation |
+| NSX-T | VMware Networking and Security Platform |
+| vSAN | VMware Software-Defined Storage |
+| SRM | Site Recovery Manager |
+| TKG | Tanzu Kubernetes Grid |
 | SIEM | Security Information and Event Management |
-| CAB | Change Advisory Board - Change approval authority |
-| CISO | Chief Information Security Officer |
-| QSA | Qualified Security Assessor |
-| TAM | Technical Account Manager |
-| CSR | Certificate Signing Request |
-| CA | Certificate Authority |
-| MFA | Multi-Factor Authentication |
-| GDPR | General Data Protection Regulation |
-| PCI-DSS | Payment Card Industry Data Security Standard |
-| HIPAA | Health Insurance Portability and Accountability Act |
-| ISO27001 | Information Security Management System Standard |
-| SOC2 | Service Organization Control 2 - Security audit standard |
-
----
-
-**Document End**
