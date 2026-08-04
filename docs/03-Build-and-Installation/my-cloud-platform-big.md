@@ -1,10 +1,10 @@
-# Build & Installation Guide (BIG): my-cloud-platform
+# Build & Installation Guide (BIG): My Cloud Services (my-cloud-platform)
 
-**Author:** Platform Engineering Architecture Team
-**Date:** 2024
-**Version:** 1.0
-**Status:** Final
-**Owner:** Platform Engineering / Cloud Infrastructure Services
+**Author:** Platform Engineering Architecture Team  
+**Date:** Generated from repository analysis of `jijeeshlearningorg/greenfield-code` (branch: `main`)  
+**Version:** 1.0  
+**Status:** Draft  
+**Owner:** Platform Engineering / Cloud Infrastructure Team
 
 ---
 
@@ -14,15 +14,15 @@
 
 | Role | Name | Status |
 |--------|--------|--------|
-| Reviewer | Platform Engineering Lead | Approved |
-| Security Review | Security & Compliance Team | Approved |
-| Document Owner | Cloud Platform Architecture Team | Approved |
+| Reviewer | Platform Engineering Lead | Pending |
+| Security Review | Security & Compliance Team | Pending |
+| Document Owner | Cloud Platform Owner | Pending |
 
 ## 1.2 Change Log
 
 | Version | Date | Description | Author |
 |----------|----------|----------|----------|
-| 1.0 | 2024 | Initial publication of Build & Installation Guide for my-cloud-platform | Platform Engineering Architecture Team |
+| 1.0 | Initial Generation | Baseline Build & Installation Guide generated from source repository analysis (`scripts/detect-impact.py`, `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) | Platform Engineering Architect |
 
 ---
 
@@ -30,29 +30,31 @@
 
 ## 2.1 Purpose
 
-This document describes the end-to-end build, installation, configuration, validation, rollback and operational handover procedures for **my-cloud-platform**, a VMware-based private cloud platform (VCS) built on vSphere, vSAN and NSX-T, orchestrated through the VMware Aria Suite, and extended with Kubernetes (Tanzu), disaster recovery, backup, security/vault, and self-service API/service broker capabilities. It provides the authoritative build reference for engineers deploying the platform into a new environment or region.
+This document describes the build, installation, configuration, validation, rollback and operational handover procedures for **My Cloud Services**, a VMware-based private/hybrid cloud platform. The platform automation is implemented in the `greenfield-code` repository and covers infrastructure provisioning, network and Kubernetes platform deployment, AI/data platform enablement, security/vault key management, backup orchestration, disaster recovery, and API service brokering.
+
+The guide is derived directly from the repository's automation modules (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) and the CI/CD impact-detection tooling (`scripts/detect-impact.py`).
 
 ## 2.2 Audience
 
-- Platform Engineers
-- Cloud Infrastructure Teams
-- Automation/DevOps Engineers
-- Security & Compliance Teams
-- Operations Teams
-- Support Teams
+- Platform Engineers responsible for build and deployment execution
+- Cloud/Infrastructure Automation Teams
+- Security and Vault Operations Teams
+- Operations and Support Teams performing day-2 operations
+- Service Delivery / API Service Broker Teams
 
 ## 2.3 Scope
 
 ### In Scope
 
-- Installation of core compute, storage and networking foundation (vSphere, vSAN, NSX-T)
-- Deployment of automation, orchestration and lifecycle management components (Aria Automation, Aria Orchestrator, SDDC Manager, vLCM)
-- Deployment of Kubernetes platform services (Tanzu Kubernetes Grid)
-- Configuration of security, secrets and encryption key management (HashiCorp Vault integration)
-- Configuration of backup services (Canopy Enterprise Backup, Avamar, Data Domain)
-- Configuration of disaster recovery (SRM, vSphere Replication)
-- Deployment of the service broker / API layer for self-service consumption
-- Validation, rollback and operational handover procedures
+- Installation and provisioning of the VMware-based cloud platform stack (compute, storage, networking)
+- Configuration of automation workflows (`src/automation.py`)
+- Deployment of network, Kubernetes, AI and data platform components (`src/deploy.py`)
+- Backup job scheduling and validation (`src/backup.py`)
+- Disaster recovery plan creation and failover validation (`src/dr_platform.py`)
+- Security vault namespace, key management and policy validation (`src/security_vault.py`)
+- Service catalog publishing and API registration (`src/service_broker.py`)
+- CI/CD impact detection and documentation automation (`scripts/detect-impact.py`)
+- Validation, rollback and operational handover
 
 ### Out of Scope
 
@@ -64,22 +66,22 @@ This document describes the end-to-end build, installation, configuration, valid
 
 | Document Type | Document ID | Relationship |
 |----------|----------|----------|
-| HLD | HLD-MCP-001 | Architecture Design |
-| LLD | LLD-MCP-001 | Detailed Design |
-| BIG | BIG-MCP-001 | Current Document |
-| OPG | OPG-MCP-001 | Operations Guide |
-| ADR | ADR-MCP-Series | Architecture Decisions |
-| Runbooks | RB-MCP-Series | Operational Procedures |
-| Vendor Documentation | VMware, HashiCorp, Trend Micro, Dell EMC Product Docs | Product Reference |
+| HLD | My Cloud Services – Architecture Design | Architecture Design |
+| LLD | My Cloud Services – Detailed Design | Detailed Design |
+| BIG | This Document | Current Document |
+| OPG | My Cloud Services – Operations Guide | Operations Guide |
+| ADR | Architecture Decision Records (repository `main` branch) | Architecture Decisions |
+| Runbooks | Automation Module Runbooks (`src/automation.py`, `src/backup.py`, `src/dr_platform.py`) | Operational Procedures |
+| Vendor Documentation | VMware vSphere / NSX-T / Aria Suite / Tanzu Documentation | Product Reference |
 
 ---
 
 # 3. Deployment Context
 
-- System Type: Private/Hybrid Cloud Platform (Software-Defined Data Center)
-- Deployment Model: On-premises VMware Cloud Foundation-aligned SDDC with hyperscaler (public cloud) extension via HCX/VMC
-- Platform/Provider: VMware (vSphere, vSAN, NSX-T, Aria Suite, Tanzu) with public cloud integration
-- Environment: Multi-tenant production cloud platform (`my-cloud-platform`), supporting Development, Staging and Production environments deployed via repeatable automation
+- System Type: VMware-based Private/Hybrid Cloud Platform (Software-Defined Data Center)
+- Deployment Model: Automated, script-driven deployment using Python automation modules with CI/CD-driven impact detection
+- Platform/Provider: VMware vSphere, vSAN, NSX-T, Aria Suite, Tanzu Kubernetes Grid, with optional public cloud integration (VMC)
+- Environment: Supports multi-environment automation (e.g., `dev`, `staging`, `prod`) driven by environment-name parameters passed to automation functions (`provision_infrastructure(environment_name)`, `deploy_configuration_baseline(environment_name)`)
 
 ---
 
@@ -87,71 +89,49 @@ This document describes the end-to-end build, installation, configuration, valid
 
 ## 4.1 Package Overview
 
-`my-cloud-platform` is a modular, automation-driven cloud platform delivered as a set of infrastructure, automation and security modules. The build package consists of:
-
-- CI/CD impact-detection tooling (`scripts/detect-impact.py`) that maps changed source paths to impacted platform capabilities for release governance
-- Automation modules (`src/automation.py`) driving infrastructure provisioning, workflow execution and configuration baselining
-- Deployment modules (`src/deploy.py`) provisioning network foundation, Kubernetes platform, AI platform, data platform and observability validation
-- Backup modules (`src/backup.py`) for scheduling, executing and validating workload backups
-- Disaster recovery modules (`src/dr_platform.py`) for recovery plan creation, site failover and RTO/RPO validation
-- Security/vault modules (`src/security_vault.py`) for namespace isolation, customer-managed key lifecycle and policy validation
-- Service broker modules (`src/service_broker.py`) exposing platform capabilities through a self-service API and catalog
+The `greenfield-code` repository provides the automation codebase for **My Cloud Services**. It is organized into discrete Python modules under `src/`, each responsible for a functional domain of the cloud platform, plus a CI/CD impact-detection utility under `scripts/`. The modules do not contain classes (0 classes detected); all logic is implemented as top-level functions (41 functions detected across 8 files).
 
 ## 4.2 Product / Platform Components
 
 | Component | Source / Location |
 |----------|----------|
-| vCenter / ESXi (Compute) | VMware vSphere platform |
-| vSAN (Storage) | VMware vSAN software-defined storage |
-| NSX-T (Networking) | VMware NSX-T Data Center |
-| SDDC Manager | VMware Cloud Foundation |
-| vSphere Lifecycle Manager (vLCM) | VMware vSphere |
-| Aria Automation | VMware Aria Suite |
-| Aria Orchestrator | VMware Aria Suite |
-| Aria Operations | VMware Aria Suite |
-| Aria Logs | VMware Aria Suite |
-| Aria Network Insight | VMware Aria Suite |
-| Aria Suite Lifecycle Manager | VMware Aria Suite |
-| Tanzu Kubernetes Grid | VMware Tanzu |
-| Tanzu Mission Control | VMware Tanzu |
-| HashiCorp Vault | Enterprise secrets/key management (`src/security_vault.py`) |
-| Canopy Enterprise Backup | Enterprise backup platform (`src/backup.py`) |
-| Avamar / Data Domain | Backup storage and recovery appliance |
-| Site Recovery Manager (SRM) | Disaster recovery orchestration (`src/dr_platform.py`) |
-| vSphere Replication | VM-level replication engine |
-| HCX | Workload mobility / migration |
-| VMware Cloud (VMC) | Public cloud integration |
-| Service Broker | Self-service catalog and API layer (`src/service_broker.py`) |
-| Trend Micro | Endpoint protection / anti-malware |
-| Nessus | Vulnerability scanning |
-| Automation Engine | `src/automation.py` |
-| Deployment Engine | `src/deploy.py` |
-| CI/CD Impact Detection | `scripts/detect-impact.py` |
+| Automation Orchestration Engine | `src/automation.py` (`provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results`) |
+| Platform Deployment Engine | `src/deploy.py` (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`) |
+| Backup Service Module | `src/backup.py` (`schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`) |
+| Disaster Recovery Module | `src/dr_platform.py` (`create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`) |
+| Security & Vault Module | `src/security_vault.py` (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`) |
+| Service Broker Module | `src/service_broker.py` (`publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`) |
+| CI/CD Impact Detection | `scripts/detect-impact.py` (15 functions including `resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`) |
+| Compute Platform | vSphere / ESXi (technology catalog) |
+| Storage Platform | vSAN, optional Fibre Channel storage |
+| Networking Platform | NSX-T |
+| Automation/Orchestration Platform | Aria Automation, Aria Orchestrator |
+| Monitoring Platform | Aria Operations, Aria Logs, Aria Network Insight |
+| Container Platform | Tanzu Kubernetes Grid, Tanzu Mission Control |
+| Lifecycle Management | SDDC Manager, vSphere Lifecycle Manager (vLCM), Aria Suite Lifecycle Manager |
+| Security Tooling | Trend Micro, Nessus, HashiCorp Vault |
+| Backup Platform | Canopy Enterprise Backup, Avamar, Data Domain |
+| Disaster Recovery Platform | Site Recovery Manager (SRM), vSphere Replication |
+| Workload Mobility | HCX |
+| Public Cloud Integration | VMware Cloud (VMC) |
+| Service Delivery | Service Broker |
 
 ## 4.3 Versioning
 
-| Component | Version (Reference) |
+| Item | Version / Reference |
 |----------|----------|
-| vSphere / ESXi | Latest supported LTS release per VMware Product Interoperability Matrix |
-| vSAN | Aligned to vSphere version |
-| NSX-T Data Center | Latest validated release |
-| SDDC Manager | Latest VCF release supported by Product Interoperability Matrix |
-| Aria Suite (Automation/Orchestrator/Operations/Logs/Network Insight) | Latest Aria Suite release compatible with vSphere/NSX-T |
-| Tanzu Kubernetes Grid | Latest TKG release supported by vSphere |
-| HashiCorp Vault | Latest Enterprise release |
-| Canopy Enterprise Backup / Avamar / Data Domain | Vendor-supported release per backup platform compatibility matrix |
-| SRM / vSphere Replication | Aligned to vSphere version |
-| Repository build tooling | `main` branch, `jijeeshlearningorg/greenfield-code` |
-
-Actual deployed versions must be recorded in the environment-specific Configuration Management Database (CMDB) entry at build completion.
+| Repository | `jijeeshlearningorg/greenfield-code` |
+| Branch | `main` |
+| Automation Modules | Version tracked via repository commit history (no explicit version constants detected in source) |
+| Underlying Platform Technologies | vSphere/ESXi/vCenter/vSAN/NSX-T/Aria Suite/Tanzu — versions to be recorded at deployment time per environment build sheet |
 
 ## 4.4 Installation Notes
 
-- All modules assume a functioning underlying vSphere/vSAN/NSX-T foundation prior to automation, backup, DR, security and service broker layers being deployed.
-- Automation workflows (`src/automation.py`, `src/deploy.py`) are idempotent at the environment/workflow level; re-running against an already-provisioned environment should be validated in a non-production environment first.
-- Public cloud integration (VMC, HCX) is optional and only required where `public-cloud-integration` capability is in scope for the target deployment.
-- The `scripts/detect-impact.py` tool is a CI/CD governance utility; it does not provision infrastructure but determines which capability documentation/deployment pipelines are impacted by a given pull request and must be included in change review.
-- Deployment order must follow: Networking Foundation → Compute/Storage → Automation/Orchestration → Security/Vault → Kubernetes/AI/Data Platforms → Backup → DR → Service Broker → Monitoring/Observability validation.
+- All deployment functions return boolean success indicators (e.g., `deploy_network_foundation(region) -> bool`), implying installation steps must be gated on function return values before proceeding to dependent steps.
+- `src/deploy.py` functions have interdependencies across domains: networking must be validated before Kubernetes, AI, and data platform deployment (inferred from function ordering: `deploy_network_foundation` → `deploy_kubernetes_platform` → `deploy_ai_platform` → `deploy_data_platform` → `validate_platform_observability`).
+- `scripts/detect-impact.py` is used in CI/CD pipelines to determine which platform capabilities are impacted by a given code change (via `resolve_capabilities_for_changed_file` and `build_impacted_capabilities`), and should be run as part of the pull request pipeline before merge to `main`.
+- No explicit configuration files (YAML/JSON) were found in the scanned repository beyond what `read_yaml()` in `scripts/detect-impact.py` consumes; the YAML mapping file consumed by this function is an external dependency and must be provisioned (inferred).
+- No classes were detected; all modules operate as function libraries — deployment orchestration (e.g., an entry-point pipeline or scheduler) invoking these functions in sequence is an external dependency and must be confirmed operationally.
 
 ---
 
@@ -159,109 +139,106 @@ Actual deployed versions must be recorded in the environment-specific Configurat
 
 ## 5.1 Infrastructure
 
-- Compute: ESXi host cluster(s) sized for management and workload domains
-- Storage: vSAN-eligible local storage per host, or supported Fibre Channel storage array for optional external storage
-- Network: NSX-T ready physical fabric (leaf/spine or equivalent), dedicated VLANs for management, vMotion, vSAN, NSX overlay/underlay, and edge uplinks
-- DNS: Forward and reverse DNS resolution for all management components (vCenter, NSX Manager, SDDC Manager, Aria Suite nodes)
-- NTP: Time synchronization source available to all ESXi hosts and management appliances
-- Backup Infrastructure: Data Domain appliance and Avamar/Canopy Enterprise Backup connectivity
+- Compute: vSphere/ESXi cluster capacity sized for platform workloads (compute domain)
+- Storage: vSAN datastore (software-defined storage) or Fibre Channel storage (optional)
+- Network: NSX-T managed network fabric for segmentation, routing, and connectivity
+- DNS: Enterprise DNS resolution for all platform management endpoints (vCenter, NSX Manager, Aria Suite, Tanzu)
+- NTP: Time synchronization service across all platform components (required for vSphere/NSX-T/vSAN cluster health)
+- Backup Infrastructure: Canopy Enterprise Backup / Avamar with Data Domain target storage
 
 ## 5.2 Hardware Requirements
 
-- CPU: Server-class CPUs certified on VMware Hardware Compatibility List (HCL)
-- Memory: Sized per management and workload domain design (minimum per Aria Suite/Tanzu sizing guides)
-- Storage: vSAN-certified disks/controllers per HCL; Data Domain capacity sized to backup retention policy
-- Rack Requirements: Standard 42U rack with redundant power feeds per site design
-- BIOS Settings: Virtualization extensions (VT-x/AMD-V), IOMMU/VT-d enabled, power management set to OS-controlled per VMware best practice
+- CPU: Sized per vSphere cluster capacity plan (per-environment sizing required)
+- Memory: Sized per vSAN/vSphere workload domain requirements
+- Storage: vSAN-eligible disk groups (cache + capacity tier) or Fibre Channel LUNs
+- Rack Requirements: Per data center standard rack/power/cooling specification
+- BIOS Settings: Virtualization extensions enabled (VT-x/AMD-V), power management set per VMware best practice
 
 ## 5.3 Software Requirements
 
-- Operating Systems: ESXi hypervisor images; Photon OS/Linux appliances for Aria Suite, NSX-T, SDDC Manager
-- Middleware: Aria Suite Lifecycle Manager for appliance deployment orchestration
-- Runtime Components: Python 3.x runtime for automation/deployment scripts (`scripts/detect-impact.py`, `src/*.py`)
-- Libraries: PyYAML (or equivalent) for YAML parsing in impact-detection tooling
-- Drivers: Certified I/O, storage and network drivers per VMware HCL
-- Utilities: Standard CLI tooling (PowerCLI, govc, kubectl, vault CLI, terraform if applicable)
+- Operating Systems: ESXi hypervisor OS on all compute hosts
+- Middleware: Aria Automation, Aria Orchestrator (automation/orchestration layer used by `src/automation.py` workflows)
+- Runtime Components: Python runtime for executing `src/*.py` automation modules and `scripts/detect-impact.py`
+- Libraries: Python standard library modules for YAML/JSON parsing (as used by `read_yaml`, `write_json` in `scripts/detect-impact.py`) — `PyYAML` dependency inferred
+- Drivers: ESXi-certified hardware drivers per VMware Compatibility Guide
+- Utilities: Git (for repository/CI-CD change detection), CI/CD runner (e.g., pipeline executing `scripts/detect-impact.py`)
 
 ## 5.4 Access & Permissions
 
 | Role | Permissions | Notes |
 |----------|----------|----------|
-| Platform Build Engineer | Administrator on vCenter, NSX-T Manager, SDDC Manager | Required for initial foundation build |
-| Automation Service Account | API access to Aria Automation/Orchestrator | Used by `src/automation.py` workflows |
-| Security/Vault Administrator | Admin on HashiCorp Vault namespace | Used by `src/security_vault.py` operations |
-| Backup Administrator | Admin on Canopy/Avamar/Data Domain | Used by `src/backup.py` operations |
-| DR Administrator | Admin on SRM/vSphere Replication | Used by `src/dr_platform.py` operations |
-| Service Broker Administrator | Publish/manage catalog and API registrations | Used by `src/service_broker.py` operations |
-| Read-Only Auditor | View-only across all consoles | For compliance/audit review |
+| Platform Automation Service Account | Administrator on vCenter, NSX-T Manager, Aria Automation | Used by `provision_infrastructure` and `execute_platform_workflow` |
+| Security/Vault Administrator | Vault namespace and key management rights | Used by `create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key` |
+| Backup Operator | Backup scheduling and execution rights on backup platform | Used by `schedule_backup_job`, `execute_backup` |
+| DR Operator | Recovery plan and failover execution rights on SRM/vSphere Replication | Used by `create_recovery_plan`, `execute_site_failover` |
+| Service Broker Administrator | Catalog publishing and API registration rights | Used by `publish_service_catalog`, `register_platform_api` |
+| CI/CD Pipeline Service Account | Read access to repository, write access to documentation/output artifacts | Used by `scripts/detect-impact.py` |
 
 ## 5.5 Security Requirements
 
-- Security Baselines: VMware vSphere Security Configuration Guide, CIS Benchmarks for ESXi/vCenter
-- Encryption Requirements: Customer-managed encryption keys via HashiCorp Vault for vSAN encryption, VM encryption and backup encryption
-- Compliance Requirements: Organizational compliance framework (e.g., ISO 27001/PCI-DSS as applicable) plus vulnerability scanning via Nessus
-- Hardening Standards: STIG/CIS hardening applied to all management appliances and endpoint protection via Trend Micro
+- Security Baselines: VMware vSphere/NSX-T hardening guides applied to all hosts and management components
+- Encryption Requirements: Customer-managed encryption keys enforced via `create_customer_managed_key` and `assign_key_to_service` (HashiCorp Vault backend)
+- Compliance Requirements: Endpoint protection (Trend Micro) and vulnerability scanning (Nessus) enabled prior to production cutover
+- Hardening Standards: Vault policies validated via `validate_vault_policy` prior to service key assignment
 
 ## 5.6 Secrets & Credential Dependencies
 
 | Credential Type | Purpose | Storage Location |
 |----------|----------|----------|
-| vCenter/NSX-T/SDDC Manager admin credentials | Initial platform build and configuration | HashiCorp Vault |
-| Aria Suite service account credentials | Automation and orchestration workflow execution | HashiCorp Vault |
-| Customer-managed encryption keys | vSAN/VM/backup encryption (`create_customer_managed_key`) | HashiCorp Vault |
-| Backup platform service credentials | Backup scheduling and execution (`schedule_backup_job`, `execute_backup`) | HashiCorp Vault |
-| DR platform service credentials | Recovery plan and failover execution | HashiCorp Vault |
-| Service Broker API credentials | API registration and subscription validation | HashiCorp Vault |
-| CI/CD pipeline tokens | Repository access for `detect-impact.py` execution | CI/CD secrets store |
+| vCenter/NSX-T Service Account Credentials | Automation execution (`provision_infrastructure`, `deploy_network_foundation`) | HashiCorp Vault |
+| Vault Root/Namespace Tokens | Vault namespace creation and key operations (`create_vault_namespace`) | HashiCorp Vault (self-managed) |
+| Customer-Managed Encryption Keys | Service encryption (`create_customer_managed_key`, `assign_key_to_service`) | HashiCorp Vault |
+| Backup Platform Credentials | Backup job execution (`execute_backup`) | Canopy Enterprise Backup / Avamar credential store |
+| DR Platform Credentials | Site failover execution (`execute_site_failover`) | SRM/vSphere Replication credential store |
+| Service Broker API Keys | API registration and subscription validation (`register_platform_api`, `validate_api_subscription`) | Service Broker secrets store |
+| CI/CD Pipeline Tokens | Repository access, PR metadata retrieval (`get_pull_request_number`, `get_pull_request_url`) | CI/CD platform secrets store |
 
 ## 5.7 Certificate Requirements
 
 | Certificate | Purpose | Owner |
 |----------|----------|----------|
-| vCenter Server Certificate | Secure management access | PKI/Security Team |
-| NSX-T Manager Certificate | Secure API/UI access | PKI/Security Team |
-| Aria Suite Appliance Certificates | Secure automation/orchestration endpoints | PKI/Security Team |
-| Vault Server Certificate (TLS) | Secure secrets management transport | Security/Vault Team |
-| Service Broker API Gateway Certificate | Secure external API consumption | Platform Engineering |
+| vCenter/NSX-T Management SSL Certificate | Secure management plane access | Platform Engineering |
+| Aria Suite Component Certificates | Secure automation/orchestration/monitoring endpoints | Platform Engineering |
+| Vault TLS Certificate | Secure vault namespace and key operations | Security Team |
+| Service Broker API Certificate | Secure external API endpoint exposure | API Service Broker Team |
 
 ## 5.8 Firewall & Network Dependencies
 
-- Firewall Rules: Management-to-management communication between vCenter, NSX-T, SDDC Manager, Aria Suite, Vault, Backup and DR platforms
-- Proxy Requirements: Outbound proxy for VMware update repositories and public cloud connectivity (VMC/HCX), if used
-- Load Balancer Dependencies: NSX-T load balancer or external LB fronting Aria Automation/Service Broker API endpoints
-- Required Ports: Standard VMware, NSX-T, Vault, backup and DR product ports per vendor documentation (see Section 16.1)
-- External Endpoints: VMware update/patch repositories, Trend Micro update servers, Nessus feed servers, public cloud (VMC) endpoints
+- Firewall Rules: Management plane access between automation host and vCenter/NSX-T/Aria Suite/Vault endpoints
+- Proxy Requirements: Outbound proxy configuration for CI/CD pipeline access to repository and external registries (if applicable)
+- Load Balancer Dependencies: Load balancing for Aria Automation, Service Broker, and Tanzu Kubernetes Grid control plane endpoints
+- Required Ports: Standard VMware management ports (vCenter 443, NSX-T Manager 443, Aria Suite 443, Vault 8200) — to be confirmed against environment build sheet
+- External Endpoints: HashiCorp Vault, Data Domain backup target, SRM peer site, VMC (if public cloud integration enabled)
 
 ## 5.9 External Dependencies
 
-- Active Directory: Identity source for RBAC across vCenter, NSX-T, Aria Suite, Vault
-- LDAP: Alternative/secondary identity integration where AD is not used
-- DNS: Enterprise DNS services
-- Monitoring Platform: Aria Operations, Aria Logs
+- Active Directory: Identity source for platform RBAC
+- LDAP: Directory integration for vCenter/NSX-T/Aria Suite authentication
+- DNS: Enterprise DNS as described in Section 5.1
+- Monitoring Platform: Aria Operations, Aria Logs, Aria Network Insight (validated via `validate_platform_observability`)
 - Backup Platform: Canopy Enterprise Backup, Avamar, Data Domain
-- Vault Solution: HashiCorp Vault (Enterprise)
-- External APIs: Service Broker consumer integrations
-- Database Platforms: Backend databases for Aria Suite components (embedded or external PostgreSQL)
-- Message Queues: Internal Aria Automation/Orchestrator messaging (embedded)
+- Vault Solution: HashiCorp Vault (`src/security_vault.py`)
+- External APIs: Platform APIs registered via `register_platform_api`
+- Database Platforms: Data platform backend (deployed via `deploy_data_platform`) — specific database engine not specified in source (inferred requirement)
+- Message Queues: Not evidenced in repository — to be confirmed with architecture team
 
 ## 5.10 Licensing Requirements
 
-- Product Licenses: vSphere, vSAN, NSX-T, Aria Suite, Tanzu Kubernetes Grid, SDDC Manager entitlements
-- Subscription Entitlements: HashiCorp Vault Enterprise, Trend Micro, Nessus, Canopy Enterprise Backup, Avamar
-- License Keys: Recorded in secure license management repository (not this document)
+- Product Licenses: VMware vSphere, vSAN, NSX-T, Aria Suite, Tanzu Kubernetes Grid, Tanzu Mission Control
+- Subscription Entitlements: HashiCorp Vault Enterprise, Canopy Enterprise Backup, Trend Micro, Nessus
+- License Keys: To be provisioned per environment build sheet prior to installation (not stored in repository)
 
 ## 5.11 Skills Required
 
 | Skill | Level |
 |----------|----------|
-| VMware vSphere/vSAN/NSX-T Administration | Expert |
-| VMware Aria Suite Automation & Orchestration | Advanced |
-| Kubernetes / Tanzu Administration | Advanced |
-| HashiCorp Vault Administration | Advanced |
-| Backup & DR Administration (SRM, Avamar, Data Domain) | Advanced |
-| Python Scripting / CI-CD Pipeline Engineering | Intermediate |
-| Network Engineering (NSX-T, Firewalls, Load Balancing) | Advanced |
-| Security & Compliance Operations | Intermediate |
+| VMware vSphere/vSAN/NSX-T Administration | Advanced |
+| VMware Aria Suite (Automation/Orchestrator/Operations/Logs) | Advanced |
+| Tanzu Kubernetes Grid / Kubernetes Operations | Intermediate–Advanced |
+| Python Scripting (automation module execution/maintenance) | Intermediate |
+| HashiCorp Vault Administration | Intermediate–Advanced |
+| Backup & DR Operations (SRM, Avamar, Data Domain) | Intermediate |
+| CI/CD Pipeline Administration (GitHub Actions or equivalent) | Intermediate |
 
 ---
 
@@ -269,19 +246,25 @@ Actual deployed versions must be recorded in the environment-specific Configurat
 
 | Parameter | Value | Description |
 |----------|----------|----------|
-| environment_name | e.g. `prod-region1` | Target environment identifier used by `provision_infrastructure`, `deploy_configuration_baseline` |
-| workflow_name | e.g. `platform-baseline-workflow` | Automation workflow identifier used by `execute_platform_workflow`, `validate_automation_results` |
-| region | e.g. `region1` | Target region for network foundation deployment (`deploy_network_foundation`) |
-| cluster_name | e.g. `tkg-prod-cluster01` | Kubernetes cluster identifier for `deploy_kubernetes_platform` |
-| workload_name | e.g. `app-tier-01` | Workload identifier for backup scheduling (`schedule_backup_job`, `execute_backup`) |
-| application_name | e.g. `crm-app` | Application identifier for DR planning (`create_recovery_plan`, `validate_recovery_objectives`) |
-| target_site | e.g. `dr-site-b` | Target DR site for `execute_site_failover` |
-| namespace_name | e.g. `platform-secrets-ns` | Vault namespace identifier for `create_vault_namespace` |
-| key_name | e.g. `platform-cmk-01` | Encryption key identifier for `create_customer_managed_key`, `rotate_encryption_key` |
-| service_name | e.g. `vm-provisioning-service` | Platform service name for key assignment / catalog offering |
-| catalog_name | e.g. `enterprise-service-catalog` | Catalog identifier for `publish_service_catalog` |
-| api_name | e.g. `vm-provisioning-api` | API endpoint identifier for `register_platform_api` |
-| subscription_id | e.g. `sub-00123` | Subscription identifier for `validate_api_subscription` |
+| `environment_name` | e.g., `dev`, `staging`, `prod` | Target environment for `provision_infrastructure`, `deploy_configuration_baseline` |
+| `workflow_name` | Platform-defined workflow identifier | Input to `execute_platform_workflow` and `validate_automation_results` |
+| `region` | Target deployment region | Input to `deploy_network_foundation` |
+| `cluster_name` | Kubernetes cluster identifier | Input to `deploy_kubernetes_platform` |
+| `environment` (AI/Data) | Target environment for AI/Data platform | Input to `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability` |
+| `workload_name` | Workload identifier for backup | Input to `schedule_backup_job`, `execute_backup` |
+| `backup_id` | Identifier of executed backup | Input to `validate_backup_integrity` |
+| `application_name` | Application identifier for DR | Input to `create_recovery_plan`, `validate_recovery_objectives` |
+| `target_site` | DR target site identifier | Input to `execute_site_failover` |
+| `namespace_name` | Vault namespace identifier | Input to `create_vault_namespace` |
+| `key_name` | Encryption key identifier | Input to `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service` |
+| `service_name` | Platform service identifier | Input to `assign_key_to_service` |
+| `policy_name` | Vault policy identifier | Input to `validate_vault_policy` |
+| `catalog_name` | Service catalog identifier | Input to `publish_service_catalog` |
+| `api_name` | Platform API identifier | Input to `register_platform_api` |
+| `service_name` (Broker) | Self-service offering identifier | Input to `create_service_offering` |
+| `subscription_id` | API subscription identifier | Input to `validate_api_subscription` |
+| YAML mapping file path | Path to capability/path mapping file | Input to `read_yaml` in `scripts/detect-impact.py` |
+| Changed files list path | Path to CI/CD changed-files manifest | Input to `read_changed_files` in `scripts/detect-impact.py` |
 
 ---
 
@@ -295,11 +278,11 @@ Prepare → Install → Configure → Validate → Handover
 
 ## 7.2 Build Phases
 
-- Preparation: Infrastructure readiness, network fabric, access, credentials, licensing
-- Installation: Core SDDC (vSphere/vSAN/NSX-T), Aria Suite, Tanzu, Vault, Backup, DR, Service Broker deployment
-- Configuration: Baseline configuration, security hardening, integration with monitoring/backup/DR/vault
-- Integration: Automation workflow execution, Kubernetes/AI/Data platform provisioning, service catalog publication
-- Validation: Health checks, connectivity, functional and observability validation
+- Preparation: Infrastructure readiness, credentials/secrets in Vault, network and DNS/NTP prerequisites confirmed
+- Installation: Execution of `provision_infrastructure`, `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`
+- Configuration: Execution of `deploy_configuration_baseline`, vault namespace/key setup (`create_vault_namespace`, `create_customer_managed_key`, `assign_key_to_service`), service broker setup (`publish_service_catalog`, `register_platform_api`, `create_service_offering`)
+- Integration: Backup scheduling (`schedule_backup_job`), DR recovery plan creation (`create_recovery_plan`), API subscription validation (`validate_api_subscription`)
+- Validation: `validate_automation_results`, `validate_platform_observability`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_vault_policy`
 
 ---
 
@@ -307,51 +290,28 @@ Prepare → Install → Configure → Validate → Handover
 
 ## 8.1 Installation Overview
 
-Installation is **hybrid**: initial SDDC foundation components (ESXi, vCenter, NSX-T, SDDC Manager) are deployed using vendor installation media/appliance OVAs, while subsequent platform layers (automation baselines, Kubernetes, AI/data platforms, backup, DR, vault, service broker) are deployed via the repository automation modules (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) invoked through CI/CD or orchestrated automation pipelines.
+Installation is automated and script-driven, executed via Python automation modules within the `greenfield-code` repository. Each module exposes discrete functions returning boolean success indicators, allowing installation orchestration (manual invocation, scheduler, or CI/CD pipeline) to gate subsequent steps on prior step success. No manual GUI-based installation steps are evidenced in the repository; all documented actions are automation-module driven.
 
 ## 8.2 Step-by-Step Installation
 
 | Step | Action | Estimated Duration | Notes |
 |----------|----------|----------|----------|
-| 1 | Validate infrastructure, network, DNS, NTP and access pre-requisites | 1 day | Refer to Section 5 |
-| 2 | Deploy/validate ESXi hosts, vCenter Server and cluster configuration | 1–2 days | Foundation for compute/storage capability |
-| 3 | Configure vSAN datastore and storage policies | 0.5 day | Storage capability |
-| 4 | Deploy NSX-T Manager and configure network foundation via `deploy_network_foundation(region)` | 1 day | Networking capability |
-| 5 | Deploy SDDC Manager and vLCM baselines | 0.5 day | Lifecycle management capability |
-| 6 | Deploy Aria Suite Lifecycle Manager and provision Aria Automation, Orchestrator, Operations, Logs, Network Insight | 1–2 days | Automation/monitoring capability |
-| 7 | Execute `provision_infrastructure(environment_name)` to provision environment resources | 0.5 day | Automation module |
-| 8 | Execute `deploy_configuration_baseline(environment_name)` to apply standard configuration baselines | 0.5 day | Automation module |
-| 9 | Execute `execute_platform_workflow(workflow_name)` and `validate_automation_results(workflow_name)` | 0.5 day | Automation validation |
-| 10 | Deploy HashiCorp Vault and execute `create_vault_namespace(namespace_name)`, `create_customer_managed_key(key_name)`, `assign_key_to_service(key_name, service_name)`, `validate_vault_policy(policy_name)` | 1 day | Security capability |
-| 11 | Deploy Tanzu Kubernetes Grid via `deploy_kubernetes_platform(cluster_name)` | 1 day | Containers capability |
-| 12 | Deploy AI platform services via `deploy_ai_platform(environment)` (if in scope) | 0.5–1 day | Optional, environment-dependent |
-| 13 | Deploy data platform services via `deploy_data_platform(environment)` (if in scope) | 0.5–1 day | Optional, environment-dependent |
-| 14 | Configure backup platform (Canopy/Avamar/Data Domain) and execute `schedule_backup_job(workload_name)`, `execute_backup(workload_name)`, `validate_backup_integrity(backup_id)` | 1 day | Backup capability |
-| 15 | Configure DR platform (SRM/vSphere Replication) and execute `create_recovery_plan(application_name)`, `validate_recovery_objectives(application_name)` | 1 day | Disaster recovery capability |
-| 16 | Deploy Service Broker layer via `publish_service_catalog(catalog_name)`, `register_platform_api(api_name)`, `create_service_offering(service_name)` | 0.5 day | API/service broker capability |
-| 17 | Execute `validate_platform_observability(environment)` | 0.5 day | Monitoring/observability validation |
-| 18 | Perform end-to-end validation, reporting and handover | 1 day | Refer to Sections 9, 15 |
+| 1 | Confirm infrastructure and credential prerequisites (Section 5) are met | 1–2 hours | Manual pre-check |
+| 2 | Execute `provision_infrastructure(environment_name)` from `src/automation.py` | Variable (environment-dependent) | Provisions base infrastructure for target environment |
+| 3 | Execute `deploy_network_foundation(region)` from `src/deploy.py` | Variable | Deploys core NSX-T networking components |
+| 4 | Execute `deploy_kubernetes_platform(cluster_name)` from `src/deploy.py` | Variable | Deploys Tanzu Kubernetes Grid platform services |
+| 5 | Execute `deploy_ai_platform(environment)` from `src/deploy.py` | Variable | Deploys AI platform and model hosting infrastructure |
+| 6 | Execute `deploy_data_platform(environment)` from `src/deploy.py` | Variable | Deploys enterprise data services and analytics platform |
+| 7 | Execute `deploy_configuration_baseline(environment_name)` from `src/automation.py` | Variable | Applies standard platform configuration baselines |
+| 8 | Execute `execute_platform_workflow(workflow_name)` from `src/automation.py` | Variable | Executes required platform automation workflows |
+| 9 | Validate installation with `validate_automation_results(workflow_name)` and `validate_platform_observability(environment)` | 30–60 minutes | Confirms automation success and monitoring/logging configuration |
 
 ## 8.3 Platform-Specific Steps
 
-**VMware Foundation**
-- Deploy ESXi hosts using certified installation media
-- Deploy vCenter Server Appliance and join hosts to cluster
-- Enable and configure vSAN
-- Deploy and configure NSX-T Manager cluster, transport zones, segments and edge nodes
-
-**Aria Suite**
-- Deploy Aria Suite Lifecycle Manager as the entry point for all Aria product deployments
-- Onboard Aria Automation, Orchestrator, Operations, Logs and Network Insight through Lifecycle Manager
-
-**Tanzu**
-- Enable Workload Management on vSphere
-- Deploy Tanzu Kubernetes Grid clusters via `deploy_kubernetes_platform`
-- Register clusters with Tanzu Mission Control for lifecycle governance
-
-**Public Cloud Integration (Optional)**
-- Deploy HCX for workload mobility where hybrid connectivity to VMC is required
-- Configure VMC connectivity and validate network extension
+- VMware: Ensure vCenter, ESXi, and vSAN cluster prerequisites (Section 5.1/5.2) are satisfied prior to Step 2.
+- NSX-T: Confirm NSX Manager and transport zone configuration prior to Step 3 (`deploy_network_foundation`).
+- Tanzu: Confirm Tanzu Mission Control registration readiness prior to Step 4 (`deploy_kubernetes_platform`).
+- Aria Suite: Confirm Aria Automation/Orchestrator availability prior to Step 2 and Step 7 (used by `src/automation.py` workflows).
 
 ---
 
@@ -359,42 +319,42 @@ Installation is **hybrid**: initial SDDC foundation components (ESXi, vCenter, N
 
 ## 9.1 Deployment Overview
 
-Deployment follows a phased strategy: foundation infrastructure is deployed first, followed by automation/orchestration enablement, security/vault integration, workload platform services (Kubernetes/AI/Data), then backup, DR and service broker layers. Each phase is validated before progressing to the next, using the automation module return values (boolean success indicators) as gating criteria.
+Deployment follows a phased, function-driven strategy: network foundation is deployed first, followed by compute/Kubernetes, AI, and data platform layers, with configuration baselines and validation applied at each stage. Deployment execution is gated on boolean success return values from each automation function.
 
 ## 9.2 Deployment Steps
 
-- Provisioning: Execute `provision_infrastructure(environment_name)` to provision target environment resources
-- Installation: Deploy platform components per Section 8
-- Configuration: Apply configuration baselines via `deploy_configuration_baseline(environment_name)` and integration-specific configuration (Section 10)
-- Validation: Execute validation functions (`validate_automation_results`, `validate_platform_observability`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_vault_policy`, `validate_api_subscription`)
+- Provisioning: `provision_infrastructure(environment_name)` (`src/automation.py`)
+- Installation: `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform` (`src/deploy.py`)
+- Configuration: `deploy_configuration_baseline(environment_name)` (`src/automation.py`); vault setup via `create_vault_namespace`, `create_customer_managed_key`, `assign_key_to_service` (`src/security_vault.py`)
+- Validation: `validate_automation_results(workflow_name)` (`src/automation.py`), `validate_platform_observability(environment)` (`src/deploy.py`), `validate_vault_policy(policy_name)` (`src/security_vault.py`)
 
 ## 9.3 Validation Plan
 
 ### Health Checks
 
-- Service Status Validation: Confirm vCenter, NSX-T Manager, SDDC Manager, Aria Suite services report healthy status
-- Component Health Validation: Confirm ESXi host health, vSAN cluster health, NSX-T transport node status
+- Service Status Validation: `validate_automation_results(workflow_name)` confirms automation workflow execution outcome
+- Component Health Validation: `validate_platform_observability(environment)` confirms monitoring, logging and observability configuration
 
 ### Connectivity Tests
 
-- Network Validation: Confirm NSX-T segment reachability, edge uplink connectivity and inter-cluster communication
-- External Dependency Validation: Confirm DNS, NTP, Active Directory/LDAP, Vault, backup and DR platform connectivity
+- Network Validation: Confirm NSX-T connectivity following `deploy_network_foundation(region)` execution
+- External Dependency Validation: Confirm connectivity to Vault, Backup Platform, and DR site endpoints
 
 ### Functional Validation
 
-- Core Function Verification: Execute `validate_automation_results(workflow_name)` and `validate_platform_observability(environment)`
-- Integration Testing: Validate Vault key assignment (`assign_key_to_service`), backup integrity (`validate_backup_integrity`), and DR readiness (`validate_recovery_objectives`, `generate_dr_readiness_report`)
-- User Acceptance Testing: Validate self-service catalog and API consumption via `validate_api_subscription`
+- Core Function Verification: Confirm Kubernetes, AI, and data platform services are operational post-deployment (`deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`)
+- Integration Testing: `validate_api_subscription(subscription_id)` (`src/service_broker.py`) to confirm API consumer integration
+- User Acceptance Testing: Service catalog offering verification via `create_service_offering` and `validate_api_subscription`
 
 ## 9.4 Acceptance Criteria
 
 The deployment is considered successful when:
 
-- Installation completed successfully across compute, storage, networking, automation, security, Kubernetes, backup, DR and service broker layers
-- Services operational and passing health checks
-- Validation completed successfully (automation, observability, backup, DR, vault, API subscription checks all return positive results)
-- Dependencies operational (DNS, NTP, AD/LDAP, monitoring, backup, vault)
-- Customer acceptance completed and sign-off obtained (Section 15.3)
+- Installation completed successfully (Section 8.2 steps executed with `True` return values)
+- Services operational (network, Kubernetes, AI, data platform layers validated)
+- Validation completed successfully (`validate_automation_results`, `validate_platform_observability`, `validate_vault_policy`)
+- Dependencies operational (Vault, Backup, DR platform connectivity confirmed)
+- Customer acceptance completed (Section 15.3 sign-off obtained)
 
 ---
 
@@ -402,34 +362,34 @@ The deployment is considered successful when:
 
 ## 10.1 System Configuration
 
-- Operating System: Apply hardened ESXi/appliance configuration baselines
-- Network Settings: Configure NSX-T segments, transport zones, edge clusters and routing via `deploy_network_foundation`
-- Storage Configuration: Configure vSAN storage policies, fault domains and capacity thresholds
+- Operating System: ESXi host configuration per VMware hardening baseline
+- Network Settings: NSX-T segment, routing and firewall configuration applied via `deploy_network_foundation`
+- Storage Configuration: vSAN datastore configuration and policy assignment (supporting `deploy_data_platform`)
 
 ## 10.2 Security Configuration
 
-- RBAC: Configure role-based access across vCenter, NSX-T, Aria Suite and Vault per Section 5.4
-- IAM: Integrate Active Directory/LDAP for centralized identity
-- Certificates: Install and validate certificates per Section 5.7
-- Hardening: Apply CIS/STIG baselines; deploy Trend Micro endpoint protection and schedule Nessus vulnerability scans
-- Audit Configuration: Enable audit logging to Aria Logs for all management planes and Vault namespace via `create_vault_namespace` and `validate_vault_policy`
+- RBAC: Role assignment for automation service accounts (Section 5.4)
+- IAM: Vault namespace-based identity segregation via `create_vault_namespace`
+- Certificates: TLS certificate deployment per Section 5.7
+- Hardening: Endpoint protection (Trend Micro) and vulnerability scanning (Nessus) applied
+- Audit Configuration: Vault policy validation via `validate_vault_policy(policy_name)`; key lifecycle operations via `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`
 
 ## 10.3 Integration Configuration
 
-- APIs: Register platform APIs via `register_platform_api(api_name)` and validate subscriptions via `validate_api_subscription(subscription_id)`
-- External Systems: Configure integration with Active Directory, DNS, NTP and public cloud (VMC/HCX) as applicable
-- Monitoring Platforms: Configure Aria Operations and Aria Logs integration; validate via `validate_platform_observability(environment)`
-- Backup Platforms: Configure Canopy Enterprise Backup, Avamar and Data Domain integration; schedule jobs via `schedule_backup_job(workload_name)`
+- APIs: `register_platform_api(api_name)` (`src/service_broker.py`)
+- External Systems: Backup platform integration via `schedule_backup_job`/`execute_backup`; DR platform integration via `create_recovery_plan`/`execute_site_failover`
+- Monitoring Platforms: Aria Operations/Logs/Network Insight validated via `validate_platform_observability`
+- Backup Platforms: Canopy Enterprise Backup/Avamar/Data Domain configured via `src/backup.py` functions
 
 ---
 
 # 11. Post-Installation Tasks
 
-- Monitoring Configuration: Confirm Aria Operations dashboards and Aria Logs pipelines are active
-- Backup Configuration: Confirm backup schedules are active and `generate_backup_report()` produces expected output
-- Documentation Updates: Update HLD/LLD/OPG references and record deployed versions (Section 4.3)
-- CMDB Updates: Register all deployed components, versions and ownership in CMDB
-- Operations Handover: Complete Section 15 handover activities
+- Monitoring Configuration: Confirm Aria Operations/Aria Logs dashboards active following `validate_platform_observability`
+- Backup Configuration: Confirm scheduled backup jobs via `schedule_backup_job(workload_name)` and validate integrity via `validate_backup_integrity(backup_id)`
+- Documentation Updates: Update CMDB and architecture documentation to reflect deployed component versions (Section 4.3)
+- CMDB Updates: Register all newly provisioned infrastructure, network and Kubernetes components
+- Operations Handover: Complete Section 15 handover procedures
 
 ---
 
@@ -437,15 +397,17 @@ The deployment is considered successful when:
 
 | Issue | Cause | Resolution |
 |----------|----------|----------|
-| `provision_infrastructure` returns failure | Insufficient compute/storage capacity or invalid environment_name | Validate infrastructure pre-requisites (Section 5.1) and re-run with corrected parameters |
-| `execute_platform_workflow` fails to complete | Aria Orchestrator workflow dependency not met or service account permissions insufficient | Verify service account permissions (Section 5.4) and workflow dependencies; re-execute |
-| `deploy_network_foundation` fails for a region | NSX-T transport zone/edge misconfiguration | Verify NSX-T Manager cluster health and transport node configuration; retry deployment |
-| `deploy_kubernetes_platform` fails | Workload Management not enabled or insufficient cluster resources | Verify vSphere Workload Management prerequisites and cluster capacity |
-| `validate_backup_integrity` returns failure | Backup job did not complete or Data Domain connectivity issue | Check backup job logs, verify Data Domain/Avamar connectivity, re-run `execute_backup` |
-| `execute_site_failover` fails | Recovery plan not validated or replication not current | Run `validate_recovery_objectives` prior to failover; confirm replication status in vSphere Replication/SRM |
-| `create_customer_managed_key` fails | Vault namespace not created or insufficient Vault permissions | Confirm `create_vault_namespace` executed successfully and Vault administrator permissions are correct |
-| `validate_api_subscription` returns failure | Subscription not registered or Service Broker catalog not published | Confirm `publish_service_catalog` and `register_platform_api` completed successfully before validating subscriptions |
-| `validate_platform_observability` fails | Aria Operations/Logs integration incomplete | Verify Aria Operations and Aria Logs connectivity and agent/collector configuration |
+| `provision_infrastructure(environment_name)` returns `False` | Infrastructure prerequisites not met (compute/storage/network capacity or credentials) | Verify Section 5.1–5.4 prerequisites, review automation logs, re-execute after remediation |
+| `deploy_network_foundation(region)` returns `False` | NSX-T Manager unreachable or misconfigured transport zone | Validate NSX-T Manager connectivity and transport zone configuration prior to retry |
+| `deploy_kubernetes_platform(cluster_name)` returns `False` | Tanzu Kubernetes Grid dependency (network foundation) not deployed or unhealthy | Confirm `deploy_network_foundation` succeeded before retrying Kubernetes deployment |
+| `validate_platform_observability(environment)` returns `False` | Aria Operations/Aria Logs integration not configured | Verify monitoring platform connectivity and reattempt validation |
+| `execute_backup(workload_name)` fails | Backup platform (Avamar/Data Domain) unreachable or credentials invalid | Verify backup platform credentials and connectivity (Section 5.6, 5.9) |
+| `validate_backup_integrity(backup_id)` returns `False` | Backup completed with data integrity issues | Review backup job logs, re-run `execute_backup`, escalate to backup platform team if recurring |
+| `execute_site_failover(target_site)` fails | SRM/vSphere Replication link down or DR site unavailable | Verify SRM pairing and replication status before retrying failover |
+| `create_vault_namespace(namespace_name)` fails | Vault service unreachable or insufficient permissions | Verify Vault connectivity and administrator credentials (Section 5.4, 5.6) |
+| `validate_vault_policy(policy_name)` returns `False` | Policy misconfigured or not assigned to namespace | Review Vault policy definitions and reassign as required |
+| `register_platform_api(api_name)` fails | Service Broker unreachable or API name conflict | Verify Service Broker availability, confirm unique API naming, retry registration |
+| `scripts/detect-impact.py` fails to resolve capabilities | Malformed or missing YAML mapping file (`read_yaml`) | Verify mapping file path and structure supplied to `read_yaml` |
 
 ---
 
@@ -453,14 +415,14 @@ The deployment is considered successful when:
 
 ## 13.1 Conditions
 
-- Failure Scenarios: Failed automation workflow execution, failed configuration baseline application, failed Kubernetes/AI/Data platform deployment, failed security/vault configuration, failed backup or DR configuration
-- Rollback Triggers: Validation function (Section 9.3) returns a failure result that cannot be remediated within the defined change window; critical service unavailability post-deployment; security policy validation failure (`validate_vault_policy`)
+- Failure Scenarios: Any Step in Section 8.2 returning `False`, failed validation in Section 9.3, or post-deployment functional test failure
+- Rollback Triggers: `validate_automation_results` returns `False`; `validate_platform_observability` returns `False`; `validate_backup_integrity` or `validate_recovery_objectives` fails after cutover; security policy validation failure (`validate_vault_policy`)
 
 ## 13.2 Steps
 
-- Backup Restoration: Restore affected component configuration from pre-change backup/snapshot (e.g., vCenter/NSX-T Manager configuration export, Vault namespace backup)
-- Configuration Reversal: Revert configuration baseline applied by `deploy_configuration_baseline`; remove partially created resources (Kubernetes clusters, vault namespaces, keys, catalog entries) created during the failed change
-- Validation Activities: Re-execute relevant validation functions (`validate_automation_results`, `validate_platform_observability`, `validate_vault_policy`) to confirm the environment has returned to its last known good state; document rollback outcome and root cause before re-attempting deployment
+- Backup Restoration: Use platform backup (Canopy Enterprise Backup/Avamar/Data Domain) to restore prior configuration state; reference `generate_backup_report()` output for last known-good backup
+- Configuration Reversal: Revert configuration baseline changes applied via `deploy_configuration_baseline`; remove vault keys/namespaces created via `create_vault_namespace`/`create_customer_managed_key` if issued in error
+- Validation Activities: Re-run `validate_automation_results`, `validate_platform_observability`, and `validate_vault_policy` post-rollback to confirm platform returned to last stable state before re-attempting deployment
 
 ---
 
@@ -476,17 +438,17 @@ No known issues at the time of publication.
 
 ## 15.1 Handover Artifacts
 
-- Configuration Backup: vCenter, NSX-T, SDDC Manager, Aria Suite and Vault configuration exports
-- Deployment Logs: Automation and deployment module execution logs (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`)
-- Validation Results: Output of Section 9.3 validation activities and `generate_dr_readiness_report()` / `generate_backup_report()`
-- Runbooks: Operational runbooks for backup, DR failover, key rotation and workflow execution
-- Related Documentation: HLD, LLD, OPG and vendor documentation references (Section 2.4)
+- Configuration Backup: Baseline configuration snapshot generated via `deploy_configuration_baseline`
+- Deployment Logs: Execution logs from `provision_infrastructure`, `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`
+- Validation Results: Outputs of `validate_automation_results`, `validate_platform_observability`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_vault_policy`
+- Runbooks: Automation module reference (`src/automation.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`)
+- Related Documentation: HLD, LLD, OPG (Section 2.4)
 
 ## 15.2 Ownership Transfer
 
-- Operations Team: Assumes responsibility for day-to-day platform monitoring, patching and incident response
-- Support Team: Assumes responsibility for tier 1/2 support and escalation management
-- Service Owner: Assumes overall accountability for platform service delivery and lifecycle management
+- Operations Team: Assumes responsibility for `execute_platform_workflow`, `schedule_backup_job`, and ongoing monitoring
+- Support Team: Assumes responsibility for troubleshooting (Section 12) and incident escalation
+- Service Owner: Assumes overall accountability for platform availability and the service catalog (`publish_service_catalog`, `create_service_offering`)
 
 ## 15.3 Acceptance Sign-Off
 
@@ -501,10 +463,10 @@ No known issues at the time of publication.
 | Item | Status |
 |--------|--------|
 | OPG Completed | Pending |
-| Monitoring Configured | Completed |
-| Alerting Configured | Completed |
-| Backup Configured | Completed |
-| Recovery Tested | Completed |
+| Monitoring Configured | Pending (`validate_platform_observability`) |
+| Alerting Configured | Pending |
+| Backup Configured | Pending (`schedule_backup_job`) |
+| Recovery Tested | Pending (`validate_recovery_objectives`) |
 | Runbooks Delivered | Pending |
 | Ownership Assigned | Pending |
 | Escalation Process Defined | Pending |
@@ -517,36 +479,30 @@ No known issues at the time of publication.
 
 | Source | Destination | Port | Protocol | Purpose |
 |----------|----------|----------|----------|----------|
-| Admin Workstation | vCenter Server | 443 | TCP/HTTPS | vCenter management access |
-| ESXi Hosts | vCenter Server | 902, 443 | TCP | Host management communication |
-| ESXi Hosts | ESXi Hosts | 8182, 8301, 8302 | TCP/UDP | vSAN cluster communication |
-| Admin Workstation | NSX-T Manager | 443 | TCP/HTTPS | NSX-T management access |
-| NSX-T Manager | NSX-T Transport Nodes | 1234, 1235 | TCP | NSX-T control/management plane |
-| Admin Workstation | SDDC Manager | 443 | TCP/HTTPS | SDDC lifecycle management |
-| Admin Workstation | Aria Automation/Orchestrator | 443, 8281 | TCP/HTTPS | Automation and orchestration access |
-| Aria Suite | Aria Operations/Logs | 443 | TCP/HTTPS | Monitoring and log ingestion |
-| Automation Services | HashiCorp Vault | 8200 | TCP/HTTPS | Secrets and key management API |
-| Backup Services | Data Domain/Avamar | 2049, 111, 443 | TCP | Backup data transfer and management |
-| DR Services | SRM/vSphere Replication | 443, 8043, 31031 | TCP | Replication and failover orchestration |
-| External Consumers | Service Broker API Gateway | 443 | TCP/HTTPS | Self-service API/catalog access |
-| Platform Hosts | NTP Server | 123 | UDP | Time synchronization |
-| Platform Hosts | DNS Server | 53 | TCP/UDP | Name resolution |
+| Automation Host | vCenter | 443 | HTTPS | vSphere API access (`provision_infrastructure`) |
+| Automation Host | NSX-T Manager | 443 | HTTPS | Network deployment (`deploy_network_foundation`) |
+| Automation Host | Aria Automation/Orchestrator | 443 | HTTPS | Workflow execution (`execute_platform_workflow`) |
+| Automation Host | HashiCorp Vault | 8200 | HTTPS | Secrets/key management (`src/security_vault.py`) |
+| Automation Host | Backup Platform (Avamar/Data Domain) | 443/9000 (verify) | HTTPS/Proprietary | Backup operations (`src/backup.py`) |
+| Automation Host | SRM/vSphere Replication | 443 | HTTPS | DR operations (`src/dr_platform.py`) |
+| External Consumers | Service Broker API | 443 | HTTPS | API service consumption (`src/service_broker.py`) |
+| CI/CD Runner | Source Repository | 443 | HTTPS | Impact detection (`scripts/detect-impact.py`) |
 
 ## 16.2 Network Plan
 
-- VLANs: Dedicated VLANs for Management, vMotion, vSAN, NSX-T Overlay/Underlay, Edge Uplink, and Backup networks
-- Subnets: Allocated per site/region design, non-overlapping across management and workload domains
-- Routing: NSX-T Tier-0/Tier-1 gateways providing north-south and east-west routing; physical uplinks via ECMP where required
-- Network Diagrams: Maintained in the associated HLD/LLD documentation (Section 2.4)
-- Firewall Zones: Segregated zones for Management, Workload, DMZ/Edge, and Backup/DR networks with NSX-T Distributed Firewall enforcement
+- VLANs: To be defined per environment build sheet (NSX-T segment mapping)
+- Subnets: To be defined per environment build sheet
+- Routing: NSX-T Tier-0/Tier-1 gateway configuration (deployed via `deploy_network_foundation`)
+- Network Diagrams: Maintained in HLD/LLD (Section 2.4)
+- Firewall Zones: Management, workload, and DMZ zones segregated via NSX-T micro-segmentation
 
 ## 16.3 Naming Standards
 
 | Object Type | Naming Convention |
 |----------|----------|
-| Server | `<env>-<role>-<site>-<seq>` (e.g., `prod-esxi-site1-01`) |
-| Database | `<env>-<app>-db-<seq>` (e.g., `prod-aria-db-01`) |
-| Network | `<env>-<segment-type>-<region>` (e.g., `prod-overlay-region1`) |
+| Server | `<env>-<domain>-<role>-<sequence>` (e.g., `prod-compute-esxi-001`) |
+| Database | `<env>-data-<service>` (aligned with `deploy_data_platform` environment parameter) |
+| Network | `<env>-<region>-<segment>` (aligned with `deploy_network_foundation` region parameter) |
 
 ## 16.4 Glossary
 
@@ -562,9 +518,9 @@ No known issues at the time of publication.
 | OPG | Operations Guide |
 | PKI | Public Key Infrastructure |
 | RBAC | Role-Based Access Control |
-| SDDC | Software-Defined Data Center |
-| NSX-T | VMware NSX-T Data Center (software-defined networking platform) |
-| vSAN | VMware vSAN (software-defined storage platform) |
-| TKG | Tanzu Kubernetes Grid |
-| SRM | Site Recovery Manager |
-| CMK | Customer-Managed Key |
+| NSX-T | VMware Software-Defined Networking and Security Platform |
+| vSAN | VMware Software-Defined Storage Platform |
+| SRM | VMware Site Recovery Manager |
+| HCX | VMware Workload Mobility and Migration Platform |
+| VMC | VMware Cloud (Public Cloud Integration) |
+| Aria Suite | VMware Aria Automation, Orchestrator, Operations, Logs, Network Insight product family |

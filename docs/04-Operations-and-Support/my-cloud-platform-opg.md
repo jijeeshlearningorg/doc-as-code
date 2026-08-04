@@ -1,10 +1,10 @@
-# Operations Guide (OPG): my-cloud-platform
+# Operations Guide (OPG): My Cloud Platform (My Cloud Services)
 
-**Author:** Operations Architecture Team  
-**Date:** 2024-06-01  
-**Version:** 1.0  
-**Status:** Final  
-**Owner:** Platform Operations Owner
+**Author:** Senior Operations Architect (Generated)
+**Date:** Generated from repository analysis
+**Version:** 1.0
+**Status:** Draft
+**Owner:** Platform Operations Team
 
 ---
 
@@ -14,11 +14,11 @@
 
 | Role | Name | Approval Status | Approval Date |
 |----------|----------|----------|----------|
-| Service Owner | Cloud Platform Service Owner | Approved | 2024-06-01 |
-| Operations Manager | VCS Operations Manager | Approved | 2024-06-01 |
-| Platform Owner | VMware Cloud Foundation Platform Owner | Approved | 2024-06-01 |
-| Security Representative | Platform Security Lead | Approved | 2024-06-01 |
-| Support Lead | Managed Services Support Lead | Approved | 2024-06-01 |
+| Service Owner | Platform Owner (My Cloud Services) | Pending | TBC |
+| Operations Manager | Cloud Operations Manager | Pending | TBC |
+| Platform Owner | VCS Platform Engineering Lead | Pending | TBC |
+| Security Representative | Security & Vault Operations Lead | Pending | TBC |
+| Support Lead | Service Desk / L1-L2 Support Lead | Pending | TBC |
 
 ---
 
@@ -26,8 +26,7 @@
 
 | Reviewer | Role | Date | Comments |
 |----------|----------|----------|----------|
-| Operations Architecture Team | Senior Operations Architect | 2024-06-01 | Initial complete draft generated from repository analysis |
-| Platform Engineering Lead | Technical Reviewer | 2024-06-01 | Reviewed monitoring, backup and DR module mapping |
+| Platform Engineering | Technical Reviewer | TBC | Initial generation from repository `jijeeshlearningorg/greenfield-code` |
 
 ---
 
@@ -35,7 +34,7 @@
 
 | Version | Date | Description | Author |
 |----------|----------|----------|----------|
-| 1.0 | 2024-06-01 | Initial publication of Operations Guide for my-cloud-platform | Operations Architecture Team |
+| 1.0 | TBC | Initial Operations Guide generated from repository scan (branch `main`) | Senior Operations Architect |
 
 ---
 
@@ -43,12 +42,12 @@
 
 | Document Type | Reference | Relationship |
 |----------|----------|----------|
-| HLD | my-cloud-platform High-Level Design | Architecture |
-| LLD | my-cloud-platform Low-Level Design (src/deploy.py, src/automation.py) | Detailed Design |
-| BIG | my-cloud-platform Build & Installation Guide | Build & Installation |
-| OPG | This Document | Current Document |
-| ADR | Architecture Decision Records for VCF/vSphere/NSX-T Selection | Design Decisions |
-| Runbooks | Backup, DR, Deployment, Security Vault Runbooks | Operations Procedures |
+| HLD | My Cloud Services Architecture Overview (product/capability catalog) | Architecture |
+| LLD | Detailed design for `src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` | Detailed Design |
+| BIG | Build & Installation guidance for VCF/vSphere/NSX-T/Tanzu stack | Build & Installation |
+| OPG | This document | Current Document |
+| ADR | Design decisions for automation, backup, DR and security vault modules (inferred) | Design Decisions |
+| Runbooks | `scripts/detect-impact.py` (impact detection), operational runbooks (to be published) | Operations Procedures |
 
 ---
 
@@ -56,15 +55,24 @@
 
 ## 3.1 Service Purpose
 
-`my-cloud-platform` is a VMware Cloud Foundation-based private/hybrid cloud platform delivering compute (vSphere/ESXi), software-defined storage (vSAN), software-defined networking (NSX-T), Kubernetes container services (Tanzu), automated provisioning (Aria Automation/Orchestrator), monitoring and log analytics (Aria Operations/Aria Logs), backup and disaster recovery services, and a self-service API/service broker layer. It is consumed by internal application teams, tenant organizations, and DevOps teams requiring on-demand infrastructure, Kubernetes workloads and self-service catalog items through the `service_broker` API layer.
+My Cloud Services (`my-cloud-platform`) is a VMware-based private/hybrid cloud platform delivering compute (vSphere/ESXi/vCenter), software-defined storage (vSAN), software-defined networking (NSX-T), Kubernetes container services (Tanzu Kubernetes Grid/Tanzu Mission Control), automation/orchestration (Aria Automation, Aria Orchestrator, SDDC Manager), observability (Aria Operations, Aria Logs, Aria Network Insight), security (HashiCorp Vault, Trend Micro, Nessus), backup (Canopy Enterprise Backup, Avamar, Data Domain), disaster recovery (SRM, vSphere Replication, HCX) and an API/service broker consumption layer (Service Broker).
 
-The platform is provisioned and operated through code-driven modules (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) and a CI/CD impact-detection pipeline (`scripts/detect-impact.py`) that determines which operational capability domains (compute, storage, networking, monitoring, backup, DR, security, etc.) are affected by a given change prior to deployment.
+The repository evidence confirms the following operational domains implemented in code:
+- **Automation & Lifecycle**: `src/automation.py` (`provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results`)
+- **Platform Deployment**: `src/deploy.py` (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`)
+- **Backup**: `src/backup.py` (`schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`)
+- **Disaster Recovery**: `src/dr_platform.py` (`create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`)
+- **Security & Secrets**: `src/security_vault.py` (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`)
+- **API/Service Broker**: `src/service_broker.py` (`publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`)
+- **Change Impact Detection**: `scripts/detect-impact.py` (CI/CD helper resolving impacted capabilities from changed files for documentation/change governance)
+
+Consumers are internal platform tenants consuming compute, container, AI/data platform and API-brokered services through the self-service catalog (`publish_service_catalog`, `create_service_offering`).
 
 ---
 
 ## 3.2 Business Criticality
 
-- **Mission Critical** — the platform is the foundational infrastructure layer for compute, storage, networking, Kubernetes, and self-service capabilities consumed by multiple downstream tenants and applications. Extended unavailability directly impacts all dependent workloads.
+- **Mission Critical** — the platform underpins compute, storage, networking, container and AI/data services for all downstream tenant workloads. Loss of automation, backup or DR capability directly impacts platform-wide resilience.
 
 ---
 
@@ -75,28 +83,27 @@ The platform is provisioned and operated through code-driven modules (`src/autom
 - UAT
 - Production
 
+(Environment names are parameterised in code, e.g. `provision_infrastructure(environment_name)`, `deploy_configuration_baseline(environment_name)`, `deploy_ai_platform(environment)`, `deploy_data_platform(environment)` — inferred to support multi-environment operation.)
+
 ---
 
 ## 3.4 Operational Scope
 
 ### In Scope
 
-- Monitoring and observability (Aria Operations, Aria Logs, Aria Network Insight)
-- Automated patching and lifecycle management (vLCM, SDDC Manager, Aria Suite Lifecycle Manager)
-- Backup and recovery operations (`src/backup.py`, Canopy Enterprise Backup, Avamar, Data Domain)
-- Disaster recovery operations (`src/dr_platform.py`, SRM, vSphere Replication)
-- Automated provisioning and workflow execution (`src/automation.py`, Aria Automation/Orchestrator)
-- Platform deployment operations (`src/deploy.py`) for network foundation, Kubernetes, AI platform and data platform services
-- Secrets and encryption key management (`src/security_vault.py`, HashiCorp Vault)
-- Service catalog and API lifecycle (`src/service_broker.py`)
-- Incident management, service requests, and escalation
+- Monitoring and observability validation (`validate_platform_observability`)
+- Automated provisioning, workflow execution and configuration baselines (`src/automation.py`)
+- Backup scheduling, execution, integrity validation and reporting (`src/backup.py`)
+- Disaster recovery planning, failover execution and readiness reporting (`src/dr_platform.py`)
+- Secrets/encryption key lifecycle management (`src/security_vault.py`)
+- API/service catalog publication and subscription validation (`src/service_broker.py`)
+- Incident management, patching, capacity management, security operations
 
 ### Out of Scope
 
-- Application-level development activities within tenant workloads
-- Architecture governance and roadmap decisions (covered by HLD/ADR)
-- Major platform enhancements and net-new capability design
-- Source code development of platform modules (covered by SDLC process, not this OPG)
+- Development of new platform capabilities
+- Architecture governance and design authority (HLD/LLD ownership)
+- Major feature enhancements to `src/*.py` modules (handled via engineering change process)
 
 ---
 
@@ -106,12 +113,12 @@ The platform is provisioned and operated through code-driven modules (`src/autom
 
 | Function | Owner |
 |----------|----------|
-| Service Owner | Cloud Platform Service Owner |
-| Technical Owner | Platform Engineering Lead (vSphere/NSX-T/vSAN/Tanzu) |
-| Operations Team | VCS Operations Team (24x7 NOC) |
-| Support Team | Managed Services Support Team |
-| Security Team | Platform Security & Vault Operations Team |
-| Vendor | VMware by Broadcom (vSphere, NSX-T, Aria Suite, SRM), Dell (Avamar/Data Domain), HashiCorp (Vault), Trend Micro, Tenable (Nessus) |
+| Service Owner | Platform Owner — My Cloud Services |
+| Technical Owner | Platform Engineering Lead (automation, deploy, DR, security modules) |
+| Operations Team | Cloud Operations Team (monitoring, backup, DR execution) |
+| Support Team | Service Desk / L1-L2-L3 Support |
+| Security Team | Security & Vault Operations (owns `src/security_vault.py` operations, Nessus, Trend Micro) |
+| Vendor | VMware (vSphere, NSX-T, Aria Suite, Tanzu, SRM, vSAN); Dell (Avamar, Data Domain) |
 
 ---
 
@@ -119,10 +126,10 @@ The platform is provisioned and operated through code-driven modules (`src/autom
 
 | Level | Responsibility |
 |----------|----------|
-| L1 | Initial triage, alert acknowledgement, dashboard monitoring, execution of published runbooks (service restarts, standard requests), incident logging |
-| L2 | Platform administration, execution of `src/automation.py` and `src/backup.py` operations, root cause analysis, escalation of complex failures, patch execution via vLCM/SDDC Manager |
-| L3 | Deep technical resolution across compute/storage/networking, `src/dr_platform.py` failover execution, `src/security_vault.py` key management, architecture-level troubleshooting, code-level fixes to platform automation modules |
-| Vendor | Broadcom/VMware GSS for vSphere, NSX-T, Aria Suite, SRM defect resolution; Dell EMC for Avamar/Data Domain hardware and backup software; HashiCorp for Vault platform issues |
+| L1 | First-line triage, alert acknowledgement, standard service requests (access, restarts), initial troubleshooting using published runbooks |
+| L2 | Platform operational support — execution of `execute_backup`, `validate_backup_integrity`, `execute_platform_workflow`, dashboard/alert investigation, coordination of scheduled maintenance |
+| L3 | Deep technical support — automation module debugging (`src/automation.py`), DR failover execution (`execute_site_failover`), security vault key operations (`rotate_encryption_key`), root cause analysis |
+| Vendor | VMware/Dell vendor support for underlying platform defects (vSphere, NSX-T, vSAN, Aria Suite, Avamar, Data Domain, SRM) |
 
 ---
 
@@ -130,10 +137,10 @@ The platform is provisioned and operated through code-driven modules (`src/autom
 
 | Severity | Escalation Contact |
 |----------|----------|
-| Critical | L3 On-Call Platform Engineer → Operations Manager → Service Owner → VMware GSS Sev-1 |
-| High | L2 On-Call Engineer → L3 Platform Engineer → Operations Manager |
-| Medium | L1 NOC → L2 Platform Administrator (next business day if outside hours) |
-| Low | L1 NOC → Service Desk queue (standard SLA) |
+| Critical | Platform Owner + Operations Manager (immediate, 24x7 bridge) |
+| High | Operations Manager + L3 Platform Engineering |
+| Medium | L2 Operations Team Lead |
+| Low | L1 Service Desk queue |
 
 ---
 
@@ -141,22 +148,22 @@ The platform is provisioned and operated through code-driven modules (`src/autom
 
 ## 5.1 Approved Change Mechanisms
 
-All production changes to `my-cloud-platform` shall be performed using approved change processes only:
+All production changes shall be performed using approved change processes, consistent with the automation modules detected in the repository:
 
-- Pull Requests against the platform automation repository (`src/*.py`, `scripts/detect-impact.py`)
-- CI/CD pipeline execution, including automated capability-impact detection (`scripts/detect-impact.py`) that determines affected capability domains (compute, storage, networking, monitoring, backup, DR, security, containers, etc.) before deployment
-- Infrastructure-as-Code driven provisioning via `provision_infrastructure`, `deploy_configuration_baseline`, and `execute_platform_workflow` (`src/automation.py`)
-- GitOps-based deployment workflows for network foundation, Kubernetes platform, AI platform and data platform components (`src/deploy.py`)
+- Pull Requests against the `main` branch of `jijeeshlearningorg/greenfield-code`
+- CI/CD pipelines invoking `scripts/detect-impact.py` for automated change impact analysis and documentation traceability
+- Infrastructure-as-Code driven provisioning via `provision_infrastructure` and `deploy_configuration_baseline` (`src/automation.py`)
+- Workflow-driven changes via `execute_platform_workflow`
+- GitOps-aligned deployment through `src/deploy.py` functions (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`)
 
 ---
 
 ## 5.2 Configuration Management Principles
 
-- Everything as Code: all provisioning, deployment, backup and DR operations are executed through version-controlled Python automation modules (`src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`)
-- Automated Deployment: `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, and `deploy_data_platform` provide repeatable, idempotent deployment of platform components
-- Version Controlled Configuration: configuration baselines applied via `deploy_configuration_baseline` are tracked in source control
-- Automated Rollback: workflow validation via `validate_automation_results` gates promotion of automation outcomes; failed validations trigger rollback per runbook
-- Automated Validation: `validate_platform_observability` confirms monitoring, logging and observability configuration post-deployment before a change is considered complete
+- Everything as Code — provisioning and configuration baselines are code-driven (`src/automation.py`)
+- Automated Deployment — network, Kubernetes, AI and data platform deployments are function-driven and repeatable (`src/deploy.py`)
+- Version Controlled Configuration — all source under Git in `jijeeshlearningorg/greenfield-code`
+- Automated Validation — `validate_automation_results`, `validate_platform_observability`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_vault_policy`, `validate_api_subscription` provide automated post-change verification gates
 
 ---
 
@@ -164,30 +171,23 @@ All production changes to `my-cloud-platform` shall be performed using approved 
 
 ### Supported Activities
 
-- Restart services (via approved runbooks only)
-- Approve deployments through CI/CD gates
-- Execute published runbooks (backup, DR failover, key rotation, patching)
-- Investigate alerts raised by Aria Operations / Aria Logs
-- Execute `validate_backup_integrity`, `validate_recovery_objectives`, and `validate_api_subscription` as part of standard operations
+- Restart services via approved automation workflows
+- Approve deployments triggered through `src/deploy.py` functions
+- Execute published runbooks (backup, DR failover, key rotation)
+- Investigate alerts raised from Aria Operations/Aria Logs (inferred monitoring stack)
 
 ### Restricted Activities
 
-- Manual production reconfiguration outside of `src/automation.py` workflows
-- Direct infrastructure modification bypassing `provision_infrastructure` / `deploy_configuration_baseline`
-- Bypass of deployment pipelines or `scripts/detect-impact.py` impact assessment
-- Untracked or undocumented changes to vault namespaces, encryption keys, or service catalog entries
-- Direct manipulation of backup jobs outside `schedule_backup_job` / `execute_backup`
+- Manual production reconfiguration bypassing `deploy_configuration_baseline`
+- Direct infrastructure modification outside `provision_infrastructure`
+- Bypass of deployment pipelines (`src/deploy.py`, `scripts/detect-impact.py` governance)
+- Untracked changes to encryption keys outside `src/security_vault.py` controlled functions
 
 ---
 
 ## 5.4 Break Glass Procedures
 
-Emergency access to the platform (vCenter, NSX-T Manager, SDDC Manager, HashiCorp Vault root tokens) is controlled through a break-glass credential process managed by the Security & Vault Operations Team. Break-glass activation requires:
-
-1. Approval from Operations Manager or Service Owner (or designated deputy).
-2. Time-boxed credential issuance (maximum 4 hours), logged in the vault audit trail.
-3. Mandatory post-use review, encryption key rotation (`rotate_encryption_key`) if vault credentials were exposed, and incident record creation.
-4. All emergency changes must be retrospectively codified into `src/automation.py` / `src/deploy.py` workflows within 5 business days.
+Emergency access to vCenter, NSX-T Manager, SDDC Manager and HashiCorp Vault must be governed by a documented break-glass process (inferred requirement — not present in source code). Emergency use of `rotate_encryption_key` or `execute_site_failover` outside standard change windows must be logged, approved by the Security Representative/Platform Owner, and reviewed post-incident.
 
 ---
 
@@ -197,16 +197,14 @@ Emergency access to the platform (vCenter, NSX-T Manager, SDDC Manager, HashiCor
 
 | Metric | Threshold | Alert Required |
 |----------|----------|----------|
-| CPU (vSphere/ESXi hosts, Tanzu nodes) | >85% sustained 15 min | Yes |
-| Memory (vSphere hosts, K8s clusters) | >90% sustained 15 min | Yes |
-| Disk / vSAN Capacity | >80% used | Yes |
-| Datastore Latency | >20ms sustained | Yes |
-| Availability (vCenter, NSX-T Manager, SDDC Manager) | <99.9% rolling 30 days | Yes |
-| Response Time (Service Broker API) | >2s p95 | Yes |
-| Backup Job Success Rate | <98% success | Yes |
-| DR Replication Lag (vSphere Replication) | > configured RPO | Yes |
-| Certificate Expiry | <30 days remaining | Yes |
-| Vault Token/Key Expiry | <15 days remaining | Yes |
+| CPU (vSphere/ESXi hosts) | > 80% sustained (inferred) | Yes |
+| Memory (vSphere/ESXi hosts) | > 85% sustained (inferred) | Yes |
+| Disk / vSAN Capacity | > 75% utilised (inferred) | Yes |
+| Availability (platform services, API broker) | < 99.9% (inferred SLA) | Yes |
+| Response Time (Service Broker API) | > 2s p95 (inferred) | Yes |
+| Observability Validation | Failure of `validate_platform_observability` | Yes |
+| Backup Job Success | Failure of `execute_backup` / `validate_backup_integrity` | Yes |
+| DR Readiness | Failure of `validate_recovery_objectives` | Yes |
 
 ---
 
@@ -214,16 +212,13 @@ Emergency access to the platform (vCenter, NSX-T Manager, SDDC Manager, HashiCor
 
 | Dashboard | Purpose |
 |----------|----------|
-| Aria Operations - Compute Health | ESXi host CPU/memory/storage health and capacity trending |
-| Aria Operations - vSAN Capacity & Performance | Storage capacity, resync, and latency monitoring |
-| Aria Operations - NSX-T Networking | NSX-T edge, routing, segmentation health |
-| Aria Logs - Platform Log Analytics | Centralized log search across `automation`, `deploy`, `backup`, `dr_platform` module executions |
-| Aria Network Insight - Network Visibility | East-west traffic flow, micro-segmentation compliance |
-| Backup Operations Dashboard | Output of `generate_backup_report`, job success/failure trends |
-| DR Readiness Dashboard | Output of `generate_dr_readiness_report`, RPO/RTO compliance |
-| Service Broker Catalog & API Health | Subscription validation status, API registration health |
-| Tanzu Kubernetes Grid Cluster Health | Cluster/node health for `deploy_kubernetes_platform` outputs |
-| Security & Vault Compliance Dashboard | Vault policy compliance, key rotation status, Nessus scan results |
+| Aria Operations — Infrastructure Health | Compute, storage (vSAN), networking (NSX-T) performance and capacity |
+| Aria Operations — Kubernetes Platform | Tanzu Kubernetes Grid / Tanzu Mission Control cluster health |
+| Aria Logs — Centralized Logging | Aggregated platform, application and security logs |
+| Aria Network Insight | NSX-T network visibility and flow analytics |
+| Backup Reporting Dashboard | Output of `generate_backup_report` (backup job status/coverage) |
+| DR Readiness Dashboard | Output of `generate_dr_readiness_report` (recovery readiness posture) |
+| Service Broker Usage Dashboard | Catalog publication and API subscription status |
 
 ---
 
@@ -231,20 +226,16 @@ Emergency access to the platform (vCenter, NSX-T Manager, SDDC Manager, HashiCor
 
 | Alert | Severity | Response Target |
 |----------|----------|----------|
-| ESXi Host Unreachable / vCenter Down | Critical | 15 minutes |
-| vSAN Cluster Degraded / Disk Failure | Critical | 15 minutes |
-| NSX-T Edge/Manager Failure | Critical | 15 minutes |
-| Backup Job Failure (`execute_backup`) | High | 1 hour |
-| Backup Integrity Validation Failure (`validate_backup_integrity`) | High | 1 hour |
-| DR Replication Breach of RPO/RTO (`validate_recovery_objectives`) | Critical | 30 minutes |
-| Automation Workflow Failure (`validate_automation_results`) | Medium | 4 hours |
-| Kubernetes Platform Deployment Failure (`deploy_kubernetes_platform`) | High | 2 hours |
-| Observability Validation Failure (`validate_platform_observability`) | Medium | 4 hours |
-| Vault Policy Violation (`validate_vault_policy`) | Critical | 30 minutes |
-| Encryption Key Rotation Failure (`rotate_encryption_key`) | High | 1 hour |
-| Service Broker API Subscription Failure (`validate_api_subscription`) | Medium | 4 hours |
-| Certificate Expiry Warning | Medium | Next business day |
-| Capacity Threshold Breach (CPU/Memory/Storage) | Medium | 4 hours |
+| `validate_platform_observability` failure | Critical | 15 minutes |
+| Backup job failure (`execute_backup` returns false) | High | 30 minutes |
+| Backup integrity validation failure (`validate_backup_integrity`) | High | 1 hour |
+| DR readiness objective breach (`validate_recovery_objectives`) | Critical | 30 minutes |
+| Site failover triggered (`execute_site_failover`) | Critical | Immediate |
+| Vault policy validation failure (`validate_vault_policy`) | High | 1 hour |
+| Encryption key rotation failure (`rotate_encryption_key`) | High | 1 hour |
+| API subscription validation failure (`validate_api_subscription`) | Medium | 4 hours |
+| Automation workflow validation failure (`validate_automation_results`) | Medium | 4 hours |
+| Infrastructure capacity threshold breach (Aria Operations) | Medium | 4 hours |
 
 ---
 
@@ -252,27 +243,27 @@ Emergency access to the platform (vCenter, NSX-T Manager, SDDC Manager, HashiCor
 
 ### Application Logs
 
-Automation module execution logs from `src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, and `src/service_broker.py` are streamed to Aria Logs, capturing workflow name, environment, execution result, and correlation IDs from `scripts/detect-impact.py` build metadata (PR number, title, URL).
+Service Broker (`src/service_broker.py`) and Automation (`src/automation.py`) execution logs — capturing catalog publication, workflow execution, and validation outcomes — aggregated via Aria Logs.
 
 ### Platform Logs
 
-vCenter, ESXi, NSX-T Manager, SDDC Manager, and Aria Suite component logs are forwarded to Aria Logs via syslog/vRealize Log Insight agents for centralized retention and analysis.
+Deployment logs from `src/deploy.py` functions (network foundation, Kubernetes, AI platform, data platform deployment) and lifecycle logs from SDDC Manager / vLCM.
 
 ### Infrastructure Logs
 
-Host-level ESXi logs, vSAN health logs, and hardware management logs (out-of-band controllers) are collected and correlated with capacity and performance dashboards in Aria Operations.
+ESXi, vCenter, NSX-T and vSAN logs collected centrally via Aria Logs / Aria Network Insight.
 
 ### Security Logs
 
-Vault audit logs (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`), Nessus scan logs, and Trend Micro endpoint protection logs are forwarded to the SIEM for correlation and threat detection.
+Vault namespace and key operations (`src/security_vault.py`), Trend Micro endpoint protection events, Nessus vulnerability scan logs.
 
 ---
 
 ## 6.5 Audit Logging
 
-- **Audit Events:** vault namespace creation/deletion, encryption key creation/rotation/assignment, deployment execution (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`), backup job execution, DR failover execution (`execute_site_failover`), service catalog changes (`publish_service_catalog`, `register_platform_api`).
-- **Retention Requirements:** Audit logs retained for a minimum of 12 months online and 7 years in cold archive to satisfy compliance obligations.
-- **Compliance Requirements:** Audit trail must support ISO27001 control evidence and internal change-control audits; all automation executions must be traceable to a source PR via `get_pull_request_number` / `get_pull_request_url` metadata.
+- **Audit Events**: Vault key creation/rotation/assignment (`create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`), backup execution and integrity checks, DR plan creation and failover execution, service catalog and API registration events
+- **Retention Requirements**: Minimum 12 months for security/compliance-relevant logs (inferred — confirm against compliance mandate)
+- **Compliance Requirements**: Aligned to organisational ISO27001/GDPR/PCI-DSS obligations (inferred; see Section 13)
 
 ---
 
@@ -282,13 +273,12 @@ Vault audit logs (`create_vault_namespace`, `create_customer_managed_key`, `rota
 
 | Asset | Frequency | Retention |
 |----------|----------|----------|
-| Production Virtual Machines (image-level, Avamar/Canopy Enterprise Backup) | Daily (`schedule_backup_job`) | 30 days |
-| Kubernetes Persistent Volumes / Tanzu Workloads | Daily | 30 days |
-| vCenter / SDDC Manager Configuration | Weekly | 90 days |
-| NSX-T Manager Configuration | Weekly | 90 days |
-| HashiCorp Vault Namespaces & Key Metadata | Daily (metadata only) | 1 year |
-| Application-Level Backups (tenant workloads) | Daily/Weekly per tenant SLA | 30–90 days per tenant tier |
-| Data Domain Backup Repository (deduplicated store) | Continuous replication | 6 months rolling |
+| Workload / VM-level backups (`schedule_backup_job`, `execute_backup`) | Daily (inferred, per `workload_name` schedule) | 30 days (inferred) |
+| Application-consistent backups | Daily/Weekly (inferred) | 90 days (inferred) |
+| Vault key material / secrets metadata | On change (via `create_customer_managed_key`/`rotate_encryption_key`) | Per key lifecycle policy (inferred) |
+| Platform configuration baselines | On deployment (`deploy_configuration_baseline`) | Version controlled indefinitely |
+
+Backup platform: Canopy Enterprise Backup, Avamar, with Data Domain as backup storage target (per product technology catalog).
 
 ---
 
@@ -296,30 +286,20 @@ Vault audit logs (`create_vault_namespace`, `create_customer_managed_key`, `rota
 
 | Requirement | Target |
 |----------|----------|
-| RPO (Tier 1 Production Workloads) | 15 minutes (vSphere Replication) |
-| RPO (Tier 2 Workloads) | 4 hours |
-| RTO (Tier 1 Production Workloads) | 1 hour (SRM automated failover) |
-| RTO (Tier 2 Workloads) | 4 hours |
-| Backup Restore SLA (single VM/file-level) | 4 hours |
+| RPO | Defined per `create_recovery_plan(application_name)` — inferred 24 hours default, tenant-configurable |
+| RTO | Defined per `validate_recovery_objectives(application_name)` — inferred 4 hours default, tenant-configurable |
 
 ---
 
 ## 7.3 Recovery Procedures
 
-Recovery is executed through the `src/backup.py` and `src/dr_platform.py` modules:
-
-1. Identify affected workload and confirm last successful backup using `generate_backup_report`.
-2. Validate backup integrity for the target restore point via `validate_backup_integrity(backup_id)`.
-3. Execute restore through Canopy Enterprise Backup / Avamar console referencing the validated backup ID.
-4. For site-level recovery, invoke `create_recovery_plan(application_name)` to confirm an SRM recovery plan exists, then execute `execute_site_failover(target_site)`.
-5. Confirm recovery success using `validate_recovery_objectives(application_name)` against defined RPO/RTO targets.
-6. Reference detailed step-by-step runbooks: *Backup Restore Runbook*, *SRM Failover Runbook*.
+Recovery execution is driven by `execute_backup` (restore path) and validated through `validate_backup_integrity`. Backup status and coverage reporting is produced by `generate_backup_report`. Detailed step-by-step restore runbooks should reference these functions and the underlying Avamar/Data Domain restore workflows (to be published separately as operational runbooks).
 
 ---
 
 ## 7.4 Backup Validation
 
-Backup validation is performed automatically via `validate_backup_integrity` following each `execute_backup` job, and consolidated weekly using `generate_backup_report`. A quarterly restore test (fire-drill) is performed against a non-production target for a sample of Tier 1 workloads, with results logged in the DR Readiness Dashboard.
+Backup integrity is validated programmatically via `validate_backup_integrity(backup_id)`. Operations teams must review `generate_backup_report()` output on a scheduled basis (recommended: daily) to confirm job success, and perform periodic test restores to validate recoverability (inferred cadence: quarterly).
 
 ---
 
@@ -327,32 +307,31 @@ Backup validation is performed automatically via `validate_backup_integrity` fol
 
 ## 8.1 High Availability Overview
 
-The platform leverages vSphere HA/DRS clusters, vSAN stretched clusters (where configured), and NSX-T Edge cluster redundancy to provide compute, storage and networking high availability. Aria Suite components (Automation, Orchestrator, Operations, Logs) are deployed in HA-capable clustered configurations. Kubernetes platform services (Tanzu) run multi-node control planes deployed via `deploy_kubernetes_platform`.
+HA is delivered through the underlying vSphere/vSAN/NSX-T stack (compute, storage, networking redundancy) with platform lifecycle managed by SDDC Manager/vLCM. Observability of platform health is validated via `validate_platform_observability` as part of the deployment pipeline (`src/deploy.py`).
 
 ---
 
 ## 8.2 Failover Process
 
-Component-level failover (host, network edge, storage node) is handled automatically by vSphere HA, NSX-T Edge redundancy and vSAN fault domains. Application/site-level failover is orchestrated through `src/dr_platform.py`:
-
-1. `create_recovery_plan(application_name)` establishes/validates the SRM recovery plan.
-2. `execute_site_failover(target_site)` triggers the orchestrated failover to the DR site.
-3. `validate_recovery_objectives(application_name)` confirms RPO/RTO compliance post-failover.
+Failover is orchestrated through `execute_site_failover(target_site)` in `src/dr_platform.py`, built on VMware Site Recovery Manager (SRM) and vSphere Replication, with HCX supporting workload mobility. Failover execution should always follow a pre-validated recovery plan created via `create_recovery_plan(application_name)`.
 
 ---
 
 ## 8.3 Disaster Recovery
 
-DR strategy is built on VMware SRM and vSphere Replication, providing site-level protection for Tier 1 and Tier 2 applications. `generate_dr_readiness_report` produces a periodic readiness assessment covering replication health, recovery plan currency, and last test date, consumed by the DR Readiness Dashboard (Section 6.2). See Section 12 (Disaster Recovery Strategy detail below) for full strategy.
+DR strategy is implemented in `src/dr_platform.py`:
+- `create_recovery_plan(application_name)` — defines per-application recovery plan
+- `execute_site_failover(target_site)` — executes failover to target DR site
+- `validate_recovery_objectives(application_name)` — confirms RPO/RTO compliance
+- `generate_dr_readiness_report()` — produces platform-wide DR readiness status
+
+Underlying technologies: VMware Site Recovery Manager (SRM), vSphere Replication, HCX. DR readiness reporting should be reviewed on a scheduled basis by Operations and Platform Owner.
 
 ---
 
 ## 8.4 Resilience Testing
 
-- Quarterly DR failover tests using non-production recovery plans, validated with `validate_recovery_objectives`.
-- Semi-annual full-scale DR exercise including live application failover for a subset of Tier 1 workloads.
-- Continuous automated readiness reporting via `generate_dr_readiness_report`.
-- Annual chaos/resilience testing of NSX-T Edge and vSAN fault domain failure scenarios.
+Periodic DR failover tests should be executed using `execute_site_failover` against non-production target sites, with results captured via `generate_dr_readiness_report()`. Recommended cadence: semi-annual (inferred — confirm against organisational DR test policy).
 
 ---
 
@@ -360,9 +339,8 @@ DR strategy is built on VMware SRM and vSphere Replication, providing site-level
 
 ## 9.1 Access Management
 
-- **User onboarding:** Access requests raised through the Service Broker catalog (`create_service_offering`) or IAM request process; role assignment approved by Service Owner/Security Team.
-- **User offboarding:** Immediate revocation of vCenter, NSX-T, Aria Suite, and Vault access upon HR/security notification; Vault namespace access reviewed via `validate_vault_policy`.
-- **Role assignments:** RBAC enforced across vSphere, NSX-T, Aria Automation and Tanzu Mission Control; least-privilege reviewed quarterly.
+- User onboarding/offboarding governed by platform IAM integrated with vCenter/NSX-T RBAC and Vault namespace access (`create_vault_namespace`)
+- Role assignments managed through Vault policies validated by `validate_vault_policy(policy_name)`
 
 ---
 
@@ -370,11 +348,10 @@ DR strategy is built on VMware SRM and vSphere Replication, providing site-level
 
 | Secret Type | Management Location |
 |----------|----------|
-| Platform Service Credentials | HashiCorp Vault (namespace per service via `create_vault_namespace`) |
-| Customer-Managed Encryption Keys | HashiCorp Vault (`create_customer_managed_key`, `rotate_encryption_key`) |
-| Service-to-Key Assignments | HashiCorp Vault (`assign_key_to_service`) |
-| API/Service Broker Credentials | Vault-backed secrets store, referenced by `register_platform_api` |
-| Backup/DR Service Accounts | HashiCorp Vault namespaces dedicated to `src/backup.py` and `src/dr_platform.py` operations |
+| Customer-managed encryption keys | HashiCorp Vault, created via `create_customer_managed_key(key_name)` |
+| Service-assigned keys | Vault, assigned via `assign_key_to_service(key_name, service_name)` |
+| Vault namespaces | `create_vault_namespace(namespace_name)` |
+| API credentials / subscriptions | Service Broker (`validate_api_subscription`) |
 
 ---
 
@@ -382,26 +359,24 @@ DR strategy is built on VMware SRM and vSphere Replication, providing site-level
 
 | Certificate | Owner | Renewal Process |
 |----------|----------|----------|
-| vCenter / SDDC Manager TLS Certificates | Platform Security Team | Automated renewal via vLCM/SDDC Manager certificate workflow, 30-day expiry alert |
-| NSX-T Manager/Edge Certificates | Platform Security Team | Renewed via NSX-T certificate management, coordinated maintenance window |
-| Aria Suite Component Certificates | Platform Engineering Team | Renewed via Aria Suite Lifecycle Manager |
-| Service Broker API TLS Certificates | Security & Vault Operations Team | Vault-issued/managed, auto-rotated |
+| Platform TLS certificates (vCenter, NSX-T, Aria Suite) | Platform Engineering / Security Team | Managed renewal process aligned with Vault-issued certificates (inferred) |
+| Service Broker API certificates | API/Service Broker Team | Renewal via Vault-managed PKI (inferred) |
 
 ---
 
 ## 9.4 Vulnerability Management
 
-- **Scanning Process:** Regular Nessus vulnerability scans across ESXi hosts, vCenter, NSX-T, and Tanzu nodes; results ingested into the Security Compliance Dashboard.
-- **Remediation Process:** Findings triaged by severity; Critical/High findings remediated within defined SLA (Critical: 7 days, High: 30 days) via `deploy_configuration_baseline` patch workflows.
-- **Exception Process:** Risk-accepted exceptions documented and approved by Security Representative, tracked in the RAID register (Section 15) with review date.
+- **Scanning Process**: Nessus-based vulnerability scanning across the platform estate
+- **Remediation Process**: Findings triaged by Security Team; remediation tracked against patch/lifecycle management (Section 10.2)
+- **Exception Process**: Documented risk exceptions approved by Security Representative (inferred process)
 
 ---
 
 ## 9.5 Security Event Management
 
-- **SIEM Integration:** Vault audit logs, Trend Micro endpoint alerts, and Nessus findings are forwarded to the enterprise SIEM for correlation.
-- **Security Monitoring:** Continuous monitoring of vault policy compliance (`validate_vault_policy`) and endpoint protection status (Trend Micro).
-- **Threat Detection:** SIEM correlation rules trigger security incident workflows; Critical security events escalate directly to the Security Team per Section 4.3.
+- **SIEM Integration**: Aria Logs feeding centralized log analytics; Trend Micro endpoint events integrated for threat visibility (inferred integration point)
+- **Security Monitoring**: Vault key operations audited (`create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`)
+- **Threat Detection**: Trend Micro anti-malware, Nessus vulnerability scanning results feed operational security monitoring
 
 ---
 
@@ -411,35 +386,34 @@ DR strategy is built on VMware SRM and vSphere Replication, providing site-level
 
 | Activity | Frequency |
 |----------|----------|
-| Health Checks (Aria Operations dashboards) | Daily |
-| Capacity Review (CPU/Memory/vSAN) | Weekly |
-| Patch Review (vLCM/SDDC Manager compliance) | Monthly |
-| Backup Verification (`generate_backup_report`) | Weekly |
+| Health Checks (`validate_platform_observability`, `validate_automation_results`) | Daily |
+| Capacity Review (compute/storage/networking) | Weekly |
+| Patch Review (vLCM / SDDC Manager lifecycle) | Monthly |
+| Backup Verification (`generate_backup_report`, `validate_backup_integrity`) | Daily |
 | DR Readiness Review (`generate_dr_readiness_report`) | Monthly |
-| Vault Policy & Key Rotation Review | Monthly |
-| Vulnerability Scan Review (Nessus) | Monthly |
-| Service Catalog / API Health Review | Monthly |
+| Vault Policy Review (`validate_vault_policy`) | Quarterly |
+| Encryption Key Rotation (`rotate_encryption_key`) | Per key rotation policy (inferred: quarterly/annual) |
 
 ---
 
 ## 10.2 Patch Management
 
-- **Maintenance Windows:** Scheduled monthly maintenance windows, communicated 5 business days in advance; emergency patches follow break-glass process (Section 5.4).
-- **Approval Process:** Patch bundles validated in non-production, approved by Operations Manager, deployed via `deploy_configuration_baseline` and vLCM/SDDC Manager workflows.
-- **Testing Requirements:** Post-patch validation using `validate_automation_results` and `validate_platform_observability` to confirm monitoring/logging integrity before closing the change.
+- **Maintenance Windows**: Scheduled outside business hours, coordinated through change management
+- **Approval Process**: Changes executed via `execute_platform_workflow` and `deploy_configuration_baseline`, requiring approved change record prior to execution
+- **Testing Requirements**: Validation gates (`validate_automation_results`, `validate_platform_observability`) must pass before promotion to production
 
 ---
 
 ## 10.3 Upgrade Management
 
-- **Supported Upgrade Paths:** VMware Cloud Foundation-defined upgrade sequencing (SDDC Manager-orchestrated) covering vCenter, ESXi, NSX-T, vSAN, and Aria Suite components; Tanzu Kubernetes Grid upgrades via Tanzu Mission Control.
-- **Version Compatibility:** All upgrades validated against the VMware Interoperability Matrix prior to execution; upgrade plans executed through `execute_platform_workflow`.
+- **Supported Upgrade Paths**: VMware Cloud Foundation lifecycle via SDDC Manager and vLCM; Aria Suite Lifecycle Manager for Aria component upgrades; Tanzu Mission Control for TKG cluster lifecycle
+- **Version Compatibility**: Must be validated against VMware Interoperability Matrix prior to `provision_infrastructure`/`deploy_configuration_baseline` execution (inferred requirement)
 
 ---
 
 ## 10.4 Capacity Management
 
-Capacity is monitored continuously via Aria Operations with weekly trend review. Scaling of compute/storage/networking is executed through `provision_infrastructure(environment_name)`, with growth forecasts feeding quarterly capacity planning reviews. Kubernetes and AI/data platform capacity (`deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`) is reviewed against tenant consumption reporting.
+Capacity is monitored via Aria Operations dashboards (Section 6.2) and reviewed as part of routine operational tasks (Section 10.1). Scaling actions are executed through `provision_infrastructure(environment_name)` and platform deployment functions in `src/deploy.py`.
 
 ---
 
@@ -447,23 +421,17 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 ## 11.1 Standard Requests
 
-- User Access (vSphere/NSX-T/Tanzu/Service Broker roles)
-- Capacity Increase (compute/storage/network via `provision_infrastructure`)
+- User Access (Vault namespace/RBAC)
+- Capacity Increase (via `provision_infrastructure`)
 - Certificate Renewal
 - Service Restart
-- New Tenant Onboarding (via `create_service_offering` / `publish_service_catalog`)
-- New API Registration (`register_platform_api`)
-- Encryption Key Provisioning (`create_customer_managed_key`)
+- New Tenant Onboarding (via `create_service_offering`, `register_platform_api`)
 
 ---
 
 ## 11.2 Request Fulfilment Process
 
-1. Request submitted via Service Broker catalog or IT Service Management (ITSM) tool.
-2. L1 validates request completeness and approval status.
-3. L2 executes fulfillment using the relevant automation module (`src/automation.py`, `src/security_vault.py`, `src/service_broker.py`).
-4. Fulfillment validated (`validate_automation_results`, `validate_api_subscription`, or `validate_vault_policy` as applicable).
-5. Request closed with audit trail reference recorded.
+Requests are logged via the service desk (L1), validated and fulfilled by L2 Operations using approved automation functions (e.g., `create_service_offering`, `publish_service_catalog`, `register_platform_api`), with validation checks (`validate_api_subscription`) confirming successful fulfilment before closure.
 
 ---
 
@@ -473,47 +441,24 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Severity | Description |
 |----------|----------|
-| P1 | Complete platform outage or Tier 1 workload unavailability; vCenter/NSX-T/SDDC Manager down; DR failover required |
-| P2 | Major degraded functionality (e.g., single ESXi host failure, backup job repeated failure, Kubernetes cluster degraded) |
-| P3 | Minor degraded functionality (e.g., single alert threshold breach, non-critical certificate expiry warning) |
-| P4 | Cosmetic or informational issue with no service impact (e.g., dashboard display issue) |
+| P1 | Full platform outage, DR failover invoked, or critical security breach |
+| P2 | Significant degradation — backup failures, observability validation failures, single-domain outage (e.g., Kubernetes platform down) |
+| P3 | Partial/localized issue with workaround available (e.g., single service offering unavailable) |
+| P4 | Minor issue, cosmetic defect, or informational alert |
 
 ---
 
 ## 12.2 Operational Troubleshooting
 
-**General Approach**
+Recommended troubleshooting sequence, aligned to detected repository functions:
 
-1. Confirm alert/incident via Aria Operations and Aria Logs correlation.
-2. Identify affected capability domain using the same mapping logic as `scripts/detect-impact.py` (compute, storage, networking, backup, DR, security, containers).
-3. Apply capability-specific runbook (below) before escalating.
-
-**Compute / Storage / Networking**
-- Check ESXi host and vSAN cluster health in Aria Operations.
-- Validate NSX-T Manager/Edge status and control-plane connectivity.
-- Escalate to L2/L3 if HA/DRS failed to remediate automatically.
-
-**Automation Workflow Failures**
-- Review `execute_platform_workflow` and `validate_automation_results` logs in Aria Logs.
-- Re-run `deploy_configuration_baseline` after confirming root cause resolved.
-
-**Backup Failures**
-- Review `generate_backup_report` output for failure pattern.
-- Re-trigger `execute_backup(workload_name)`; if repeated failure, validate Avamar/Data Domain target availability.
-- Escalate to Dell EMC vendor support if storage appliance fault suspected.
-
-**DR / Replication Issues**
-- Check `generate_dr_readiness_report` for replication lag.
-- Validate SRM protection group status; escalate to L3 if `validate_recovery_objectives` fails.
-
-**Kubernetes / Container Platform**
-- Review `deploy_kubernetes_platform` execution logs; validate Tanzu Mission Control cluster health.
-
-**Security / Vault**
-- Validate vault policy compliance (`validate_vault_policy`); escalate key rotation failures (`rotate_encryption_key`) to Security & Vault Operations Team immediately (Critical severity).
-
-**Service Broker / API**
-- Validate subscription status (`validate_api_subscription`); review `register_platform_api` and `publish_service_catalog` execution logs for catalog publishing errors.
+1. **Observability failure**: Re-run `validate_platform_observability(environment)`; check Aria Operations/Aria Logs dashboards for underlying signal.
+2. **Deployment failure**: Verify sequence in `src/deploy.py` — confirm `deploy_network_foundation` succeeded before retrying `deploy_kubernetes_platform`, `deploy_ai_platform`, or `deploy_data_platform`.
+3. **Automation workflow failure**: Inspect `execute_platform_workflow(workflow_name)` output; confirm via `validate_automation_results(workflow_name)`.
+4. **Backup failure**: Check `schedule_backup_job`/`execute_backup` logs; re-run `validate_backup_integrity(backup_id)`; review `generate_backup_report()`.
+5. **DR/failover issue**: Confirm recovery plan via `create_recovery_plan(application_name)`; validate objectives with `validate_recovery_objectives(application_name)` prior to invoking `execute_site_failover(target_site)`.
+6. **Security/Vault issue**: Validate namespace and policy via `create_vault_namespace`/`validate_vault_policy`; confirm key assignment with `assign_key_to_service`.
+7. **API/Service Broker issue**: Validate subscription state via `validate_api_subscription(subscription_id)`; confirm catalog/API registration via `publish_service_catalog`/`register_platform_api`.
 
 ---
 
@@ -521,10 +466,8 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Issue | Workaround |
 |----------|----------|
-| Backup job intermittently reports failure due to Data Domain target latency | Re-run `execute_backup` after confirming Data Domain appliance health; escalate to vendor if repeated |
-| Automation workflow validation timeout on large environment provisioning | Increase workflow timeout in `execute_platform_workflow` configuration and re-run `validate_automation_results` |
-| DR readiness report shows stale replication status after network blip | Manually re-trigger `generate_dr_readiness_report` after confirming replication link restored |
-| Service Broker catalog publish fails silently on duplicate catalog name | Verify uniqueness before `publish_service_catalog`; rename and retry |
+| `scripts/detect-impact.py` parsed via fallback regex parser (AST parse failures noted for `read_yaml`, `resolve_capabilities_for_changed_file`, etc.) | Manual review of impact detection output recommended until parser reliability is improved |
+| Several modules (`backup.py`, `dr_platform.py`) parsed via fallback regex due to AST parse failure | Manual code review recommended for these modules pending source correction |
 
 ---
 
@@ -532,17 +475,17 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 ## 13.1 Compliance Requirements
 
-- ISO27001
-- GDPR (for tenant data hosted on the platform)
-- PCI-DSS (for tenants processing payment card data within the platform)
+- ISO27001 (inferred — platform security controls align with security domain: Vault, Trend Micro, Nessus)
+- GDPR (inferred — applicable where tenant/customer data is processed on data platform)
+- PCI-DSS (inferred — applicable if payment-related workloads are hosted; confirm with compliance team)
 
 ---
 
 ## 13.2 Audit Requirements
 
-- **Audit Responsibilities:** Security & Vault Operations Team owns vault/key audit evidence; Platform Operations Team owns deployment and backup audit evidence.
-- **Log Retention:** Minimum 12 months online, 7 years archived (Section 6.5).
-- **Evidence Collection:** Automated evidence collected via `generate_backup_report`, `generate_dr_readiness_report`, and vault audit trails; PR-linked change evidence captured via `scripts/detect-impact.py` metadata (repository, PR number, title, URL).
+- **Audit Responsibilities**: Security Team owns audit evidence for Vault operations (Section 9.2); Operations Team owns backup/DR audit evidence (Sections 7 and 8)
+- **Log Retention**: Minimum 12 months (inferred; confirm against regulatory mandate)
+- **Evidence Collection**: `generate_backup_report()`, `generate_dr_readiness_report()`, and Vault policy validation logs (`validate_vault_policy`) serve as primary audit evidence sources
 
 ---
 
@@ -550,14 +493,14 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Item | Status |
 |----------|----------|
-| Monitoring Configured | Complete — Aria Operations/Logs/Network Insight deployed |
-| Alerting Configured | Complete — Section 6.3 alert catalog active |
-| Backup Configured | Complete — `schedule_backup_job` active for all Tier 1/2 workloads |
-| Recovery Tested | Complete — Quarterly DR test cadence established |
-| Runbooks Available | Complete — Backup, DR, Patch, Security runbooks published |
-| Ownership Assigned | Complete — Section 4 ownership matrix confirmed |
-| Escalation Defined | Complete — Section 4.3 escalation path confirmed |
-| Documentation Complete | Complete — This OPG approved and distributed |
+| Monitoring Configured | Confirm `validate_platform_observability` integrated into deployment pipeline |
+| Alerting Configured | Confirm alert routing for failures in backup/DR/vault validation functions |
+| Backup Configured | Confirm `schedule_backup_job` active for all production workloads |
+| Recovery Tested | Confirm periodic execution of `execute_site_failover` in test mode |
+| Runbooks Available | Pending — detailed runbooks to be published referencing Section 12.2 |
+| Ownership Assigned | Confirm Section 4.1 roles staffed |
+| Escalation Defined | Confirm Section 4.3 contacts populated |
+| Documentation Complete | This OPG to be finalized with named owners and confirmed thresholds |
 
 ---
 
@@ -567,10 +510,9 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Risk | Impact | Mitigation |
 |----------|----------|----------|
-| Data Domain appliance capacity exhaustion | Backup job failures, retention non-compliance | Weekly capacity review; proactive expansion via vendor engagement |
-| Vault key rotation failure undetected | Security exposure, compliance breach | Automated alerting on `rotate_encryption_key` failure (Section 6.3) |
-| DR replication lag exceeding RPO during peak load | Data loss beyond acceptable threshold | Monthly `generate_dr_readiness_report` review, bandwidth capacity planning |
-| Uncontrolled manual changes bypassing automation modules | Configuration drift, audit failure | Enforce restricted activities (Section 5.3), periodic drift detection |
+| Fallback regex parsing indicates possible code quality/parse issues in `backup.py`, `dr_platform.py`, `detect-impact.py` | Reduced confidence in automated validation of backup/DR logic | Manual code review; improve AST compatibility |
+| Inferred thresholds/RPO/RTO not yet confirmed with business | Misaligned recovery expectations | Formal RPO/RTO workshop with Service Owner |
+| No explicit alerting module detected in repository | Alerts may rely entirely on Aria Operations configuration outside code | Confirm alert rules configured in Aria Operations and document them |
 
 ---
 
@@ -578,9 +520,10 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Assumption | Owner |
 |----------|----------|
-| All production changes are executed exclusively through `src/*.py` automation modules and CI/CD pipeline | Platform Engineering Lead |
-| Underlying VMware licensing (vSphere, NSX-T, Aria Suite, SRM) remains current | Service Owner |
-| Vendor support contracts (Broadcom, Dell EMC, HashiCorp, Tenable, Trend Micro) remain active | Operations Manager |
+| Aria Operations/Aria Logs/Aria Network Insight are configured as the monitoring/logging stack per product technology catalog | Platform Engineering |
+| Canopy Enterprise Backup/Avamar/Data Domain constitute the backup platform | Operations Team |
+| SRM/vSphere Replication/HCX constitute the DR platform | Platform Engineering |
+| Multi-environment support (Dev/Test/UAT/Prod) inferred from parameterised functions | Platform Owner |
 
 ---
 
@@ -588,8 +531,8 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Issue | Owner |
 |----------|----------|
-| Backup job failures linked to Data Domain latency (Section 12.3) | L2 Backup Operations Team |
-| Automation workflow timeouts on large-scale provisioning | Platform Engineering Lead |
+| Several source files failed AST parsing and were processed via regex fallback | Platform Engineering |
+| Named owners/contacts not yet populated in this document | Service Owner |
 
 ---
 
@@ -597,10 +540,10 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Dependency | Owner |
 |----------|----------|
-| VMware Cloud Foundation / SDDC Manager lifecycle platform | Platform Engineering Lead |
-| HashiCorp Vault enterprise platform availability | Security & Vault Operations Team |
-| Dell EMC Avamar / Data Domain backup infrastructure | Backup Operations Team |
-| Broadcom/VMware GSS support entitlement | Operations Manager |
+| VMware vSphere/vSAN/NSX-T platform availability | VMware Vendor Support |
+| HashiCorp Vault availability for secrets/key operations | Security Team |
+| Avamar/Data Domain backup infrastructure | Operations Team |
+| SRM/vSphere Replication DR infrastructure | Platform Engineering |
 
 ---
 
@@ -610,14 +553,8 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Link | Purpose |
 |----------|----------|
-| Aria Operations Console | Compute/storage/network health monitoring |
-| Aria Logs Console | Centralized log search and analytics |
-| Aria Network Insight Console | Network flow and micro-segmentation visibility |
-| SDDC Manager Console | Lifecycle management and patching |
-| HashiCorp Vault UI | Secrets and key management |
-| Service Broker Portal | Self-service catalog and API subscriptions |
-| Backup Reporting Dashboard (`generate_backup_report` output) | Backup job status and trends |
-| DR Readiness Dashboard (`generate_dr_readiness_report` output) | DR compliance and readiness status |
+| `jijeeshlearningorg/greenfield-code` (branch `main`) | Source repository |
+| `scripts/detect-impact.py` | Change impact detection tooling |
 
 ---
 
@@ -625,20 +562,23 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Tool | Purpose |
 |----------|----------|
-| vSphere / ESXi / vCenter | Compute virtualization and management |
+| vSphere / ESXi / vCenter | Compute virtualization platform |
 | vSAN | Software-defined storage |
-| NSX-T | Software-defined networking and security |
-| Aria Automation / Orchestrator | Provisioning and workflow automation |
-| Aria Operations / Aria Logs / Aria Network Insight | Monitoring, logging, network analytics |
+| NSX-T | Software-defined networking/security |
+| Aria Automation / Aria Orchestrator | Provisioning and workflow automation |
+| Aria Operations | Infrastructure monitoring |
+| Aria Logs | Centralized log aggregation |
+| Aria Network Insight | Network visibility/analytics |
 | Tanzu Kubernetes Grid / Tanzu Mission Control | Kubernetes platform and governance |
-| SDDC Manager / vLCM / Aria Suite Lifecycle Manager | Lifecycle and patch management |
-| HashiCorp Vault | Secrets and encryption key management |
-| Canopy Enterprise Backup / Avamar / Data Domain | Backup execution and storage |
-| VMware SRM / vSphere Replication | Disaster recovery orchestration and replication |
-| HCX / VMC | Workload mobility and public cloud integration |
+| SDDC Manager / vLCM | Lifecycle automation |
+| Aria Suite Lifecycle Manager | Aria component lifecycle |
+| HashiCorp Vault | Secrets/encryption key management |
 | Trend Micro | Endpoint protection |
 | Nessus | Vulnerability scanning |
-| Service Broker | Self-service catalog and API management |
+| Canopy Enterprise Backup / Avamar / Data Domain | Backup and backup storage |
+| SRM / vSphere Replication / HCX | Disaster recovery and workload mobility |
+| VMC | Public cloud integration |
+| Service Broker | Self-service catalog delivery |
 
 ---
 
@@ -646,14 +586,11 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 
 | Team | Contact |
 |----------|----------|
-| Platform Operations (NOC) | 24x7 Operations Bridge |
-| Platform Engineering | Platform Engineering Lead / On-call rotation |
-| Security & Vault Operations | Security Representative / On-call rotation |
-| Backup Operations | Backup Operations Team distribution list |
-| DR Operations | DR On-call Engineer |
-| Vendor Support - VMware/Broadcom | GSS Support Portal |
-| Vendor Support - Dell EMC | Avamar/Data Domain Support Portal |
-| Vendor Support - HashiCorp | Vault Enterprise Support Portal |
+| Platform Engineering | TBC |
+| Operations Team | TBC |
+| Security & Vault Operations | TBC |
+| Service Desk | TBC |
+| Vendor Support (VMware/Dell) | TBC |
 
 ---
 
@@ -671,9 +608,7 @@ Capacity is monitored continuously via Aria Operations with weekly trend review.
 | RPO | Recovery Point Objective |
 | IAM | Identity & Access Management |
 | RBAC | Role-Based Access Control |
-| VCF | VMware Cloud Foundation |
-| NSX-T | VMware Networking and Security Platform |
-| vSAN | VMware Software-Defined Storage |
-| SRM | Site Recovery Manager |
+| SDDC | Software-Defined Data Center |
 | TKG | Tanzu Kubernetes Grid |
-| SIEM | Security Information and Event Management |
+| SRM | Site Recovery Manager |
+| VCS | VMware Cloud Services (My Cloud Services) |
