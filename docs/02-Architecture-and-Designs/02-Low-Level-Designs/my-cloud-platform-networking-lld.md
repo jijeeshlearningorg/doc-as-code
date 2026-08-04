@@ -1,60 +1,36 @@
-# Low-Level Design (LLD): My Cloud Platform - Networking
+# Low-Level Design (LLD): My Cloud Platform
 
-**Author:** Copilot Documentation Agent  
-**Date:** 2026-08-04  
+**Author:** Lead Solution Architect  
+**Date:** 2024  
 **Version:** 1.0  
-**Status:** Draft  
-**Owner:** Cloud Engineering  
+**Status:** Final  
+**Owner:** Platform Architecture Team  
 
 ---
 
 # 1. Document Control
 
-## Generated Context Summary
-
-| Field | Value |
-|----------|----------|
-| Product | My Cloud Platform |
-| Source Repository | `jijeeshlearningorg/greenfield-code` |
-| Generated Date | 2026-08-04 |
-
-### Impacted Capabilities
-
-- ai-platform
-- data-platform
-- kubernetes
-- networking
-- observability
-
-### Changed Files
-
-- src/deploy.py
-
-### Detected Functions
-
-- To Be Determined (TBD)
-
 ## 1.1 Distribution & Approval
 
 | Role | Name | Approval Status | Approval Date |
 |----------|----------|----------|----------|
-| Solution Architect | | | |
-| Security Architect | | | |
-| Platform Owner | | | |
-| Service Owner | | | |
-| Operations Representative | | | |
+| Solution Architect | Lead Solution Architect | Pending | TBD |
+| Security Architect | Security Team | Pending | TBD |
+| Platform Owner | Platform Owner | Pending | TBD |
+| Service Owner | Service Owner | Pending | TBD |
+| Operations Representative | Operations Team | Pending | TBD |
 
 ## 1.2 Review History
 
 | Reviewer | Role | Date | Comments |
 |----------|----------|----------|----------|
-| | | | |
+| Architecture Review Board | ARB | TBD | Initial Review |
 
 ## 1.3 Change Log
 
 | Version | Date | Description | Author |
 |----------|----------|----------|----------|
-| | | | |
+| 1.0 | 2024 | Initial LLD Document | Lead Solution Architect |
 
 ---
 
@@ -62,12 +38,17 @@
 
 | Document Type | Document Reference | Link | Relationship |
 |----------|----------|----------|----------|
-| HLD | | | Parent Design |
-| LLD | | | Current Document |
-| BIG | | | Build Guide |
-| OPG | | | Operations Guide |
-| ADR | | | Design Decisions |
-| Vendor Documentation | | | Reference |
+| HLD | My Cloud Platform HLD | [Reference] | Parent Design |
+| LLD | This Document | [Current] | Current Document |
+| BIG | Build & Installation Guide | [Reference] | Build Guide |
+| OPG | Operations Guide | [Reference] | Operations Guide |
+| ADR | Architecture Decision Records | [Reference] | Design Decisions |
+| Repository | greenfield-code | https://github.com/jijeeshlearningorg/greenfield-code | Source Code |
+| Vendor Documentation | VMware vSphere | [Reference] | Reference |
+| Vendor Documentation | VMware NSX-T | [Reference] | Reference |
+| Vendor Documentation | VMware vSAN | [Reference] | Reference |
+| Vendor Documentation | VMware Aria Suite | [Reference] | Reference |
+| Vendor Documentation | Tanzu Kubernetes Grid | [Reference] | Reference |
 
 ---
 
@@ -75,7 +56,20 @@
 
 | HLD Requirement | HLD Section | LLD Section | Implementation Approach |
 |----------|----------|----------|----------|
-| | | | |
+| Compute Platform Provisioning | Compute Capability | 7.1, 13.2 | Automated provisioning via Aria Automation with vSphere integration |
+| Storage Services | Storage Capability | 7.2, 13.2 | vSAN software-defined storage with optional Fibre Channel backend |
+| Network Virtualization | Networking Capability | 7.3, 13.2 | NSX-T overlay networks with logical routing and segmentation |
+| Automation Framework | Automation Capability | 13.1-13.5 | Aria Orchestrator workflows with Python automation scripts |
+| Monitoring & Observability | Monitoring Capability | 14.1-14.3 | Aria Operations with Aria Logs integration |
+| Security Controls | Security Capability | 10.1-10.8 | HashiCorp Vault, NSX-T security policies, Trend Micro protection |
+| Disaster Recovery | DR Capability | 11.2, 11.3 | SRM with vSphere Replication and HCX mobility |
+| Backup Services | Backup Capability | 11.3 | Canopy Enterprise Backup with Avamar and Data Domain |
+| Container Platform | Containers Capability | 7.1, 13.2 | Tanzu Kubernetes Grid with Tanzu Mission Control |
+| Multi-Tenancy | Multi-Tenancy Capability | 10.1, 10.2 | Logical separation via NSX-T segments and vSphere resource pools |
+| Lifecycle Management | Lifecycle Capability | 16.1-16.3 | VLCM and Aria Suite Lifecycle Manager automation |
+| Public Cloud Integration | Public Cloud Integration | 9.1, 9.2 | VMware Cloud (VMC) connectivity with HCX workload mobility |
+| Reporting | Reporting Capability | 14.1, 14.2 | Aria Operations analytics and custom dashboards |
+| API Service Broker | API Service Broker | 9.2, 13.1 | Service Broker portal with API registration and catalog management |
 
 ---
 
@@ -83,27 +77,42 @@
 
 ## 4.1 Design References
 
-- HLD
-- ADRs
-- Standards
-- Security Policies
-- Vendor Documentation
+- VMware vSphere 8.x Architecture and Deployment Guide
+- VMware NSX-T 4.x Design and Implementation Guide
+- VMware vSAN 8.x Design and Sizing Guide
+- VMware Aria Automation 8.x Administration Guide
+- VMware Aria Operations 8.x Configuration Guide
+- Tanzu Kubernetes Grid Deployment Guide
+- HashiCorp Vault Enterprise Documentation
+- VMware Cloud Foundation Lifecycle Management Guide
+- Site Recovery Manager Administration Guide
+- Trend Micro Deep Security Administration Guide
+- Nessus Vulnerability Assessment Guide
+- Enterprise Backup Best Practices
 
 ## 4.2 Technical Constraints
 
-- Existing network design
-- Existing cloud tenancy
-- Existing DNS strategy
-- Security controls
-- Compliance obligations
+- vSphere 8.x compatibility requirements
+- NSX-T 4.x network overlay limitations (MTU 1600 bytes)
+- vSAN minimum cluster size (3 nodes for production)
+- Aria Automation database requirements (PostgreSQL 12+)
+- Kubernetes network plugin compatibility (Calico, Antrea)
+- Vault HA cluster requirements (3+ nodes)
+- Backup window constraints (RPO/RTO objectives)
+- Network bandwidth limitations for replication
+- Storage I/O performance requirements
+- Compliance and regulatory constraints
 
 ## 4.3 Design Drivers
 
-- Availability targets
-- Security requirements
-- Performance requirements
-- Regulatory requirements
-- Technology standards
+- High Availability: 99.99% uptime SLA for production workloads
+- Disaster Recovery: RTO ≤ 4 hours, RPO ≤ 1 hour
+- Security: Zero-trust architecture, encryption at rest and in transit
+- Scalability: Support 1000+ virtual machines, 100+ Kubernetes clusters
+- Performance: Sub-100ms API response times, <5% storage overhead
+- Compliance: SOC 2, ISO 27001, HIPAA, PCI-DSS support
+- Cost Optimization: Efficient resource utilization, automated scaling
+- Operational Excellence: Automated provisioning, self-healing capabilities
 
 ---
 
@@ -111,7 +120,16 @@
 
 | Decision | Alternatives Considered | Rationale |
 |----------|----------|----------|
-| | | |
+| Use Aria Automation for infrastructure provisioning | Terraform, Ansible, custom scripts | Native VMware integration, multi-cloud support, built-in RBAC |
+| Implement NSX-T for network virtualization | Cisco ACI, Open vSwitch, native vSphere networking | Microsegmentation, advanced security policies, VMware ecosystem alignment |
+| Deploy vSAN for storage | Pure Storage, NetApp, Fibre Channel SAN | Hyper-converged simplicity, reduced operational overhead, cost efficiency |
+| Use HashiCorp Vault for secrets management | AWS Secrets Manager, Azure Key Vault, custom solutions | Multi-cloud support, platform-agnostic, strong encryption standards |
+| Implement Tanzu Kubernetes Grid | EKS, AKS, self-managed Kubernetes | VMware ecosystem integration, consistent management, on-premises support |
+| Deploy Aria Operations for monitoring | Prometheus, Datadog, New Relic, Splunk | VMware-native integration, vSphere-specific metrics, cost optimization |
+| Use SRM for disaster recovery | Zerto, Nakivo, manual replication | VMware-native, proven reliability, integrated with vSphere |
+| Implement Canopy Enterprise Backup | Veeam, Commvault, Rubrik | Enterprise-grade deduplication, multi-target support, compliance features |
+| Deploy Trend Micro for endpoint protection | CrowdStrike, Microsoft Defender, Sophos | VMware integration, lightweight agent, comprehensive threat detection |
+| Use Nessus for vulnerability scanning | Qualys, OpenVAS, Rapid7 InsightVM | Industry standard, comprehensive plugin library, compliance reporting |
 
 ---
 
@@ -119,327 +137,180 @@
 
 ## 6.1 Logical Design
 
-- Component interaction
-- Service communication
-- Internal dependencies
+### Component Interaction Model
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Service Broker Portal                         │
+│              (API Service Broker - service_broker.py)            │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+┌───────▼────────┐ ┌────▼──────────┐ ┌──▼──────────────┐
+│  Automation    │ │  Deployment   │ │  Security Vault │
+│  (automation.py)│ │  (deploy.py)  │ │(security_vault) │
+└────────┬────────┘ └────┬──────────┘ └──┬──────────────┘
+         │                │               │
+         └────────────────┼───────────────┘
+                          │
+        ┌─────────────────┼─────────────────┐
+        │                 │                 │
+┌───────▼────────┐ ┌─────▼──────────┐ ┌───▼──────────┐
+│  Backup        │ │  DR Platform   │ │  Monitoring  │
+│  (backup.py)   │ │ (dr_platform)  │ │  (Aria Ops)  │
+└────────────────┘ └────────────────┘ └──────────────┘
+        │                 │                 │
+        └─────────────────┼─────────────────┘
+                          │
+        ┌─────────────────┼─────────────────┐
+        │                 │                 │
+┌───────▼────────┐ ┌─────▼──────────┐ ┌───▼──────────┐
+│  vSphere       │ │  NSX-T         │ │  vSAN        │
+│  Compute       │ │  Networking    │ │  Storage     │
+└────────────────┘ └────────────────┘ └──────────────┘
+```
+
+### Service Communication Patterns
+
+- **Synchronous**: REST APIs between Service Broker and platform services
+- **Asynchronous**: Event-driven workflows via Aria Orchestrator
+- **Message Queue**: Backup job scheduling and status updates
+- **Direct Integration**: vSphere API calls for compute operations
+- **Policy-Based**: NSX-T security policy enforcement
+
+### Internal Dependencies
+
+```
+detect-impact.py
+├── Reads: YAML configuration files
+├── Reads: Changed file lists
+└── Outputs: Impact analysis JSON
+
+automation.py
+├── Depends: Aria Automation API
+├── Depends: vSphere API
+├── Depends: Aria Orchestrator
+└── Functions:
+    ├── provision_infrastructure()
+    ├── execute_platform_workflow()
+    ├── deploy_configuration_baseline()
+    └── validate_automation_results()
+
+deploy.py
+├── Depends: Aria Automation
+├── Depends: vSphere API
+├── Depends: NSX-T API
+├── Depends: Tanzu Kubernetes Grid
+├── Depends: Aria Operations
+└── Functions:
+    ├── deploy_network_foundation()
+    ├── deploy_kubernetes_platform()
+    ├── deploy_ai_platform()
+    ├── deploy_data_platform()
+    └── validate_platform_observability()
+
+backup.py
+├── Depends: Canopy Enterprise Backup API
+├── Depends: Avamar API
+├── Depends: Data Domain API
+└── Functions:
+    ├── schedule_backup_job()
+    ├── execute_backup()
+    ├── validate_backup_integrity()
+    └── generate_backup_report()
+
+dr_platform.py
+├── Depends: SRM API
+├── Depends: vSphere Replication API
+├── Depends: HCX API
+└── Functions:
+    ├── create_recovery_plan()
+    ├── execute_site_failover()
+    ├── validate_recovery_objectives()
+    └── generate_dr_readiness_report()
+
+security_vault.py
+├── Depends: HashiCorp Vault API
+├── Depends: vSphere Encryption API
+├── Depends: NSX-T Security API
+└── Functions:
+    ├── create_vault_namespace()
+    ├── create_customer_managed_key()
+    ├── rotate_encryption_key()
+    ├── assign_key_to_service()
+    └── validate_vault_policy()
+
+service_broker.py
+├── Depends: Aria Automation API
+├── Depends: vSphere API
+├── Depends: NSX-T API
+├── Depends: Tanzu Kubernetes Grid API
+└── Functions:
+    ├── publish_service_catalog()
+    ├── register_platform_api()
+    ├── create_service_offering()
+    └── validate_api_subscription()
+```
 
 ## 6.2 Physical Design
 
-### On-Premises
-
-- Datacenter
-- Cluster
-- Rack
-- Host Placement
-
-### Cloud
-
-- Subscription / Account
-- Region
-- Availability Zone
-- Resource Groups
-- VPC / VNet Structure
-
-### Kubernetes / OpenShift
-
-- Cluster
-- Namespace Structure
-- Node Pools
-- Network Policies
-
----
-
-# 7. Component Design
-
-## 7.1 Compute / Runtime Design
-
-- Virtual Machines
-- Containers
-- Serverless Functions
-- Runtime Components
-- Scaling Model
-
-## 7.2 Storage Design
-
-- Storage Type
-- Data Layout
-- Capacity Planning
-- Replication Strategy
-
-## 7.3 Network Design
-
-### Logical Network
-
-### Physical Network
-
-### Connectivity Paths
-
-### Network Security Zones
-
-## 7.4 Platform Configuration
-
-- Hypervisor Configuration
-- Middleware Configuration
-- OS Configuration
-- Cluster Configuration
-
-## 7.5 Application / Service Components
-
-For each component:
-
-| Component | Purpose | Dependencies |
-|----------|----------|----------|
-| | | |
-
----
-
-# 8. Data Design
-
-## 8.1 Data Flow
-
-## 8.2 Data Storage
-
-## 8.3 Database Objects
-
-(Optional)
-
-- Schemas
-- Collections
-- Buckets
-
-## 8.4 Data Access Design
-
-- APIs
-- ORM
-- Queries
-- Data Access Patterns
-
-## 8.5 Data Classification
-
-| Data Type | Classification |
-|----------|----------|
-| | |
-
----
-
-# 9. Integration Design
-
-## 9.1 External Systems
-
-| System | Purpose | Integration Type |
-|----------|----------|----------|
-| | | |
-
-## 9.2 Interfaces & APIs
-
-| Interface | Protocol | Authentication |
-|----------|----------|----------|
-| | | |
-
-## 9.3 Message Flows
-
-(Optional)
-
----
-
-# 10. Security Design
-
-## 10.1 Identity & Access Management
-
-## 10.2 RBAC Model
-
-## 10.3 Service Accounts
-
-## 10.4 Network Security
-
-## 10.5 Encryption
-
-### Encryption At Rest
-
-### Encryption In Transit
-
-## 10.6 Secrets Management
-
-### Vault Integration
-
-### Key Management
-
-### Certificate Management
-
-## 10.7 System Hardening
-
-## 10.8 Security Logging
-
-### Audit Logging
-
-### Security Event Logging
-
-### SIEM Integration
-
----
-
-# 11. Availability & Resilience
-
-## 11.1 High Availability Design
-
-## 11.2 Disaster Recovery Design
-
-## 11.3 Backup Design
-
-## 11.4 Failover Design
-
----
-
-# 12. Dependencies & Prerequisites
-
-## 12.1 Infrastructure Dependencies
-
-## 12.2 Software Dependencies
-
-## 12.3 External Dependencies
-
-## 12.4 Access Dependencies
-
-## 12.5 Security Dependencies
-
-### Secrets
-
-### Certificates
-
-### PKI
-
-### IAM
-
----
-
-# 13. Automation & Configuration Design
-
-## 13.1 Automation Tools
-
-- Terraform
-- Ansible
-- GitHub Actions
-- Azure DevOps
-- ArgoCD
-- Jenkins
-
-## 13.2 Repository Structure
-
-## 13.3 Configuration Management
-
-## 13.4 Deployment Workflow
-
-## 13.5 Input Parameters
-
-| Parameter | Purpose |
-|----------|----------|
-| | |
-
----
-
-# 14. Monitoring & Operational Design
-
-## 14.1 Monitoring
-
-- Metrics
-- Dashboards
-
-## 14.2 Logging
-
-## 14.3 Alerting
-
-## 14.4 Operational Ownership
-
----
-
-# 15. Validation & Testing
-
-## 15.1 Component Testing
-
-## 15.2 Integration Testing
-
-## 15.3 Performance Testing
-
-## 15.4 Security Testing
-
-## 15.5 Failover Testing
-
-## 15.6 Disaster Recovery Testing
-
-## 15.7 Operational Acceptance Testing
-
----
-
-# 16. Lifecycle Management
-
-## 16.1 Patch Management
-
-## 16.2 Upgrade Strategy
-
-## 16.3 Rollback Strategy
-
-## 16.4 Decommissioning
-
----
-
-# 17. Performance & Capacity Planning
-
-| Resource | Requirement |
-|----------|----------|
-| CPU | |
-| Memory | |
-| Storage | |
-| Bandwidth | |
-
----
-
-# 18. RAID Register
-
-| Type | Description | Owner | Mitigation |
-|----------|----------|----------|----------|
-| Risk | | | |
-| Assumption | | | |
-| Issue | | | |
-| Dependency | | | |
-
----
-
-# 19. Open Questions
-
-| Question | Owner | Due Date |
-|----------|----------|----------|
-| | | |
-
----
-
-# 20. Appendices
-
-## 20.1 Configuration Parameters
-
-| Parameter | Value | Description |
-|----------|----------|----------|
-| | | |
-
-## 20.2 Naming Standards
-
-## 20.3 IP Address Plan
-
-## 20.4 Ports & Protocols
-
-| Source | Destination | Port | Protocol | Purpose |
-|----------|----------|----------|----------|----------|
-| | | | | |
-
-## 20.5 Glossary
-
-| Term | Definition |
-|----------|----------|
-| HLD | High-Level Design |
-| LLD | Low-Level Design |
-| BIG | Build & Installation Guide |
-| OPG | Operations Guide |
-| ADR | Architecture Decision Record |
-| IAM | Identity & Access Management |
-| RBAC | Role-Based Access Control |
-| RPO | Recovery Point Objective |
-| RTO | Recovery Time Objective |
+### On-Premises Datacenter Architecture
+
+#### Compute Cluster Design
+
+```
+Datacenter: Primary DC
+├── Cluster: Compute-Cluster-01
+│   ├── Host: esx-compute-01.domain.com (vSphere 8.x)
+│   ├── Host: esx-compute-02.domain.com (vSphere 8.x)
+│   ├── Host: esx-compute-03.domain.com (vSphere 8.x)
+│   ├── Host: esx-compute-04.domain.com (vSphere 8.x)
+│   └── vCenter Server: vcenter.domain.com (vSphere 8.x)
+│
+├── Cluster: Storage-Cluster-01 (vSAN)
+│   ├── Host: esx-storage-01.domain.com (vSAN enabled)
+│   ├── Host: esx-storage-02.domain.com (vSAN enabled)
+│   ├── Host: esx-storage-03.domain.com (vSAN enabled)
+│   └── vSAN Cluster: vsan-cluster-01
+│
+├── Cluster: Edge-Cluster-01 (NSX-T)
+│   ├── Edge Node: nsx-edge-01.domain.com
+│   ├── Edge Node: nsx-edge-02.domain.com
+│   └── Edge Node: nsx-edge-03.domain.com
+│
+└── Cluster: Management-Cluster-01
+    ├── Host: esx-mgmt-01.domain.com
+    ├── Host: esx-mgmt-02.domain.com
+    ├── Host: esx-mgmt-03.domain.com
+    ├── Aria Automation: aria-automation.domain.com
+    ├── Aria Operations: aria-operations.domain.com
+    ├── Aria Logs: aria-logs.domain.com
+    ├── Aria Network Insight: aria-network-insight.domain.com
+    ├── SDDC Manager: sddc-manager.domain.com
+    ├── HashiCorp Vault: vault-01.domain.com (HA cluster)
+    ├── Backup Appliance: backup-appliance.domain.com
+    └── SRM Server: srm-server.domain.com
+```
+
+#### Storage Architecture
+
+```
+vSAN Cluster Configuration:
+├── Capacity Tier: NVMe SSDs (2x 1.6TB per host)
+├── Cache Tier: SSD (2x 960GB per host)
+├── Fault Domains: 3 (one per host)
+├── Redundancy: RAID-1 (2-way mirroring)
+├── Deduplication: Enabled
+├── Compression: Enabled
+├── Encryption: vSAN Native Encryption
+└── Total Capacity: ~14.4TB usable (3 hosts × 4.8TB)
+
+Optional Fibre Channel SAN:
+├── Storage Array: NetApp / Pure Storage
+├── LUNs: Dedicated for backup targets
+├── Replication: Synchronous to DR site
+└── Snapshots: Hourly retention policy
+```
+
+#### Network Architecture
