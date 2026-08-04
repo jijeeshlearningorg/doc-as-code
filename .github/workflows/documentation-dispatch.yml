@@ -169,6 +169,28 @@ jobs:
 
           cat generated-context.json
 
+      - name: Show Runtime Workspace
+        run: |
+          echo "=================================="
+          echo "CURRENT DIRECTORY"
+          echo "=================================="
+
+          pwd
+
+          echo ""
+          echo "=================================="
+          echo "ROOT CONTENT"
+          echo "=================================="
+
+          ls -la
+          
+          echo ""
+          echo "=================================="
+          echo "ALL FILES"
+          echo "=================================="
+
+          find . -type f | sort
+          
       - name: Verify Templates
         run: |
           echo "=================================="
