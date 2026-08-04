@@ -141,6 +141,20 @@ jobs:
 
           find template -type f | sort || true
 
+      - name: Validate Python Scripts
+        run: |
+          echo "=================================="
+          echo "VALIDATING PYTHON SCRIPTS"
+          echo "=================================="
+
+          python -m py_compile _actions/scripts/build-document-context.py
+          python -m py_compile _actions/scripts/prompt-generator.py
+          python -m py_compile _actions/scripts/invoke-claude.py
+
+          echo "=================================="
+          echo "VALIDATION SUCCESSFUL"
+          echo "=================================="
+
       - name: Build Documentation Context
         run: |
           echo "=================================="
