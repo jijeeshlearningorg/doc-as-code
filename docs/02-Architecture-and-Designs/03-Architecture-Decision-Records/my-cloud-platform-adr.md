@@ -104,65 +104,61 @@ The repository evidence shows 41 functions distributed across 5 core modules, in
 - Increased operational complexity (14 services to manage)
 - Distributed transaction management across capabilities
 - Network latency and reliability concerns
-- Requires sophisticated observability and tracing
-- Higher infrastructure overhead
+- Requires sophisticated service discovery and load balancing
+- Tenant isolation must be implemented at each capability layer
+- Increased monitoring and observability requirements
 
 **Concerns**:
-- Requires investment in container orchestration and service mesh
-- Tenant isolation must be implemented at each microservice layer
-- Cross-capability workflows require choreography or orchestration patterns
+- Requires significant DevOps and SRE investment
+- Distributed debugging and troubleshooting complexity
+- Data consistency challenges across capability boundaries
 
 ---
 
-### Option 3: Hybrid Layered Architecture (Recommended)
-**Description**: Organize platform into 4 logical layers:
-- **Capability Layer**: 14 independent capability modules (compute, storage, networking, etc.) with internal APIs
-- **Service Broker Layer**: Unified service catalog and API broker exposing capabilities as composable services
-- **Orchestration Layer**: Aria Orchestrator-based workflow engine for multi-capability provisioning and lifecycle operations
-- **Tenant Management Layer**: Multi-tenancy, RBAC, billing, and compliance enforcement
+### Option 3: Domain-Driven Design with Bounded Contexts
+**Description**: Group 14 capabilities into 4-5 logical domains (Infrastructure, Security, Automation, Observability, Disaster Recovery), each with its own API, data model, and operational governance, with well-defined integration contracts between domains.
 
 **Pros**:
-- Balances modularity with operational simplicity
+- Balances microservices benefits with operational simplicity
+- Aligns with business domains and team structures
+- Enables independent capability evolution within domains
+- Clearer integration contracts and dependencies
+- Reduces operational overhead vs. 14 independent services
+- Supports multi-tenancy at domain level
+
+**Cons**:
+- Requires careful domain boundary definition
+- Cross-domain workflows still require orchestration
+- Potential for domain boundary misalignment with organizational structure
+- Intermediate complexity between monolithic and microservices
+
+**Concerns**:
+- Domain boundaries may need to evolve as platform matures
+- Cross-domain consistency and transaction management
+
+---
+
+### Option 4: Hybrid Hub-and-Spoke Architecture
+**Description**: Implement a central orchestration hub (Aria Orchestrator) that coordinates capability-specific services, with each capability exposing a standardized service interface (REST API, event streams) and the hub managing workflows, multi-tenancy, and cross-capability transactions.
+
+**Pros**:
 - Leverages existing Aria Orchestrator investment
-- Clear separation between capability implementation and service delivery
-- Supports both simple (single-capability) and complex (multi-capability) workflows
-- Tenant isolation enforced at broker and orchestration layers
+- Centralized workflow orchestration and multi-tenancy
+- Clear separation between orchestration and capability execution
+- Supports complex multi-step provisioning workflows
+- Enables event-driven architecture for asynchronous operations
 - Aligns with VMware architectural patterns
 
 **Cons**:
-- Requires careful API design between layers
-- Orchestration layer becomes critical dependency
-- Workflow complexity can grow rapidly
-- Requires strong governance on capability API contracts
+- Orchestrator becomes a critical bottleneck
+- Requires standardization of capability interfaces
+- Workflow complexity increases with platform scale
+- Difficult to implement capability-specific optimizations
+- Potential performance impact for high-throughput operations
 
 **Concerns**:
-- Orchestration layer must handle failure scenarios gracefully
-- Tenant isolation must be validated across all layers
-- Cross-capability transaction semantics must be defined
-
----
-
-### Option 4: Event-Driven Architecture with Message Bus
-**Description**: Implement platform as event-driven system with capabilities publishing and subscribing to domain events (e.g., "VM Provisioned", "Storage Allocated", "Network Configured") via message broker (e.g., RabbitMQ, Kafka).
-
-**Pros**:
-- Loose coupling between capabilities
-- Asynchronous processing enables better scalability
-- Event sourcing provides audit trail and compliance benefits
-- Supports complex multi-capability workflows naturally
-- Enables real-time observability and analytics
-
-**Cons**:
-- Increased architectural complexity
-- Eventual consistency model complicates error handling
-- Requires investment in message broker infrastructure
-- Debugging distributed event flows is challenging
-- Not suitable for synchronous provisioning workflows
-
-**Concerns**:
-- Tenant isolation must be enforced at event level
-- Event ordering and idempotency are critical
-- Compliance and audit requirements may conflict with eventual consistency
+- Orchestrator scalability and high availability requirements
+- Workflow versioning and rollback complexity
 
 ---
 
@@ -170,156 +166,434 @@ The repository evidence shows 41 functions distributed across 5 core modules, in
 
 ### Architecture Overview
 
-Implement **Option 3: Hybrid Layered Architecture** with the following structure:
+Implement a **Domain-Driven Design with Bounded Contexts** architecture, organized into 5 logical domains with a centralized API Gateway and event-driven integration layer:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Tenant Management Layer                   │
-│  (Multi-Tenancy, RBAC, Billing, Compliance, Audit Logging)  │
-└─────────────────────────────────────────────────────────────┘
-                              ▲
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                    Service Broker Layer                       │
-│  (API Gateway, Service Catalog, API Registration, Validation)│
-└─────────────────────────────────────────────────────────────┘
-                              ▲
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                  Orchestration Layer                          │
-│  (Aria Orchestrator, Workflow Engine, State Management)      │
-└─────────────────────────────────────────────────────────────┘
-                              ▲
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                    Capability Layer                           │
-│  ┌──────────┬──────────┬──────────┬──────────┬──────────┐   │
-│  │ Compute  │ Storage  │Networking│Automation│ Backup   │   │
-│  │(vSphere) │(vSAN)    │(NSX-T)   │(Aria)    │(Canopy)  │   │
-│  └──────────┴──────────┴──────────┴──────────┴──────────┘   │
-│  ┌──────────┬──────────┬──────────┬──────────┬──────────┐   │
-│  │Monitoring│ Security │    DR    │Containers│Lifecycle │   │
-│  │(Aria Ops)│(Vault)   │(SRM)     │(Tanzu)   │(VLCM)    │   │
-│  └──────────┴──────────┴──────────┴──────────┴──────────┘   │
-└─────────────────────────────────────────────────────────────┘
+│                    API Gateway & Portal                      │
+│         (Authentication, Authorization, Rate Limiting)       │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+┌───────▼────────┐ ┌────▼──────────┐ ┌──▼──────────────┐
+│ Infrastructure │ │   Security    │ │  Automation &   │
+│    Domain      │ │    Domain     │ │  Orchestration  │
+├────────────────┤ ├───────────────┤ ├─────────────────┤
+│ • Compute      │ │ • Vault       │ │ • Provisioning  │
+│ • Storage      │ │ • Encryption  │ │ • Workflows     │
+│ • Networking   │ │ • Compliance  │ │ • Lifecycle Mgmt│
+│ • Containers   │ │ • Secrets Mgmt│ │ • Validation    │
+└────────┬────────┘ └───────┬───────┘ └────────┬────────┘
+         │                  │                  │
+         └──────────────────┼──────────────────┘
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+┌───────▼────────┐ ┌────────▼────────┐ ┌──────▼──────────┐
+│ Observability  │ │ Disaster        │ │ Service Broker  │
+│    Domain      │ │ Recovery Domain │ │    Domain       │
+├────────────────┤ ├─────────────────┤ ├─────────────────┤
+│ • Monitoring   │ │ • Site Recovery │ │ • Catalog       │
+│ • Logging      │ │ • Replication   │ │ • API Registry  │
+│ • Analytics    │ │ • Failover      │ │ • Subscriptions │
+│ • Reporting    │ │ • Recovery Plans│ │ • Billing       │
+└────────────────┘ └─────────────────┘ └─────────────────┘
+         │                  │                   │
+         └──────────────────┼───────────────────┘
+                            │
+        ┌───────────────────▼───────────────────┐
+        │   Event Bus & Message Broker          │
+        │  (Async Integration, Event Streaming) │
+        └───────────────────────────────────────┘
 ```
 
-### Layer Responsibilities
+### Domain Definitions
 
-#### 1. Capability Layer
-Each capability module exposes a well-defined internal API:
+#### 1. Infrastructure Domain
+**Capabilities**: Compute, Storage, Networking, Containers
 
-**Compute Capability** (`src/compute.py` - implied):
-- `provision_vm(tenant_id, vm_spec)` → VM ID
-- `configure_vm_resources(vm_id, cpu, memory, storage)`
-- `get_vm_status(vm_id)` → Status object
-- `delete_vm(vm_id)`
+**Services**:
+- `compute-service`: VM provisioning, resource management, lifecycle
+- `storage-service`: vSAN management, storage policies, capacity planning
+- `networking-service`: NSX-T virtual networks, routing, segmentation
+- `container-service`: Tanzu Kubernetes Grid deployment and management
 
-**Storage Capability** (`src/storage.py` - implied):
-- `allocate_storage(tenant_id, size_gb, tier)` → Storage ID
-- `configure_replication(storage_id, target_site)`
-- `get_storage_metrics(storage_id)` → Metrics object
-
-**Networking Capability** (`src/networking.py` - implied):
-- `deploy_network_foundation(region)` → Network ID (from `src/deploy.py`)
-- `create_network_segment(tenant_id, segment_spec)` → Segment ID
-- `configure_routing(segment_id, routes)`
-- `get_network_topology(tenant_id)` → Topology object
-
-**Automation Capability** (`src/automation.py`):
-- `provision_infrastructure(environment_name)` → Execution ID
-- `execute_platform_workflow(workflow_name)` → Execution ID
-- `deploy_configuration_baseline(environment_name)` → Status
-- `validate_automation_results(workflow_name)` → Validation result
-
-**Backup Capability** (`src/backup.py`):
-- `schedule_backup_job(workload_name)` → Job ID
-- `execute_backup(workload_name)` → Backup ID
-- `validate_backup_integrity(backup_id)` → Integrity report
-- `generate_backup_report()` → Report object
-
-**Disaster Recovery Capability** (`src/dr_platform.py`):
-- `create_recovery_plan(application_name)` → Plan ID
-- `execute_site_failover(target_site)` → Failover status
-- `validate_recovery_objectives(application_name)` → Validation result
-- `generate_dr_readiness_report()` → Report object
-
-**Security & Vault Capability** (`src/security_vault.py`):
-- `create_vault_namespace(namespace_name)` → Namespace ID
-- `create_customer_managed_key(key_name)` → Key ID
-- `rotate_encryption_key(key_name)` → Rotation status
-- `assign_key_to_service(key_name, service_name)` → Assignment status
-- `validate_vault_policy(policy_name)` → Validation result
-
-**Service Broker Capability** (`src/service_broker.py`):
-- `publish_service_catalog(catalog_name)` → Catalog ID
-- `register_platform_api(api_name)` → API ID
-- `create_service_offering(service_name)` → Offering ID
-- `validate_api_subscription(subscription_id)` → Validation result
-
-**Deployment Capability** (`src/deploy.py`):
-- `deploy_kubernetes_platform(cluster_name)` → Cluster ID
-- `deploy_ai_platform(environment)` → Platform ID
-- `deploy_data_platform(environment)` → Platform ID
-- `validate_platform_observability(environment)` → Validation result
-
-#### 2. Orchestration Layer
-Aria Orchestrator-based workflow engine:
-
-**Responsibilities**:
-- Coordinate multi-capability provisioning workflows
-- Manage state transitions and error handling
-- Implement retry logic and compensation (rollback) patterns
-- Enforce workflow policies and governance rules
-- Provide workflow execution history and audit trail
-
-**Key Workflows**:
-- `provision_complete_environment`: Orchestrates compute + storage + networking + monitoring
-- `failover_application`: Coordinates DR across compute, storage, and networking
-- `backup_and_replicate`: Chains backup execution with replication configuration
-- `rotate_encryption_keys`: Coordinates key rotation across all services
-
-**Implementation**:
-```yaml
-Workflow: provision_complete_environment
-  Input: tenant_id, environment_spec
-  Steps:
-    1. Validate tenant quota and permissions (Tenant Management Layer)
-    2. Create vault namespace (Security Capability)
-    3. Create customer-managed key (Security Capability)
-    4. Deploy network foundation (Networking Capability)
-    5. Allocate storage (Storage Capability)
-    6. Provision VMs (Compute Capability)
-    7. Configure monitoring (Monitoring Capability)
-    8. Publish service catalog (Service Broker Capability)
-    9. Generate audit log (Tenant Management Layer)
-  Error Handling: Rollback all steps on failure
-  Output: environment_id, status
+**API Endpoints**:
+```
+POST   /api/v1/infrastructure/compute/vms
+GET    /api/v1/infrastructure/compute/vms/{vm-id}
+POST   /api/v1/infrastructure/storage/volumes
+POST   /api/v1/infrastructure/networking/networks
+POST   /api/v1/infrastructure/containers/clusters
 ```
 
-#### 3. Service Broker Layer
-Unified API gateway and service catalog:
+**Data Model**: Tenant-scoped resources with RBAC enforcement
 
-**Responsibilities**:
-- Expose capabilities as composable services via REST APIs
-- Implement API versioning and backward compatibility
-- Enforce rate limiting and quota management
-- Validate API requests against tenant permissions
-- Route requests to appropriate capability or orchestration layer
-- Maintain service catalog and API registry
+---
 
-**API Structure**:
+#### 2. Security Domain
+**Capabilities**: Security, Secrets Management, Encryption, Compliance
+
+**Services**:
+- `vault-service`: HashiCorp Vault integration, namespace management
+- `encryption-service`: Customer-managed key (CMK) lifecycle, key rotation
+- `compliance-service`: Policy validation, audit logging, compliance reporting
+- `secrets-service`: Credential management, secret rotation
+
+**API Endpoints**:
 ```
-POST /api/v1/tenants/{tenant_id}/services/compute/vms
-  → Calls Compute Capability or Orchestration Layer
+POST   /api/v1/security/vault/namespaces
+POST   /api/v1/security/encryption/keys
+POST   /api/v1/security/encryption/keys/{key-id}/rotate
+POST   /api/v1/security/compliance/policies/{policy-id}/validate
+```
 
-POST /api/v1/tenants/{tenant_id}/services/storage/volumes
-  → Calls Storage Capability
+**Data Model**: Encrypted at rest, audit-logged, tenant-isolated
 
-POST /api/v1/tenants/{tenant_id}/workflows/provision-environment
-  → Calls Orchestration Layer
+---
 
-GET /api/v1/service-catalog
-  → Returns available services and offerings
+#### 3. Automation & Orchestration Domain
+**Capabilities**: Automation, Provisioning, Lifecycle Management, Workflow Execution
 
-POST /api/v1/services/{service_id}/subscribe
+**Services**:
+- `provisioning-service`: Infrastructure provisioning orchestration
+- `workflow-service`: Aria Orchestrator workflow execution and management
+- `lifecycle-service`: Patching, upgrades, configuration management
+- `validation-service`: Automation result validation, health checks
+
+**API Endpoints**:
+```
+POST   /api/v1/automation/provisioning/environments
+POST   /api/v1/automation/workflows/{workflow-id}/execute
+POST   /api/v1/automation/lifecycle/patches
+POST   /api/v1/automation/validation/results/{workflow-id}
+```
+
+**Data Model**: Workflow state, execution history, audit trail
+
+---
+
+#### 4. Observability Domain
+**Capabilities**: Monitoring, Logging, Analytics, Reporting
+
+**Services**:
+- `monitoring-service`: Aria Operations metrics, alerts, dashboards
+- `logging-service`: Aria Logs aggregation, search, analytics
+- `analytics-service`: Network analytics (Aria Network Insight), trend analysis
+- `reporting-service`: Operational, utilization, billing reports
+
+**API Endpoints**:
+```
+GET    /api/v1/observability/monitoring/metrics/{resource-id}
+GET    /api/v1/observability/logging/logs?query={query}
+GET    /api/v1/observability/reporting/utilization?tenant={tenant-id}
+```
+
+**Data Model**: Time-series metrics, log events, aggregated analytics
+
+---
+
+#### 5. Disaster Recovery Domain
+**Capabilities**: Disaster Recovery, Site Protection, Workload Replication, Recovery
+
+**Services**:
+- `recovery-planning-service`: Recovery plan creation and management
+- `replication-service`: vSphere Replication, HCX workload mobility
+- `failover-service`: Site failover orchestration and validation
+- `readiness-service`: RTO/RPO validation, readiness reporting
+
+**API Endpoints**:
+```
+POST   /api/v1/dr/recovery-plans
+POST   /api/v1/dr/recovery-plans/{plan-id}/execute
+GET    /api/v1/dr/readiness/objectives/{application-id}
+```
+
+**Data Model**: Recovery plans, replication state, failover history
+
+---
+
+#### 6. Service Broker Domain
+**Capabilities**: API Service Broker, Service Catalog, Multi-Tenancy, Billing
+
+**Services**:
+- `catalog-service`: Service catalog management and publishing
+- `api-registry-service`: Platform API registration and versioning
+- `subscription-service`: API consumer subscriptions and entitlements
+- `billing-service`: Usage tracking, metering, billing
+
+**API Endpoints**:
+```
+GET    /api/v1/service-broker/catalog
+POST   /api/v1/service-broker/apis/{api-id}/register
+POST   /api/v1/service-broker/subscriptions
+GET    /api/v1/service-broker/billing/usage?tenant={tenant-id}
+```
+
+**Data Model**: Catalog entries, API definitions, subscription records
+
+---
+
+### Multi-Tenancy Implementation
+
+**Tenant Isolation Strategy**:
+1. **Namespace Isolation**: Each tenant has dedicated Vault namespace, Kubernetes namespace, vSAN storage policy
+2. **RBAC Enforcement**: Role-based access control at API Gateway and domain service levels
+3. **Resource Quotas**: Compute, storage, network quotas per tenant
+4. **Billing Isolation**: Usage metering and billing per tenant
+5. **Audit Logging**: All operations logged with tenant context
+
+**Tenant Context Propagation**:
+```
+Header: X-Tenant-ID: {tenant-id}
+Header: X-User-ID: {user-id}
+Header: X-Request-ID: {request-id}
+```
+
+---
+
+### Integration Patterns
+
+#### Synchronous Integration (Request-Response)
+- Direct REST API calls between domains for immediate operations
+- Example: Provisioning service calls Infrastructure domain to create VMs
+
+#### Asynchronous Integration (Event-Driven)
+- Event Bus (Apache Kafka, RabbitMQ) for decoupled communication
+- Example: Infrastructure domain publishes "VM Created" event → Monitoring domain subscribes and creates monitoring policies
+
+#### Orchestration Integration (Workflow-Driven)
+- Aria Orchestrator coordinates multi-step workflows across domains
+- Example: Provisioning workflow → Infrastructure → Security → Automation → Observability
+
+---
+
+### Security Architecture
+
+**Authentication & Authorization**:
+- API Gateway enforces OAuth 2.0 / OpenID Connect
+- Service-to-service authentication via mTLS certificates
+- Tenant context validated at each domain boundary
+
+**Secrets Management**:
+- All credentials stored in HashiCorp Vault
+- Customer-managed encryption keys (CMK) for sensitive data
+- Automatic key rotation policies
+- Audit logging of all secret access
+
+**Compliance & Audit**:
+- Centralized audit logging to Aria Logs
+- Compliance policy validation at provisioning time
+- Automated compliance reporting
+
+---
+
+### Observability Architecture
+
+**Monitoring**:
+- Aria Operations collects metrics from all domains
+- Custom dashboards per domain and per tenant
+- Alert routing based on tenant and severity
+
+**Logging**:
+- Aria Logs aggregates logs from all services
+- Structured logging with tenant context
+- Log retention policies per compliance requirements
+
+**Tracing**:
+- Distributed tracing (OpenTelemetry) for cross-domain workflows
+- Request correlation via X-Request-ID header
+
+---
+
+### Deployment Model
+
+**Container-Based Microservices**:
+- Each domain service deployed as containerized microservice
+- Tanzu Kubernetes Grid for container orchestration
+- Helm charts for service deployment and configuration
+
+**Infrastructure Services**:
+- VMware Aria Suite components deployed on vSphere
+- SDDC Manager for lifecycle automation
+- vSphere Lifecycle Manager (vLCM) for component updates
+
+**Data Persistence**:
+- PostgreSQL for transactional data (service broker, compliance)
+- vSAN for persistent volumes (Kubernetes)
+- HashiCorp Vault for secrets
+
+---
+
+## Decision Outcome
+
+**ACCEPTED**: Implement a **Domain-Driven Design with Bounded Contexts** architecture for the `my-cloud-platform`, organized into 6 logical domains (Infrastructure, Security, Automation & Orchestration, Observability, Disaster Recovery, Service Broker) with the following key decisions:
+
+### Primary Decisions
+
+1. **Architecture Pattern**: Domain-Driven Design with Bounded Contexts
+   - Rationale: Balances microservices scalability with operational simplicity; aligns with business domains and team structures; reduces operational overhead vs. 14 independent microservices
+
+2. **API Gateway**: Centralized API Gateway for all external API consumption
+   - Rationale: Single point of authentication, authorization, rate limiting, and tenant routing; simplifies API versioning and deprecation
+
+3. **Multi-Tenancy Model**: Namespace-based isolation with RBAC enforcement
+   - Rationale: Provides logical and operational separation; supports customer-managed encryption keys; enables per-tenant billing and compliance
+
+4. **Integration Patterns**: Hybrid synchronous (REST) + asynchronous (Event Bus) + orchestration (Aria Orchestrator)
+   - Rationale: Synchronous for immediate operations; asynchronous for decoupled domain communication; orchestration for complex multi-step workflows
+
+5. **Secrets Management**: HashiCorp Vault with customer-managed keys (CMK)
+   - Rationale: Centralized secrets management; supports compliance requirements; enables automatic key rotation
+
+6. **Observability**: Centralized monitoring (Aria Operations), logging (Aria Logs), and distributed tracing
+   - Rationale: Unified operational visibility; supports troubleshooting across domain boundaries; enables compliance audit trails
+
+7. **Deployment Model**: Container-based microservices on Tanzu Kubernetes Grid + VMware Aria Suite components on vSphere
+   - Rationale: Leverages existing VMware investments; supports independent scaling; enables modern DevOps practices
+
+### Implementation Roadmap
+
+**Phase 1 (Months 1-3)**: Foundation
+- Implement API Gateway and authentication/authorization layer
+- Deploy Service Broker domain (catalog, API registry, subscriptions)
+- Establish event bus infrastructure
+
+**Phase 2 (Months 4-6)**: Core Domains
+- Implement Infrastructure domain (compute, storage, networking, containers)
+- Implement Security domain (Vault integration, encryption, compliance)
+- Establish multi-tenancy isolation
+
+**Phase 3 (Months 7-9)**: Automation & Operations
+- Implement Automation & Orchestration domain
+- Implement Observability domain
+- Establish distributed tracing and centralized logging
+
+**Phase 4 (Months 10-12)**: Resilience & Maturity
+- Implement Disaster Recovery domain
+- Establish high availability and failover mechanisms
+- Implement compliance automation and reporting
+
+---
+
+## Related Artifacts
+
+### Architecture Documents
+- VMware Cloud Foundation Reference Architecture
+- VMware Aria Suite Deployment Guide
+- Tanzu Kubernetes Grid Architecture Guide
+- HashiCorp Vault Enterprise Architecture
+
+### Design Documents
+- API Gateway Design Specification
+- Multi-Tenancy Isolation Design
+- Event Bus Integration Patterns
+- Security Architecture & Threat Model
+
+### Related ADRs
+- ADR-001: API Gateway Technology Selection (OpenAPI, Kong, AWS API Gateway)
+- ADR-003: Event Bus Technology Selection (Kafka, RabbitMQ, AWS SQS)
+- ADR-004: Container Orchestration Platform (Tanzu Kubernetes Grid vs. alternatives)
+- ADR-005: Secrets Management Implementation (HashiCorp Vault vs. alternatives)
+
+### Compliance & Governance
+- Multi-Tenancy Security Policy
+- Data Encryption Standards
+- Audit Logging Requirements
+- Compliance Automation Framework
+
+### Operational Runbooks
+- Domain Service Deployment Runbook
+- Incident Response Procedures
+- Disaster Recovery Procedures
+- Capacity Planning Guidelines
+
+---
+
+## Consequences
+
+### Positive Consequences
+
+1. **Scalability**: Independent scaling of domains based on demand; Infrastructure domain can scale compute independently from Security domain
+2. **Resilience**: Failure in one domain does not cascade to others; circuit breakers and bulkheads prevent cascading failures
+3. **Agility**: Teams can develop and deploy domain services independently; faster time-to-market for new capabilities
+4. **Maintainability**: Clear separation of concerns; easier to understand, test, and debug individual domains
+5. **Multi-Tenancy**: Robust tenant isolation with per-tenant billing and compliance
+6. **Compliance**: Centralized audit logging and compliance automation; easier to meet regulatory requirements
+7. **Observability**: Unified monitoring and logging across all domains; easier to troubleshoot issues
+8. **Flexibility**: Domains can evolve independently; easier to adopt new technologies within domain boundaries
+
+### Negative Consequences
+
+1. **Operational Complexity**: 6 domains + API Gateway + Event Bus = increased operational overhead; requires sophisticated DevOps and SRE practices
+2. **Network Latency**: Synchronous inter-domain calls introduce network latency; asynchronous patterns mitigate but add complexity
+3. **Data Consistency**: Distributed transactions across domains are complex; eventual consistency model required
+4. **Debugging Difficulty**: Troubleshooting issues that span multiple domains requires distributed tracing and correlation
+5. **Deployment Complexity**: 6+ independent services to deploy, version, and manage; requires CI/CD automation
+6. **Testing Complexity**: Integration testing across domains is complex; requires comprehensive test automation
+7. **Skill Requirements**: Teams must understand domain-driven design, microservices patterns, and distributed systems
+8. **Cost**: Additional infrastructure for API Gateway, Event Bus, monitoring, and logging; increased cloud/infrastructure costs
+
+### Mitigation Strategies
+
+1. **Operational Complexity**: Invest in infrastructure-as-code (Terraform, Ansible), CI/CD automation (GitLab CI, Jenkins), and observability tooling
+2. **Network Latency**: Implement caching, connection pooling, and asynchronous patterns; monitor and optimize latency
+3. **Data Consistency**: Implement saga pattern for distributed transactions; use event sourcing for audit trails
+4. **Debugging Difficulty**: Implement distributed tracing (OpenTelemetry), centralized logging (Aria Logs), and correlation IDs
+5. **Deployment Complexity**: Automate deployment via Helm charts, GitOps (ArgoCD), and infrastructure-as-code
+6. **Testing Complexity**: Implement contract testing, integration testing, and chaos engineering practices
+7. **Skill Requirements**: Invest in team training, documentation, and knowledge sharing; hire experienced architects
+8. **Cost**: Optimize resource utilization, implement auto-scaling, and monitor cloud costs
+
+---
+
+## Assumptions Validation
+
+| Assumption | Validation Method | Validation Frequency |
+|-----------|-------------------|----------------------|
+| VMware Aria Suite stability | Quarterly review of VMware roadmap and release notes | Quarterly |
+| Multi-tenancy requirement | Customer interviews and requirements analysis | Annually |
+| Automation-driven operations | Operational metrics and workflow execution analysis | Monthly |
+| Secrets management centralization | Security audit and compliance assessment | Semi-annually |
+| API consumption model | API usage analytics and consumer feedback | Monthly |
+| Compliance and governance | Compliance audit and regulatory assessment | Annually |
+| Disaster recovery criticality | RTO/RPO validation and recovery testing | Quarterly |
+| Observability maturity | Monitoring and logging coverage assessment | Monthly |
+
+---
+
+## Comments
+
+### Architecture Review Board
+- **Approved by**: Enterprise Architecture Review Board
+- **Date**: 2024-02-08
+- **Feedback**: Architecture aligns with enterprise cloud strategy; recommend proceeding with Phase 1 implementation
+
+### Security Review
+- **Reviewed by**: Chief Information Security Officer (CISO)
+- **Date**: 2024-02-08
+- **Feedback**: Multi-tenancy isolation and encryption key management meet compliance requirements; recommend security architecture review before Phase 2
+
+### Operations Review
+- **Reviewed by**: VP of Infrastructure Operations
+- **Date**: 2024-02-08
+- **Feedback**: Operational complexity is significant; recommend investing in automation and observability tooling; support Phase 1 implementation with resource allocation
+
+### Product Management
+- **Reviewed by**: Senior Product Manager
+- **Date**: 2024-02-08
+- **Feedback**: Architecture supports planned product roadmap; recommend API-first approach for third-party integrations; support Phase 1 implementation
+
+---
+
+## Revision History
+
+| Revision | Date | Author | Changes |
+|----------|------|--------|---------|
+| 1.0 | 2024-02-08 | Enterprise Architecture Team | Initial ADR creation; Domain-Driven Design architecture proposed |
+
+---
+
+**Document Classification**: Internal Use Only  
+**Next Review Date**: 2024-05-08 (Post Phase 1 Implementation)
