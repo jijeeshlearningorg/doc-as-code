@@ -1,10 +1,10 @@
 # Build & Installation Guide (BIG): My Cloud Services
 
-**Author:**  
-**Date:** 2026-07-31  
+**Author:** Copilot Documentation Agent  
+**Date:** 2026-08-04  
 **Version:** 1.0  
 **Status:** Draft  
-**Owner:** TBD  
+**Owner:** Cloud Engineering  
 
 ---
 
@@ -13,7 +13,7 @@
 ## 1.1 Review & Approval
 
 | Role | Name | Status |
-|------|------|--------|
+|--------|--------|--------|
 | Reviewer | | |
 | Security Review | | |
 | Document Owner | | |
@@ -21,8 +21,8 @@
 ## 1.2 Change Log
 
 | Version | Date | Description | Author |
-|---------|------|-------------|--------|
-| 1.0 | 2026-07-31 | Initial draft | |
+|----------|----------|----------|----------|
+| | | | |
 
 ---
 
@@ -30,34 +30,27 @@
 
 ## 2.1 Purpose
 
-This document provides the detailed steps required to build, install, configure, validate, hand over, and support the **My Cloud Services** platform, which includes AI, data, Kubernetes, and networking foundations built on VMware NSX‑T and Aria Network Insight.
-
 ## 2.2 Audience
-
-- Platform Engineers  
-- Operations Teams  
-- Support Teams  
-- Security Teams  
 
 ## 2.3 Scope
 
 ### In Scope
 
-- Installation  
-- Configuration  
-- Validation  
-- Handover  
+- Installation
+- Configuration
+- Validation
+- Handover
 
 ### Out of Scope
 
-- High‑Level Design (HLD)  
-- Low‑Level Design (LLD)  
-- Operational Procedures (OPG)  
+- High-Level Design (HLD)
+- Low-Level Design (LLD)
+- Operational Procedures (OPG)
 
 ## 2.4 Related Documents
 
 | Document Type | Document ID | Relationship |
-|---------------|-------------|--------------|
+|----------|----------|----------|
 | HLD | | Architecture Design |
 | LLD | | Detailed Design |
 | BIG | | Current Document |
@@ -70,117 +63,376 @@ This document provides the detailed steps required to build, install, configure,
 
 # 3. Deployment Context
 
-- **System Type:** Cloud Platform  
-- **Deployment Model:** Private Cloud (VMware SDDC)  
-- **Platform/Provider:** VMware vSphere, NSX‑T, Aria Suite  
-- **Environment:** Production  
+- System Type:
+- Deployment Model:
+- Platform/Provider:
+- Environment:
 
 ---
 
 # 4. Package / Build Description
 
-## 4.1 Package Overview
+## Generated Context Summary
 
-The **My Cloud Services** package deploys a multi‑tenant cloud platform comprising AI, data, Kubernetes, and networking services. It leverages VMware NSX‑T for software‑defined networking and Aria Network Insight for network visibility.
+| Field | Value |
+|----------|----------|
+| Product | My Cloud Services |
+| Source Repository | `jijeeshlearningorg/greenfield-code` |
+| Generated Date | 2026-08-04 |
+
+### Impacted Capabilities
+
+- ai-platform
+- data-platform
+- kubernetes
+- networking
+- observability
+
+### Changed Files
+
+- src/deploy.py
+
+### Detected Functions
+
+- deploy_ai_platform
+- deploy_data_platform
+- deploy_kubernetes_platform
+- deploy_network_foundation
+- validate_platform_observability
+
+## 4.1 Package Overview
 
 ## 4.2 Product / Platform Components
 
 | Component | Source / Location |
-|-----------|-------------------|
-| vCenter Server | `https://vcenter.example.com` |
-| ESXi Hosts | `esxi-host-01` to `esxi-host-04` |
-| NSX‑T Manager | `https://nsxt-manager.example.com` |
-| NSX‑T Edge | `nsxt-edge-01` to `nsxt-edge-02` |
-| Aria Network Insight | `https://aria-insight.example.com` |
-| Aria Automation | `https://aria-automation.example.com` |
-| Aria Orchestrator | `https://aria-orchestrator.example.com` |
-| Aria Operations | `https://aria-operations.example.com` |
-| Aria Logs | `https://aria-logs.example.com` |
-| Aria Suite Lifecycle Manager | `https://lifecycle-manager.example.com` |
-| GitHub Actions | `https://github.com/jijeeshlearningorg/greenfield-code` |
-| Ansible | `ansible` playbooks in repo |
-| Terraform | `terraform` modules in repo |
+|----------|----------|
+| | |
 
 ## 4.3 Versioning
 
-| Component | Version |
-|-----------|---------|
-| vCenter Server | 7.0 U3 |
-| ESXi | 7.0 U3 |
-| NSX‑T Manager | 3.2.1 |
-| NSX‑T Edge | 3.2.1 |
-| Aria Network Insight | 1.4.0 |
-| Aria Automation | 2.3.0 |
-| Aria Orchestrator | 2.1.0 |
-| Aria Operations | 3.0.0 |
-| Aria Logs | 3.0.0 |
-| Aria Suite Lifecycle Manager | 1.2.0 |
-| Ansible | 2.12 |
-| Terraform | 1.5 |
-
 ## 4.4 Installation Notes
-
-- All components must be installed in the same vSphere SDDC cluster.  
-- NSX‑T must be licensed and activated before deploying Edge services.  
-- Aria Network Insight requires a dedicated subnet with sufficient IP addresses.  
-- GitHub Actions runners must have network access to the SDDC and Aria services.  
 
 ---
 
-# 5. Pre‑Requisites
+# 5. Pre-Requisites
 
 ## 5.1 Infrastructure
 
-- Compute: 4 x ESXi hosts, each with 64 GB RAM, 16 vCPU.  
-- Storage: vSAN cluster with 1 TB usable capacity.  
-- Network: 3‑tiered network (Management, Control, Data).  
-- DNS: Internal DNS for all services.  
-- NTP: Synchronized to `ntp.example.com`.  
-- Backup Infrastructure: Aria Backup or equivalent.  
+- Compute
+- Storage
+- Network
+- DNS
+- NTP
+- Backup Infrastructure
 
 ## 5.2 Hardware Requirements
 
-| CPU | Memory | Storage | Rack | BIOS |
-|-----|--------|---------|------|------|
-| 16 vCPU per host | 64 GB | 1 TB | 2U | Default |
+- CPU
+- Memory
+- Storage
+- Rack Requirements
+- BIOS Settings
 
 ## 5.3 Software Requirements
 
-- Operating System: VMware ESXi 7.0 U3  
-- Middleware: vCenter Server 7.0 U3  
-- Runtime Components: NSX‑T 3.2.1, Aria Suite 2.x  
-- Libraries: Python 3.9, Go 1.18  
-- Utilities: Ansible 2.12, Terraform 1.5, Git 2.34  
+- Operating Systems
+- Middleware
+- Runtime Components
+- Libraries
+- Drivers
+- Utilities
 
 ## 5.4 Access & Permissions
 
 | Role | Permissions | Notes |
-|------|-------------|-------|
-| Platform Engineer | vCenter Admin, NSX‑T Admin, Aria Admin | Full control |
-| Operations | Aria Ops Viewer | Read‑only |
-| Security | Security Auditor | Read‑only |
+|----------|----------|----------|
+| | | |
 
 ## 5.5 Security Requirements
 
-- All management traffic must be encrypted (TLS 1.2+).  
-- Secrets stored in HashiCorp Vault.  
-- Role‑based access control enforced across all services.  
+- Security Baselines
+- Encryption Requirements
+- Compliance Requirements
+- Hardening Standards
 
 ## 5.6 Secrets & Credential Dependencies
 
 | Credential Type | Purpose | Storage Location |
-|-----------------|---------|------------------|
-| vCenter Password | vCenter login | HashiCorp Vault |
-| NSX‑T Admin | NSX‑T admin | HashiCorp Vault |
-| Aria API Key | Aria services | HashiCorp Vault |
-| GitHub Token | CI/CD | GitHub Secrets |
+|----------|----------|----------|
+| | | |
 
 ## 5.7 Certificate Requirements
 
 | Certificate | Purpose | Owner |
-|-------------|---------|-------|
-| vCenter SSL | Management | IT Security |
-| NSX‑T SSL | Control | IT Security |
-| Aria SSL | Data | IT Security |
+|----------|----------|----------|
+| | | |
 
-## 5.8 Firewall & Network
+## 5.8 Firewall & Network Dependencies
+
+- Firewall Rules
+- Proxy Requirements
+- Load Balancer Dependencies
+- Required Ports
+- External Endpoints
+
+## 5.9 External Dependencies
+
+- Active Directory
+- LDAP
+- DNS
+- Monitoring Platform
+- Backup Platform
+- Vault Solution
+- External APIs
+- Database Platforms
+- Message Queues
+
+## 5.10 Licensing Requirements
+
+- Product Licenses
+- Subscription Entitlements
+- License Keys
+
+## 5.11 Skills Required
+
+| Skill | Level |
+|----------|----------|
+| | |
+
+---
+
+# 6. Input Parameters
+
+| Parameter | Value | Description |
+|----------|----------|----------|
+| | | |
+
+---
+
+# 7. Build Overview
+
+## 7.1 Deployment Flow
+
+```text
+Prepare → Install → Configure → Validate → Handover
+```
+
+## 7.2 Build Phases
+
+- Preparation
+- Installation
+- Configuration
+- Integration
+- Validation
+
+---
+
+# 8. Installation Procedure
+
+## 8.1 Installation Overview
+
+## 8.2 Step-by-Step Installation
+
+| Step | Action | Estimated Duration | Notes |
+|----------|----------|----------|----------|
+| 1 | | | |
+| 2 | | | |
+
+## 8.3 Platform-Specific Steps
+
+Examples:
+- VMware
+- Azure
+- AWS
+- OpenShift
+- Mainframe
+
+---
+
+# 9. Deployment Procedure
+
+## 9.1 Deployment Overview
+
+## 9.2 Deployment Steps
+
+- Provisioning
+- Installation
+- Configuration
+- Validation
+
+## 9.3 Validation Plan
+
+### Health Checks
+
+- Service Status Validation
+- Component Health Validation
+
+### Connectivity Tests
+
+- Network Validation
+- External Dependency Validation
+
+### Functional Validation
+
+- Core Function Verification
+- Integration Testing
+- User Acceptance Testing
+
+## 9.4 Acceptance Criteria
+
+The deployment is considered successful when:
+
+- Installation completed successfully
+- Services operational
+- Validation completed successfully
+- Dependencies operational
+- Customer acceptance completed
+
+---
+
+# 10. Configuration Steps
+
+## 10.1 System Configuration
+
+- Operating System
+- Network Settings
+- Storage Configuration
+
+## 10.2 Security Configuration
+
+- RBAC
+- IAM
+- Certificates
+- Hardening
+- Audit Configuration
+
+## 10.3 Integration Configuration
+
+- APIs
+- External Systems
+- Monitoring Platforms
+- Backup Platforms
+
+---
+
+# 11. Post-Installation Tasks
+
+- Monitoring Configuration
+- Backup Configuration
+- Documentation Updates
+- CMDB Updates
+- Operations Handover
+
+---
+
+# 12. Troubleshooting
+
+| Issue | Cause | Resolution |
+|----------|----------|----------|
+| | | |
+
+---
+
+# 13. Rollback Procedure
+
+## 13.1 Conditions
+
+- Failure Scenarios
+- Rollback Triggers
+
+## 13.2 Steps
+
+- Backup Restoration
+- Configuration Reversal
+- Validation Activities
+
+---
+
+# 14. Known Issues
+
+If none:
+
+```text
+No known issues at the time of publication.
+```
+
+---
+
+# 15. Handover and Acceptance
+
+## 15.1 Handover Artifacts
+
+- Configuration Backup
+- Deployment Logs
+- Validation Results
+- Runbooks
+- Related Documentation
+
+## 15.2 Ownership Transfer
+
+- Operations Team
+- Support Team
+- Service Owner
+
+## 15.3 Acceptance Sign-Off
+
+| Role | Name | Date | Status |
+|----------|----------|----------|----------|
+| Deployment Lead | | | |
+| Service Owner | | | |
+| Operations | | | |
+
+### 15.4 Operations Readiness
+
+| Item | Status |
+|--------|--------|
+| OPG Completed | |
+| Monitoring Configured | |
+| Alerting Configured | |
+| Backup Configured | |
+| Recovery Tested | |
+| Runbooks Delivered | |
+| Ownership Assigned | |
+| Escalation Process Defined | |
+
+---
+
+# 16. Appendices
+
+## 16.1 Ports & Protocols
+
+| Source | Destination | Port | Protocol | Purpose |
+|----------|----------|----------|----------|----------|
+| | | | | |
+
+## 16.2 Network Plan
+
+Include:
+- VLANs
+- Subnets
+- Routing
+- Network Diagrams
+- Firewall Zones
+
+## 16.3 Naming Standards
+
+| Object Type | Naming Convention |
+|----------|----------|
+| Server | |
+| Database | |
+| Network | |
+
+## 16.4 Glossary
+
+| Term | Definition |
+|----------|----------|
+| API | Application Programming Interface |
+| BIG | Build & Installation Guide |
+| CI/CD | Continuous Integration / Continuous Delivery |
+| DNS | Domain Name System |
+| HLD | High-Level Design |
+| IAM | Identity and Access Management |
+| LLD | Low-Level Design |
+| OPG | Operations Guide |
+| PKI | Public Key Infrastructure |
+| RBAC | Role-Based Access Control |
