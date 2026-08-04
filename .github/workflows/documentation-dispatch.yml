@@ -247,6 +247,20 @@ jobs:
 
           find generated -type f | sort || true
 
+          echo ""
+          echo "=================================="
+          echo "HLD GENERATED CONTENT"
+          echo "=================================="
+
+          head -50 generated/hld-generated.md || true
+
+          echo ""
+          echo "=================================="
+          echo "LLD GENERATED CONTENT"
+          echo "=================================="
+
+          head -20 generated/lld-generated.md || true
+
       - name: Render Documentation Templates
         run: |
           echo "=================================="
