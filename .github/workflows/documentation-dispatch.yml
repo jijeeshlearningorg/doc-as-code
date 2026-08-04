@@ -230,6 +230,8 @@ jobs:
           echo "CLAUDE AI GENERATION"
           echo "=================================="
 
+          python _actions/scripts/invoke-claude.py
+
       - name: Show Workspace After Claude
         run: |
           echo "=================================="
