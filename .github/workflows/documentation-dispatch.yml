@@ -230,7 +230,12 @@ jobs:
           echo "CLAUDE AI GENERATION"
           echo "=================================="
 
-          python _actions/scripts/invoke-claude.py
+      - name: Show Workspace After Claude
+        run: |
+          echo "=================================="
+          echo "WORKSPACE AFTER CLAUDE"
+          echo "=================================="
+          find . -type f | sort
 
       - name: Show Generated AI Files
         run: |
