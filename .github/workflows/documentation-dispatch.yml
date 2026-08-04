@@ -155,13 +155,13 @@ jobs:
 
           cat generated-context.json
 
-      - name: Generate Copilot Prompts
+      - name: Generate AI Prompts
         run: |
           echo "=================================="
-          echo "GENERATE COPILOT PROMPTS"
+          echo "GENERATE AI PROMPTS"
           echo "=================================="
 
-          python _actions/scripts/copilot-generator.py
+          python _actions/scripts/prompt-generator.py
 
           echo "=================================="
           echo "PROMPT FILES"
