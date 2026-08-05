@@ -1,96 +1,110 @@
-# Architecture Decision Record: Domain-Aligned Modular Automation Architecture with Automated Capability-Impact Traceability for My Cloud Services
+# Architecture Decision Record: Capability-Aligned Modular Automation Architecture for My Cloud Services Platform
 
 * **Status:** Proposed
 * **Owner:** Enterprise Architecture Team
-* **Deciders:** Platform Engineering Lead, Enterprise Architect, Cloud Operations Lead, Security Architecture Lead
-* **Working Group:** `jijeeshlearningorg/greenfield-code` maintainers (Platform Automation Team) — responsible for implementing and maintaining `src/*.py` domain modules and `scripts/detect-impact.py`
+* **Deciders:** Product Owner (My Cloud Services), Platform Engineering Lead, Security Architecture Lead, DevOps/Automation Lead
+* **Working group:** Platform Automation Engineering (owners of `src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`), CI/CD Tooling Team (owner of `scripts/detect-impact.py`)
 * **Creation Date:** 2024-02-08
 * **Last Revisited:** 2024-02-08
 * **Revision:** 1.0
 
----
-
 ## Context and Problem Statement
 
-`My Cloud Services` (product: `my-cloud-platform`) is a VMware-based enterprise cloud platform spanning compute (vSphere/ESXi), storage (vSAN), networking (NSX-T), automation (Aria Automation/Orchestrator), Kubernetes (Tanzu), disaster recovery (SRM/vSphere Replication/HCX), backup (Avamar/Data Domain/Canopy), security (HashiCorp Vault/Trend Micro/Nessus), and public cloud integration (VMC).
+The `my-cloud-platform` repository (`jijeeshlearningorg/greenfield-code`, branch `main`) is the greenfield codebase for **My Cloud Services**, a VMware Cloud Foundation-based private/hybrid cloud platform spanning **13 detected architecture domains**: `ai-platform`, `api-service-broker`, `automation`, `backup`, `compute`, `data-platform`, `disaster-recovery`, `kubernetes`, `lifecycle-management`, `networking`, `observability`, `security`, and `storage`.
 
-The repository (`greenfield-code`) implements this platform's automation and orchestration surface as a set of discrete Python modules rather than a monolithic script or a class-based framework. Repository scanning confirms:
+Repository scanning (8 files, 41 functions, 0 classes) shows the codebase is currently organized as a small set of **flat, function-based Python modules**, each of which spans multiple architecture domains simultaneously rather than being isolated to a single capability:
 
-- **Zero classes detected** across 8 files despite 41 functions — indicating a deliberate function-oriented, procedural design rather than object-oriented service abstractions.
-- Each source file maps to a distinct product capability domain:
-  - `src/automation.py` → `automation`, `lifecycle-management`, `observability`, `security` (functions: `provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results`)
-  - `src/backup.py` → `backup`, `storage`, `lifecycle-management`, `observability`, `security` (functions: `schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`)
-  - `src/deploy.py` → `compute`, `networking`, `kubernetes`, `ai-platform`, `data-platform`, `api-service-broker`, `observability`, `security` (functions: `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`)
-  - `src/dr_platform.py` → `disaster-recovery`, `backup`, `ai-platform`, `observability`, `security` (functions: `create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`)
-  - `src/security_vault.py` → `security`, `api-service-broker`, `automation`, `kubernetes` (functions: `create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`)
-  - `src/service_broker.py` → `api-service-broker`, `lifecycle-management`, `observability`, `security` (functions: `publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`)
-- A dedicated CI/build-time script, `scripts/detect-impact.py` (351 lines, regex-fallback parsed), implements a **capability-impact detection pipeline**: `read_changed_files`, `resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`, and `write_json`, driven by a path-to-capability mapping (`path_mapping`) and PR metadata (`get_repository_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`).
+- `src/automation.py` — `provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results` — supports `automation`, `lifecycle-management`, `observability`, `security`.
+- `src/backup.py` — `schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report` — supports `backup`, `lifecycle-management`, `observability`, `security`, `storage`.
+- `src/deploy.py` — `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability` — supports `ai-platform`, `api-service-broker`, `compute`, `data-platform`, `kubernetes`, `lifecycle-management`, `networking`, `observability`, `security`.
+- `src/dr_platform.py` — `create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report` — supports `ai-platform`, `backup`, `disaster-recovery`, `lifecycle-management`, `observability`, `security`.
+- `src/security_vault.py` — `create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy` — supports `api-service-broker`, `automation`, `kubernetes`, `lifecycle-management`, `observability`, `security`.
+- `src/service_broker.py` — `publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription` — supports `api-service-broker`, `lifecycle-management`, `observability`, `security`.
 
-The architectural problem this ADR addresses is: **how should the platform's automation codebase be structured so that (a) each product capability has clear, isolated ownership of its automation logic, and (b) changes to that code are automatically and traceably linked to the capabilities and documentation they affect**, given a 14-capability, 26-technology enterprise platform with cross-cutting concerns (security, observability, lifecycle-management) touching almost every module.
+In addition, `scripts/detect-impact.py` (351 lines, regex-fallback parsed) implements a **capability-impact detection utility** (`resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`, `resolve_product`, `write_json`, `main`) that maps changed source files to product capabilities (`ai-platform`, `api-service-broker`, `automation`, `compute`, `data-platform`, `lifecycle-management`) for downstream automated documentation and architecture-impact governance.
 
-This decision must be made now because the repository is greenfield — no established pattern yet governs how future capability modules (e.g., additional AI-platform or data-platform services) should be added, and no automated mechanism currently exists to prevent capability/documentation drift as the codebase grows.
+The problem: as the platform grows across 13 domains and 26 underlying VMware/Aria/Tanzu technologies (`vsphere`, `esxi`, `vcenter`, `vsan`, `nsx-t`, `aria-automation`, `aria-orchestrator`, `aria-operations`, `aria-logs`, `aria-network-insight`, `tanzu-kubernetes-grid`, `tanzu-mission-control`, `sddc-manager`, `vlcm`, `aria-suite-lifecycle-manager`, `trend-micro`, `nessus`, `hashicorp-vault`, `canopy-enterprise-backup`, `avamar`, `data-domain`, `srm`, `vsphere-replication`, `hcx`, `vmc`, `service-broker`), there is **no formal architectural boundary** between capability domains inside the codebase. Cross-cutting concerns (`security`, `observability`, `lifecycle-management`) are duplicated informally across nearly every module rather than being centralized. This creates a risk of architectural drift as the platform scales, and makes automated impact analysis (via `scripts/detect-impact.py`) the *only* current mechanism for understanding which capabilities are affected by a given change.
+
+A decision is needed now — at the greenfield stage — on how the codebase should be structured going forward: as capability-aligned modules with embedded cross-cutting concerns (current state), or as a layered/domain-driven architecture with explicit shared cross-cutting services, and whether automated capability-impact detection should be formalized as a governing architectural control.
 
 ## Assumptions (Optional)
 
-- The current absence of classes (0 detected) is an intentional architectural choice for this stage of the platform, not a parsing artifact — confirmed by `ast_success` parse status on 3 of 8 files (`automation.py`, `deploy.py`, `security_vault.py`, `service_broker.py`). *(Inferred: procedural style is deliberate rather than accidental.)*
-- `scripts/detect-impact.py` is intended to run in a CI/CD pipeline (e.g., on pull requests) given its reliance on `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`, and `get_repository_full_name`. *(Inferred from function signatures; no pipeline YAML was present in the scanned files.)*
-- The product catalog's 14 declared capabilities are the authoritative taxonomy against which all source files and future modules must be mapped.
-- Cross-cutting domains (`security`, `observability`, `lifecycle-management`) are expected to appear in most modules and are not evidence of poor separation of concerns, but of legitimate shared platform concerns.
-- The regex-fallback parsing on `scripts/detect-impact.py`, `src/backup.py`, and `src/dr_platform.py` indicates these files may use syntax or constructs not fully supported by the AST parser (e.g., complex type hints or multi-line signatures) — a code-quality/tooling risk rather than a functional defect. *(Inferred.)*
-- No automated test suite was detected in the 8 scanned files; validation functions (`validate_automation_results`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_vault_policy`, `validate_api_subscription`, `validate_platform_observability`) serve as the primary in-code verification pattern.
+- The product `My Cloud Services` (product code `my-cloud-platform`) is built on VMware Cloud Foundation-aligned technologies (`vsphere`, `esxi`, `vcenter`, `vsan`, `nsx-t`, `sddc-manager`, `vlcm`) as declared in the product technology catalog. *(inferred from product metadata, not directly observable in scanned source files, which contain no explicit technology imports beyond `logging`)*.
+- The current repository (`greenfield-code`) represents an early-stage/reference implementation of platform automation logic rather than the full production codebase, given the small file count (8 files, 41 functions, 0 classes) relative to the breadth of declared domains and technologies.
+- `scripts/detect-impact.py` is intended to run in a CI/CD pipeline (evidenced by functions `get_repository_name`, `get_repository_full_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`) to support automated architecture documentation generation on pull requests. *(inferred)*
+- The absence of detected classes (0 classes across the repository) indicates the platform automation layer currently favors a **procedural, function-based style** over object-oriented domain modeling.
+- Multi-tenancy, public-cloud-integration, and reporting capabilities (declared in the product capability catalog) are not yet represented in source code and are assumed to be planned for future implementation phases.
 
 ## Constraints (Optional)
 
-- The platform is built exclusively on the VMware SDDC stack (vSphere, vSAN, NSX-T, Aria Suite, Tanzu, SDDC Manager) — any architectural pattern chosen must remain compatible with VMware Aria Automation/Orchestrator workflow invocation patterns, since `execute_platform_workflow` and `deploy_configuration_baseline` in `src/automation.py` imply orchestration-workflow delegation rather than direct infrastructure API calls.
-- Security-sensitive operations (`create_customer_managed_key`, `rotate_encryption_key` in `src/security_vault.py`) must remain isolated from general automation/deploy modules to satisfy compliance and least-privilege boundaries implied by the `hashicorp-vault` technology dependency.
-- The capability-to-file mapping used by `resolve_capabilities_for_changed_file` must be kept synchronized with the product/capability catalog; any new source file must be registered in `path_mapping` or it will not be traceable to a capability.
-- Only 4 imports were detected repository-wide, suggesting minimal external library dependency at this stage — any architectural direction should avoid introducing heavy framework dependencies prematurely.
-- No classes exist today; introducing object-oriented refactoring must be backward-compatible with existing function-based call sites (`deploy_network_foundation`, `deploy_kubernetes_platform`, etc.) if adopted incrementally.
+- The platform must continue to align with the declared **Product Capabilities** catalog (`compute`, `storage`, `networking`, `automation`, `monitoring`, `security`, `disaster-recovery`, `backup`, `containers`, `multi-tenancy`, `lifecycle-management`, `public-cloud-integration`, `reporting`, `api-service-broker`) even though only a subset (`automation`, `backup`, `security`) currently has a direct 1:1 capability mapping in the `Capability Mapping` evidence.
+- Cross-cutting concerns of `security`, `observability`, and `lifecycle-management` appear in **every single automation module** (`automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`), indicating these must be treated as first-class architectural concerns rather than incidental module behavior.
+- `scripts/detect-impact.py` uses a **regex fallback parser** (AST parsing failed) — any architectural decision relying on this tool's output must account for reduced parsing fidelity until the tooling is hardened.
+- No class-based domain models exist yet (0 classes detected); any architectural refactoring must be introduced without breaking existing function signatures consumed elsewhere (e.g., `provision_infrastructure(environment_name)`, `execute_backup(workload_name)`, `create_recovery_plan(application_name)`).
+- Secrets and encryption key management responsibilities are concentrated in `src/security_vault.py` (`create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`), implying dependency on `hashicorp-vault` per the technology catalog; this is an architectural coupling point that constrains how security capability can be decomposed.
 
 ## Considered Options
 
-**Option A — Continue Domain-Aligned Functional Modules per Capability (as-is, formalized)**
-Retain the current pattern of one module per capability domain (`automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`), formalize naming/interface conventions, and mandate that new capabilities (e.g., `data-platform`, `ai-platform` growth) receive dedicated modules rather than being appended to `deploy.py`.
+**Option A — Retain current flat, capability-tagged module structure (status quo)**
+Keep `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` as-is, each spanning multiple domains, relying on `scripts/detect-impact.py` for downstream governance/documentation.
 
-**Option B — Consolidate into a Single Monolithic Orchestration Module**
-Merge all automation logic into a single file to reduce file-count overhead. Rejected direction, evaluated for completeness.
+**Option B — Adopt a Domain-Driven, Capability-Aligned Modular Architecture with centralized cross-cutting services**
+Refactor toward explicit domain boundaries per the Product Capabilities catalog (e.g., dedicated modules/packages for `compute`, `networking`, `containers`, `disaster-recovery`, `backup`, `api-service-broker`), extracting shared `security`, `observability`, and `lifecycle-management` behavior (currently duplicated across `automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`) into common cross-cutting libraries/services.
 
-**Option C — Refactor to Class-Based Service Abstractions (introduce OO design)**
-Introduce classes (e.g., `AutomationService`, `BackupService`, `DRPlatformService`) wrapping existing functions, enabling dependency injection, state management, and polymorphic extension for multi-hyperscaler (`vmc`) support.
+**Option C — Monolithic single-service architecture**
+Consolidate all platform automation logic (currently split across 6 source files) into a single deployable service/module, reducing file count but increasing coupling and reducing independent deployability of capabilities such as `disaster-recovery` (`src/dr_platform.py`) vs `security` (`src/security_vault.py`).
 
-**Option D — Adopt Domain Modules + Formalize Automated Capability-Impact Traceability (Option A + detect-impact.py as a governance gate)**
-Combine Option A with elevating `scripts/detect-impact.py` from a utility script to a mandatory CI gate that (1) blocks merges lacking capability mapping, (2) auto-generates documentation-impact requests (`build_doc_request`) on every PR, and (3) fails builds if a changed file resolves to zero capabilities.
+**Option D — Formalize automated capability-impact governance as an architecture control**
+Elevate `scripts/detect-impact.py` from a documentation-generation utility to a **mandatory CI/CD architecture gate**, requiring every pull request to declare/validate impacted capabilities (`ai-platform`, `api-service-broker`, `automation`, `compute`, `data-platform`, `lifecycle-management`, and extended to all 13 detected domains) before merge, and to harden its parsing (currently regex-fallback) to full AST-based analysis.
 
 ## Proposed Design (Optional)
 
-Adopt **Option D**. Architecture direction:
+The proposed direction combines **Option B** (capability-aligned modular refactor) with **Option D** (formalized impact governance), while preserving backward compatibility with existing function signatures:
 
-1. **Module-per-capability convention**: Each capability domain (`compute`, `networking`, `automation`, `backup`, `disaster-recovery`, `security`, `containers`, `api-service-broker`, etc.) SHOULD map to one or more dedicated modules under `src/`. Existing modules already conform: `src/deploy.py` (compute/networking/kubernetes/ai-platform/data-platform), `src/backup.py` (backup/storage), `src/dr_platform.py` (disaster-recovery), `src/security_vault.py` (security key management), `src/service_broker.py` (api-service-broker), `src/automation.py` (automation/lifecycle-management).
-2. **Validation-function pairing**: Every capability module SHOULD expose a `validate_*` function (already present in all 6 modules) as a lightweight architectural test hook, standardizing the pattern of provision → execute → validate → report seen across `automation.py`, `backup.py`, `dr_platform.py`.
-3. **Impact-detection as CI gate**: `scripts/detect-impact.py` (`main`, `build_impacted_capabilities`, `build_doc_request`, `write_json`) becomes the authoritative mechanism that, on every PR, reads `read_changed_files`, resolves capabilities via `resolve_capabilities_for_changed_file` against `path_mapping`, and emits a JSON doc-request artifact via `write_json` used downstream for documentation regeneration.
-4. **Path-mapping governance**: The `path_mapping` configuration consumed by `resolve_product` and `resolve_capabilities_for_changed_file` must be treated as a first-class architecture artifact, version-controlled and reviewed whenever new modules are added.
-5. **Deferred OO refactor**: Class-based abstraction (Option C) is not adopted now but is recorded as a future revisit trigger once cross-hyperscaler (`vmc`) polymorphism or stateful workflow orchestration requirements emerge.
+1. **Capability boundary alignment**: Reorganize `src/` into capability-scoped packages mapped explicitly to the Product Capabilities catalog:
+   - `automation/` (from `src/automation.py`: `provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results`)
+   - `backup/` (from `src/backup.py`: `schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`)
+   - `deploy/` split by sub-domain (from `src/deploy.py`: `deploy_network_foundation` → networking, `deploy_kubernetes_platform` → kubernetes, `deploy_ai_platform` → ai-platform, `deploy_data_platform` → data-platform)
+   - `disaster_recovery/` (from `src/dr_platform.py`: `create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`)
+   - `security/` (from `src/security_vault.py`: `create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`)
+   - `service_broker/` (from `src/service_broker.py`: `publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`)
+
+2. **Cross-cutting shared layer**: Extract a shared `observability`/`security`/`lifecycle-management` utility layer, since these three domains recur across every scanned module (`automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`), each currently importing `logging` independently.
+
+3. **CI/CD governance hardening**: Upgrade `scripts/detect-impact.py` from regex-fallback parsing to full AST-based parsing (mirroring the success achieved in `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py`, which parsed via `ast_success`), and wire `build_impacted_capabilities` / `build_doc_request` into a mandatory PR check.
 
 ## Decision Outcome
 
-**Decision: Adopt Option D** — Retain and formalize the domain-aligned, function-based modular architecture (one module per capability domain) and elevate `scripts/detect-impact.py` from an ad-hoc utility into a mandatory, pipeline-enforced capability-impact traceability gate.
+**Decision:** Adopt **Option B (Capability-Aligned Modular Architecture with centralized cross-cutting services)** combined with **Option D (formalized automated capability-impact governance)**.
 
-Rationale:
-- The existing repository structure already demonstrates strong, unforced alignment between files and product capabilities (evidenced by per-file `detected_domains` matching the product capability catalog almost exactly), indicating this is the platform's natural evolutionary direction rather than an imposed pattern.
-- The presence of a purpose-built impact-detection script indicates the working group has already anticipated the traceability problem; formalizing rather than replacing it minimizes rework.
-- A monolithic module (Option B) would degrade the current clean domain/capability alignment and increase merge-conflict risk across teams owning different capabilities (e.g., security vs. DR).
-- Full OO refactor (Option C) is premature given zero classes exist today, minimal import surface (4 imports total), and no evidence of shared state requiring encapsulation; it is deferred, not rejected.
+The platform will evolve from the current flat, multi-domain module structure toward explicit capability-aligned boundaries consistent with the declared Product Capabilities catalog, while retaining and hardening `scripts/detect-impact.py` as the authoritative mechanism for architecture impact detection and documentation generation. This decision preserves the existing function-level contracts (e.g., `execute_backup(workload_name)`, `create_recovery_plan(application_name)`, `rotate_encryption_key(key_name)`) to minimize migration risk while introducing clearer domain ownership.
+
+### Consequences
+
+**Positive:**
+- Clearer ownership and change-impact boundaries per capability (`compute`, `storage`, `networking`, `backup`, `disaster-recovery`, `security`, `api-service-broker`, etc.), reducing risk of unintended cross-domain regressions.
+- Reduced duplication of `security`, `observability`, and `lifecycle-management` logic currently repeated across `automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`.
+- Formalized use of `scripts/detect-impact.py` improves architecture traceability and supports automated documentation generation for the `my-cloud-platform` product.
+- Aligns codebase structure with the already-published Product Capabilities and Technology catalogs, improving consistency between documentation and implementation.
+
+**Negative / Risks:**
+- Refactoring effort required to decompose multi-domain modules (e.g., `src/deploy.py` currently spans 9 domains) into capability-scoped packages.
+- `scripts/detect-impact.py` currently relies on regex-fallback parsing (AST parse failed); hardening to full AST parsing is a prerequisite dependency and introduces near-term tooling work.
+- Introducing a mandatory CI/CD architecture gate may slow initial PR velocity until the capability-mapping configuration is fully validated.
+- Since 0 classes are currently detected in the repository, moving to clearer domain boundaries may still remain function-based rather than object-oriented, which could limit long-term extensibility for capabilities such as `multi-tenancy` and `public-cloud-integration` that are not yet implemented in code.
+
+**Neutral:**
+- No change to underlying VMware Cloud Foundation technology choices (`vsphere`, `nsx-t`, `vsan`, `aria-automation`, etc.) — this ADR governs code/module architecture, not infrastructure technology selection.
 
 ## Related Artifacts (Optional)
 
-- `scripts/detect-impact.py` — capability-impact detection and documentation-request generation pipeline.
-- `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` — domain capability modules under governance.
-- Product Capability Catalog (`compute`, `storage`, `networking`, `automation`, `monitoring`, `security`, `disaster-recovery`, `backup`, `containers`, `multi-tenancy`, `lifecycle-management`, `public-cloud-integration`, `reporting`, `api-service-broker`).
-- Product Technology Catalog (vSphere/ESXi/vCenter/vSAN/NSX-T, Aria Suite, Tanzu Kubernetes Grid/Tanzu Mission Control, SDDC Manager, vLCM, Trend Micro, Nessus, HashiCorp Vault, Canopy/Avamar/Data Domain, SRM/vSphere Replication/HCX, VMC, Service Broker).
-- Future ADR (to be raised): "Class-Based Refactor of Capability Modules for Multi-Hyperscaler Extensibility" — triggered by Option C deferral.
+- `scripts/detect-impact.py` — capability/domain impact detection tooling referenced by this decision.
+- `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` — subject modules for capability-aligned refactor.
+- Product Capability Catalog — `compute`, `storage`, `networking`, `automation`, `monitoring`, `security`, `disaster-recovery`, `backup`, `containers`, `multi-tenancy`, `lifecycle-management`, `public-cloud-integration`, `reporting`, `api-service-broker`.
+- Product Technology Catalog — `vsphere`, `esxi`, `vcenter`, `vsan`, `nsx-t`, `aria-automation`, `aria-orchestrator`, `aria-operations`, `aria-logs`, `aria-network-insight`, `tanzu-kubernetes-grid`, `tanzu-mission-control`, `sddc-manager`, `vlcm`, `aria-suite-lifecycle-manager`, `trend-micro`, `nessus`, `hashicorp-vault`, `canopy-enterprise-backup`, `avamar`, `data-domain`, `srm`, `vsphere-replication`, `hcx`, `vmc`, `service-broker`.
+- Future ADRs anticipated for: `multi-tenancy` implementation, `public-cloud-integration` (VMC-based), and `reporting` capability, none of which currently have corresponding source files in this repository.
 
 ## Comments (Optional)
 
-- Reviewers should confirm whether `path_mapping` in `scripts/detect-impact.py` currently enumerates all 8 scanned files, or whether gaps exist that would cause `resolve_capabilities_for_changed_file` to return an empty capability list for a changed file.
-- The regex-fallback parse status on `scripts/detect-impact.py`, `src/backup.py`, and `src/dr_platform.py` should be investigated by the working group as a secondary code-health action item, independent of this ADR's decision.
-- No test files were detected in the 8 scanned files; a follow-up ADR or backlog item may be warranted to formalize automated testing strategy alongside the `validate_*` function convention.
+- Repository parse quality note: `scripts/detect-impact.py`, `src/backup.py`, and `src/dr_platform.py` fell back to regex-based parsing rather than full AST parsing; this should be tracked as a technical-debt item impacting confidence in future automated architecture analyses.
+- Working group to confirm whether `src/deploy.py`'s multi-domain scope (`ai-platform`, `api-service-broker`, `compute`, `data-platform`, `kubernetes`, `lifecycle-management`, `networking`, `observability`, `security`) should be split in the first refactor iteration or deferred to a follow-up ADR given its central role in platform deployment (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`).
