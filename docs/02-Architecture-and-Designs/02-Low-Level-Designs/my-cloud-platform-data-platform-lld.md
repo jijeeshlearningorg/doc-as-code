@@ -1,10 +1,10 @@
-# Low-Level Design (LLD): My Cloud Services – Greenfield Code Platform
+# Low-Level Design (LLD): My Cloud Services Platform Automation & Control Modules
 
 **Author:** Lead Solution Architect
-**Date:** Generated from repository scan
+**Date:** Generated from repository analysis
 **Version:** 1.0
 **Status:** Draft
-**Owner:** Platform Engineering / Jijeeshlearningorg
+**Owner:** jijeeshlearningorg/greenfield-code
 
 ---
 
@@ -24,13 +24,13 @@
 
 | Reviewer | Role | Date | Comments |
 |----------|----------|----------|----------|
-| TBD - repository evidence not found. | TBD - repository evidence not found. | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| TBD - repository evidence not found. | — | — | — |
 
 ## 1.3 Change Log
 
 | Version | Date | Description | Author |
 |----------|----------|----------|----------|
-| 1.0 | Generated | Initial LLD generated from `jijeeshlearningorg/greenfield-code` repository scan (branch `main`) | Lead Solution Architect |
+| 1.0 | Generated | Initial LLD generated from repository scan of `jijeeshlearningorg/greenfield-code` (branch `main`), 8 files scanned, 41 functions detected. | Lead Solution Architect |
 
 ---
 
@@ -38,12 +38,12 @@
 
 | Document Type | Document Reference | Link | Relationship |
 |----------|----------|----------|----------|
-| HLD | My Cloud Services Architecture | TBD - repository evidence not found. | Parent Design |
+| HLD | My Cloud Services - Architecture Summary | TBD - repository evidence not found. | Parent Design |
 | LLD | This Document | N/A | Current Document |
 | BIG | TBD - repository evidence not found. | TBD - repository evidence not found. | Build Guide |
 | OPG | TBD - repository evidence not found. | TBD - repository evidence not found. | Operations Guide |
 | ADR | TBD - repository evidence not found. | TBD - repository evidence not found. | Design Decisions |
-| Vendor Documentation | VMware Aria / vSphere / NSX-T / Tanzu / HashiCorp Vault catalogs | TBD - repository evidence not found. | Reference |
+| Vendor Documentation | VMware vSphere, NSX-T, Aria Suite, Tanzu, SDDC Manager, HashiCorp Vault, Canopy Enterprise Backup | TBD - repository evidence not found. | Reference |
 
 ---
 
@@ -51,13 +51,13 @@
 
 | HLD Requirement | HLD Section | LLD Section | Implementation Approach |
 |----------|----------|----------|----------|
-| Automation & Lifecycle Provisioning | Automation Capability | Section 13 | Implemented via `src/automation.py` (`provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results`) |
-| Backup & Data Protection | Backup Capability | Section 11.3 | Implemented via `src/backup.py` (`schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`) |
-| Platform Deployment (Network/K8s/AI/Data) | Compute/Networking/Kubernetes/AI/Data-Platform Capabilities | Section 6, 7 | Implemented via `src/deploy.py` (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`) |
-| Disaster Recovery | Disaster Recovery Capability | Section 11.2 | Implemented via `src/dr_platform.py` (`create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`) |
-| Security / Secrets Management | Security Capability | Section 10 | Implemented via `src/security_vault.py` (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`) |
-| API Service Broker / Catalog | API Service Broker Capability | Section 9 | Implemented via `src/service_broker.py` (`publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`) |
-| Change Impact Detection & Documentation Automation | Automation / Lifecycle-Management Capability | Section 13.4 | Implemented via `scripts/detect-impact.py` (15 functions including `resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`) |
+| Automated provisioning and lifecycle management | Automation Capability | §7, §13 | `src/automation.py` functions `provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results` |
+| Backup and application-level data protection | Backup Capability | §7, §11.3 | `src/backup.py` functions `schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report` |
+| Disaster recovery and site protection | Disaster-Recovery Capability | §7, §11.2, §11.4 | `src/dr_platform.py` functions `create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report` |
+| Platform security controls and secrets management | Security Capability | §10 | `src/security_vault.py` functions `create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy` |
+| Networking, Kubernetes, AI and data platform deployment | Compute / Networking / Containers / AI Platform / Data Platform Capabilities | §7, §16 | `src/deploy.py` functions `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability` |
+| Service catalog exposure and API brokerage | API Service Broker Capability | §9 | `src/service_broker.py` functions `publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription` |
+| Change-impact detection and documentation automation | Automation / Lifecycle-Management Capability | §13 | `scripts/detect-impact.py` functions `read_yaml`, `read_changed_files`, `resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`, `write_json`, `main` |
 
 ---
 
@@ -65,23 +65,23 @@
 
 ## 4.1 Design References
 
-- Product Capability Catalog (`compute`, `storage`, `networking`, `automation`, `monitoring`, `security`, `disaster-recovery`, `backup`, `containers`, `multi-tenancy`, `lifecycle-management`, `public-cloud-integration`, `reporting`, `api-service-broker`)
-- Product Technology Catalog (vSphere, ESXi, vCenter, vSAN, NSX-T, Aria Suite, Tanzu, SDDC Manager, vLCM, Trend Micro, Nessus, HashiCorp Vault, Canopy Enterprise Backup, Avamar, Data Domain, SRM, vSphere Replication, HCX, VMC, Service Broker)
-- Repository source code: `README.md`, `scripts/detect-impact.py`, `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`
+- Product catalog: `my-cloud-platform` / `My Cloud Services`
+- Capability catalog (14 capabilities including compute, storage, networking, automation, monitoring, security, disaster-recovery, backup, containers, multi-tenancy, lifecycle-management, public-cloud-integration, reporting, api-service-broker)
+- Technology catalog (VMware/vSphere/NSX-T/Aria/Tanzu/SDDC/vLCM/Trend Micro/Nessus/HashiCorp Vault/Canopy/Avamar/Data Domain/SRM/vSphere Replication/HCX/VMC/Service Broker)
+- Source repository `jijeeshlearningorg/greenfield-code` (branch `main`)
 
 ## 4.2 Technical Constraints
 
-- Repository contains 8 scanned files, 41 detected functions, 0 detected classes, 4 detected imports (all `logging`) — implementation is function-based, not object-oriented.
-- `scripts/detect-impact.py` parse status is `ast_failed_regex_fallback`, indicating parser fallback was required (structural evidence limited to regex-detected functions).
-- `src/backup.py` and `src/dr_platform.py` also show `ast_failed_regex_fallback` parse status.
-- No explicit configuration files (YAML/JSON) were detected in the scanned file list beyond references inside `scripts/detect-impact.py` (`read_yaml`, `write_json`).
-- No classes were detected in the repository; all logic is implemented as standalone functions.
+- Repository contains only Python source modules and one automation script; no infrastructure-as-code, container manifests, or CI/CD pipeline definitions were detected in the scan (8 files scanned).
+- No classes were detected across the repository (0 classes) — all logic is implemented as module-level functions.
+- Only one import relationship (`logging`) was detected across modules that declare it (`src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py`).
+- `scripts/detect-impact.py` parse status is `ast_failed_regex_fallback`, indicating structural parsing limitations; function signatures for this file were extracted via regex fallback.
 
 ## 4.3 Design Drivers
 
-- Multi-domain platform delivery spanning compute, networking, containers, AI, data, security, backup, and disaster recovery domains as evidenced by `module_relationships`.
-- Cross-cutting `observability`, `security`, and `lifecycle-management` domains are present in nearly every source module.
-- Change-driven documentation automation is a first-class capability, evidenced by `scripts/detect-impact.py`.
+- Support for 14 declared platform capabilities spanning compute, storage, networking, automation, monitoring, security, DR, backup, containers, multi-tenancy, lifecycle-management, public-cloud-integration, reporting, and API service brokerage.
+- Traceability between changed source files and impacted capabilities/domains via automated detection (`scripts/detect-impact.py`).
+- Consistent domain tagging across all `src/` modules for `lifecycle-management`, `observability`, and `security`.
 
 ---
 
@@ -89,9 +89,9 @@
 
 | Decision | Alternatives Considered | Rationale |
 |----------|----------|----------|
-| Implement platform operations as discrete functional modules (`src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) rather than class-based services | Object-oriented service classes (not present — 0 classes detected) | Repository evidence shows a purely function-based design (41 functions, 0 classes) |
-| Use a dedicated `scripts/detect-impact.py` utility for change-impact detection and documentation triggering | Manual documentation update process | Evidence: functions `build_impacted_capabilities`, `build_doc_request`, `write_json` directly support automated impact detection |
-| Centralize logging via `logging` import in `automation.py`, `deploy.py`, `security_vault.py`, `service_broker.py` | Per-module custom logging | Evidence: `imports` relationship shows `logging` imported consistently across 4 of 7 Python modules |
+| Implement platform capabilities as discrete function-based Python modules (`automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`) rather than class-based services | Class-based service objects | Repository evidence shows 0 classes detected; all 41 functions are implemented at module scope, indicating a deliberate procedural design pattern |
+| Use a dedicated `scripts/detect-impact.py` utility to map changed files to impacted capabilities and generate a documentation request payload | Manual documentation impact assessment | Automates lifecycle-management and documentation traceability directly from repository changes |
+| Tag each module with `supports_domain` relationships instead of hard-coded cross-module imports | Direct inter-module function calls | Module relationship evidence shows domain-tagging (`supports_domain`) as the primary coupling mechanism rather than explicit code-level imports between `src/` modules |
 
 ---
 
@@ -99,37 +99,34 @@
 
 ## 6.1 Logical Design
 
-The platform is composed of independent Python modules, each mapped to one or more product domains via `module_relationships` (`supports_domain`). The following **Module Dependency Matrix** is derived directly from `module_relationships` data (shared domain support is used as the basis for inferred coupling; no explicit import-based cross-module calls were detected between `src/*.py` files):
+The platform automation layer is composed of six functional Python modules under `src/` plus one governance/automation utility under `scripts/`. Per `module_relationships`, each module declares one or more `supports_domain` relationships that establish its position within the platform's capability domains:
 
-### Module Dependency Matrix (from `module_relationships`)
+- `src/automation.py` → supports `automation`, `lifecycle-management`, `observability`, `security`
+- `src/backup.py` → supports `backup`, `lifecycle-management`, `observability`, `security`, `storage`
+- `src/deploy.py` → supports `ai-platform`, `api-service-broker`, `compute`, `data-platform`, `kubernetes`, `lifecycle-management`, `networking`, `observability`, `security`
+- `src/dr_platform.py` → supports `ai-platform`, `backup`, `disaster-recovery`, `lifecycle-management`, `observability`, `security`
+- `src/security_vault.py` → supports `api-service-broker`, `automation`, `kubernetes`, `lifecycle-management`, `observability`, `security`
+- `src/service_broker.py` → supports `api-service-broker`, `lifecycle-management`, `observability`, `security`
+- `scripts/detect-impact.py` → supports `ai-platform`, `api-service-broker`, `automation`, `compute`, `data-platform`, `lifecycle-management`
 
-| Module | Shared Domain Dependencies (Inferred from Domain Overlap) | Direct Import Dependency |
-|----------|----------|----------|
-| `scripts/detect-impact.py` | Shares `automation`, `lifecycle-management`, `compute`, `ai-platform`, `api-service-broker`, `data-platform` with `src/deploy.py` and `src/automation.py` (inferred) | None detected |
-| `src/automation.py` | Shares `automation`, `lifecycle-management` with `src/security_vault.py`; shares `observability`, `security` across all `src/*.py` modules | `logging` |
-| `src/backup.py` | Shares `backup`, `lifecycle-management` with `src/dr_platform.py`; shares `observability`, `security` with all `src/*.py` modules | None detected |
-| `src/deploy.py` | Shares `ai-platform`, `api-service-broker`, `compute`, `data-platform` with `scripts/detect-impact.py`; shares `kubernetes` with `src/security_vault.py`; shares `networking` uniquely | `logging` |
-| `src/dr_platform.py` | Shares `backup` with `src/backup.py`; shares `ai-platform` with `src/deploy.py`; shares `observability`, `security` across all `src/*.py` modules | None detected |
-| `src/security_vault.py` | Shares `api-service-broker` with `src/deploy.py` and `src/service_broker.py`; shares `automation` with `src/automation.py`; shares `kubernetes` with `src/deploy.py` | `logging` |
-| `src/service_broker.py` | Shares `api-service-broker`, `lifecycle-management`, `observability`, `security` with `src/security_vault.py` and `src/deploy.py` | `logging` |
+Four modules (`src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py`) declare an `imports` relationship to `logging`, indicating a shared observability/logging integration pattern across the automation, deployment, security, and service-broker layers.
 
-**Note:** No explicit cross-module function call relationships (e.g., module A importing module B) were detected in the repository. All cross-module coupling above is **inferred** from shared `supports_domain` relationships in `module_relationships`.
+Component interaction is therefore domain-mediated: modules do not call one another directly (no such relationships were detected), but converge on shared capability domains — most notably `lifecycle-management`, `observability`, and `security`, which appear in every `src/` module.
 
 ## 6.2 Physical Design
 
 ### On-Premises
 
-TBD - repository evidence not found (no datacenter, cluster, rack, or host placement evidence present in source code).
+TBD - repository evidence not found. (No datacenter, cluster, rack, or host placement configuration detected in repository.)
 
 ### Cloud
 
-TBD - repository evidence not found (no subscription, region, VPC/VNet, or resource group configuration detected in scanned files).
+TBD - repository evidence not found. (No subscription, region, availability zone, resource group, or VPC/VNet configuration files detected in repository.)
 
 ### Kubernetes / OpenShift
 
-- Evidence exists for a Kubernetes deployment function: `deploy_kubernetes_platform(cluster_name)` in `src/deploy.py`, mapped to the `kubernetes` domain.
-- `src/security_vault.py` also supports the `kubernetes` domain (`supports_domain` relationship), indicating vault-to-cluster integration is architecturally expected, though no explicit namespace/node-pool/network-policy code was found.
-- Namespace structure, node pools, and network policies: TBD - repository evidence not found.
+- Kubernetes platform domain is supported by `src/deploy.py` (`deploy_kubernetes_platform`) and `src/security_vault.py` (domain tag `kubernetes`).
+- No namespace structure, node pool, or network policy manifests were detected in the repository scan; cluster/namespace configuration is TBD - repository evidence not found.
 
 ---
 
@@ -137,20 +134,17 @@ TBD - repository evidence not found (no subscription, region, VPC/VNet, or resou
 
 ## 7.1 Compute / Runtime Design
 
-- Compute domain is supported by `scripts/detect-impact.py` (`supports_domain: compute`) and `src/deploy.py` (`supports_domain: compute`).
-- Runtime components are implemented as Python functions; no VM, container, or serverless deployment manifests were detected in the repository.
-- Scaling model: TBD - repository evidence not found.
+Compute-related functionality is implemented in `src/deploy.py` via `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, and `deploy_data_platform`, and in `scripts/detect-impact.py` through domain tagging (`compute`). No virtual machine, container, or serverless runtime definitions (e.g., IaC, Dockerfiles, Helm charts) were detected in the repository. Scaling model: TBD - repository evidence not found.
 
 ## 7.2 Storage Design
 
-- Storage domain is supported exclusively by `src/backup.py` (`supports_domain: storage`).
-- Data layout, capacity planning, and replication strategy at the storage layer: TBD - repository evidence not found (no storage configuration files detected).
+Storage domain support is declared only by `src/backup.py` (`supports_domain: storage`). No storage layout, capacity planning, or replication configuration files were detected. Data protection functions (`schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`) implement the storage-adjacent backup workflow.
 
 ## 7.3 Network Design
 
 ### Logical Network
 
-- Networking domain is supported by `src/deploy.py` via `deploy_network_foundation(region)`, described as deploying "core networking components for a new cloud platform."
+Networking domain is declared by `src/deploy.py` only, implemented via `deploy_network_foundation(region)`.
 
 ### Physical Network
 
@@ -166,102 +160,19 @@ TBD - repository evidence not found.
 
 ## 7.4 Platform Configuration
 
-- No hypervisor, middleware, OS, or cluster configuration files were detected in the scanned repository (8 files scanned; only Python source and README present).
-- Configuration handling that does exist is limited to generic file I/O in `scripts/detect-impact.py`: `read_yaml(path)` and `write_json(path, payload)`.
+No hypervisor, middleware, OS, or cluster configuration files were detected in the repository scan (8 files scanned: `README.md`, `scripts/detect-impact.py`, and six `src/*.py` modules). Platform configuration is applied at the software workflow level via `deploy_configuration_baseline(environment_name)` in `src/automation.py`.
 
 ## 7.5 Application / Service Components
 
 | Component | Purpose | Dependencies |
 |----------|----------|----------|
-| `scripts/detect-impact.py` | Detects repository change impact and builds documentation regeneration requests | `read_yaml`, `read_changed_files`, GitHub PR/repository context functions |
-| `src/automation.py` | Provisions infrastructure, executes platform workflows, applies configuration baselines, validates automation outcomes | `logging` |
-| `src/backup.py` | Schedules and executes backup jobs, validates backup integrity, generates backup reports | Implicit dependency on backup domain services |
-| `src/deploy.py` | Deploys network foundation, Kubernetes platform, AI platform, data platform; validates observability | `logging` |
-| `src/dr_platform.py` | Creates recovery plans, executes site failover, validates recovery objectives, generates DR readiness reports | Implicit dependency on `src/backup.py` (shared `backup` domain) |
-| `src/security_vault.py` | Manages vault namespaces, customer-managed encryption keys, key rotation, key-to-service assignment, vault policy validation | `logging` |
-| `src/service_broker.py` | Publishes service catalogs, registers platform APIs, creates service offerings, validates API subscriptions | `logging` |
-
-## 7.6 Source Module Specifications (Full Module Coverage — Rule 34)
-
-### 7.6.1 `scripts/detect-impact.py`
-
-- **Purpose:** Detects which repository changes impact which product capabilities and builds a documentation-generation request payload.
-- **Functions:** `read_yaml(path)`, `read_changed_files(path)`, `normalize_path(value)`, `unique_sorted(values)`, `get_repository_name()`, `get_repository_full_name()`, `get_pull_request_number()`, `get_pull_request_title()`, `get_pull_request_url()`, `resolve_product(mapping)`, `resolve_capabilities_for_changed_file(changed_file, path_mapping)`, `build_impacted_capabilities(changed_files, path_mapping)`, `build_doc_request(mapping, changed_files)`, `write_json(path, payload)`, `main()`
-- **Inputs:** YAML mapping file (`path`), changed-files list (`path`), GitHub PR/repository environment context (implied by `get_repository_name`, `get_pull_request_number`, etc.)
-- **Outputs:** `dict` (mapping data, impacted capabilities, doc request payload), `list[str]` (changed files, normalized/sorted values), JSON file written via `write_json`
-- **Dependencies:** None explicitly imported (parse fallback used); operates on file system paths and repository/PR context
-- **Capability Mapping:** `ai-platform`, `api-service-broker`, `automation`, `compute`, `data-platform`, `lifecycle-management`
-- **Technology Mapping:** No specific product technology detected; supports automation tooling generically
-
-### 7.6.2 `src/automation.py`
-
-- **Purpose:** Automates infrastructure provisioning and platform workflow execution, including configuration baseline deployment and result validation. Module authored by Jijeesh Valappil.
-- **Functions:** `provision_infrastructure(environment_name)` → `bool`, `execute_platform_workflow(workflow_name)` → `bool`, `deploy_configuration_baseline(environment_name)` → `bool`, `validate_automation_results(workflow_name)` → `bool`
-- **Inputs:** `environment_name`, `workflow_name`
-- **Outputs:** `bool` (success/failure indicators for each operation)
-- **Dependencies:** `logging` (imports)
-- **Capability Mapping:** `automation`, `lifecycle-management`, `observability`, `security`
-- **Technology Mapping:** Aligns with `aria-automation` / `aria-orchestrator` catalog technologies (inferred from `automation` capability mapping; not explicitly imported in code)
-
-### 7.6.3 `src/backup.py`
-
-- **Purpose:** Schedules, executes, and validates backup jobs, and generates backup reporting output.
-- **Functions:** `schedule_backup_job(workload_name)` → `bool`, `execute_backup(workload_name)` → `bool`, `validate_backup_integrity(backup_id)` → `bool`, `generate_backup_report()` → `dict`
-- **Inputs:** `workload_name`, `backup_id`
-- **Outputs:** `bool` (job/validation status), `dict` (backup report)
-- **Dependencies:** None explicitly imported (parse fallback used)
-- **Capability Mapping:** `backup`, `lifecycle-management`, `observability`, `security`, `storage`
-- **Technology Mapping:** Aligns with `canopy-enterprise-backup`, `avamar`, `data-domain` catalog technologies (inferred from `backup`/`storage` capability mapping)
-
-### 7.6.4 `src/deploy.py`
-
-- **Purpose:** Deploys core cloud platform infrastructure spanning networking, Kubernetes, AI, and data platform domains, and validates observability configuration. Module authored by Jijeesh Valappil.
-- **Functions:** `deploy_network_foundation(region)` → `bool`, `deploy_kubernetes_platform(cluster_name)` → `bool`, `deploy_ai_platform(environment)` → `bool`, `deploy_data_platform(environment)` → `bool`, `validate_platform_observability(environment)` → `bool`
-- **Inputs:** `region`, `cluster_name`, `environment`
-- **Outputs:** `bool` (deployment/validation success)
-- **Dependencies:** `logging` (imports)
-- **Capability Mapping:** `ai-platform`, `api-service-broker`, `compute`, `data-platform`, `kubernetes`, `lifecycle-management`, `networking`, `observability`, `security`
-- **Technology Mapping:** Aligns with `nsx-t` (networking), `tanzu-kubernetes-grid` (kubernetes), `vsphere`/`esxi`/`vcenter` (compute) catalog technologies (inferred from capability mapping)
-
-### 7.6.5 `src/dr_platform.py`
-
-- **Purpose:** Manages disaster recovery lifecycle including recovery plan creation, site failover execution, recovery objective validation, and DR readiness reporting.
-- **Functions:** `create_recovery_plan(application_name)` → `bool`, `execute_site_failover(target_site)` → `bool`, `validate_recovery_objectives(application_name)` → `bool`, `generate_dr_readiness_report()` → `dict`
-- **Inputs:** `application_name`, `target_site`
-- **Outputs:** `bool` (plan/failover/validation status), `dict` (DR readiness report)
-- **Dependencies:** None explicitly imported (parse fallback used)
-- **Capability Mapping:** `ai-platform`, `backup`, `disaster-recovery`, `lifecycle-management`, `observability`, `security`
-- **Technology Mapping:** Aligns with `srm`, `vsphere-replication`, `hcx` catalog technologies (inferred from `disaster-recovery` capability mapping)
-
-### 7.6.6 `src/security_vault.py`
-
-- **Purpose:** Manages enterprise vault namespaces, customer-managed encryption keys, key rotation, key-to-service assignment, and vault security policy validation. Module authored by Jijeesh Valappil.
-- **Functions:** `create_vault_namespace(namespace_name)` → `bool`, `create_customer_managed_key(key_name)` → `str`, `rotate_encryption_key(key_name)` → `bool`, `assign_key_to_service(key_name, service_name)` → `bool`, `validate_vault_policy(policy_name)` → `bool`
-- **Inputs:** `namespace_name`, `key_name`, `service_name`, `policy_name`
-- **Outputs:** `bool` (operation status), `str` (created key identifier)
-- **Dependencies:** `logging` (imports)
-- **Capability Mapping:** `api-service-broker`, `automation`, `kubernetes`, `lifecycle-management`, `observability`, `security`
-- **Technology Mapping:** Aligns with `hashicorp-vault` catalog technology (explicit fit — module name and function set directly match vault key/namespace/policy operations)
-
-### 7.6.7 `src/service_broker.py`
-
-- **Purpose:** Publishes cloud service catalogs, registers platform APIs, creates self-service catalog offerings, and validates API consumer subscriptions. Module authored by Jijeesh Valappil.
-- **Functions:** `publish_service_catalog(catalog_name)` → `bool`, `register_platform_api(api_name)` → `bool`, `create_service_offering(service_name)` → `bool`, `validate_api_subscription(subscription_id)` → `bool`
-- **Inputs:** `catalog_name`, `api_name`, `service_name`, `subscription_id`
-- **Outputs:** `bool` (operation status)
-- **Dependencies:** `logging` (imports)
-- **Capability Mapping:** `api-service-broker`, `lifecycle-management`, `observability`, `security`
-- **Technology Mapping:** Aligns with `service-broker` catalog technology (explicit fit — module directly implements catalog publishing/API registration/subscription validation)
-
-### 7.6.8 `README.md`
-
-- **Purpose:** Repository-level documentation entry point.
-- **Functions:** None (documentation file; 3 lines; generic parse status).
-- **Inputs:** N/A
-- **Outputs:** N/A
-- **Dependencies:** None detected
-- **Capability Mapping:** TBD - repository evidence not found.
-- **Technology Mapping:** TBD - repository evidence not found.
+| `scripts/detect-impact.py` | Detects changed files, resolves impacted capabilities/domains, and builds a documentation refresh request payload | `read_yaml`, `read_changed_files`, `normalize_path`, `unique_sorted`, `get_repository_name`, `get_repository_full_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`, `resolve_product`, `resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`, `write_json` |
+| `src/automation.py` | Automates infrastructure provisioning, workflow execution, configuration baselining, and validation | `logging` (import); domains: automation, lifecycle-management, observability, security |
+| `src/backup.py` | Schedules, executes, validates, and reports on workload backups | Domains: backup, lifecycle-management, observability, security, storage |
+| `src/deploy.py` | Deploys network, Kubernetes, AI, and data platform services; validates observability | `logging` (import); domains: ai-platform, api-service-broker, compute, data-platform, kubernetes, lifecycle-management, networking, observability, security |
+| `src/dr_platform.py` | Creates recovery plans, executes site failover, validates recovery objectives, generates DR readiness reports | Domains: ai-platform, backup, disaster-recovery, lifecycle-management, observability, security |
+| `src/security_vault.py` | Manages vault namespaces, customer-managed encryption keys, key rotation, service key assignment, and vault policy validation | `logging` (import); domains: api-service-broker, automation, kubernetes, lifecycle-management, observability, security |
+| `src/service_broker.py` | Publishes service catalogs, registers platform APIs, creates service offerings, validates API subscriptions | `logging` (import); domains: api-service-broker, lifecycle-management, observability, security |
 
 ---
 
@@ -269,16 +180,19 @@ TBD - repository evidence not found.
 
 ## 8.1 Data Flow
 
-Based on `deployment_flow` and `function_relationships`, the primary repository-evidenced data flow is the **impact-detection-to-documentation** pipeline in `scripts/detect-impact.py`:
+Per `deployment_flow` and `function_relationships`, the data flow for change-impact detection is: changed files (`read_changed_files`) → path normalization (`normalize_path`) → capability resolution (`resolve_capabilities_for_changed_file`) → aggregation (`build_impacted_capabilities`) → documentation request construction (`build_doc_request`) → JSON persistence (`write_json`) — orchestrated by `main()` in `scripts/detect-impact.py`.
 
-`read_changed_files` → `normalize_path` / `unique_sorted` → `resolve_capabilities_for_changed_file` → `build_impacted_capabilities` → `resolve_product` → `build_doc_request` → `write_json`
-
-Secondary data flows within `src/*.py` modules are single-function, stateless operations invoked independently (e.g., `create_customer_managed_key` returning a key identifier consumed conceptually by `assign_key_to_service`), though no explicit call-chain evidence links these functions directly in code.
+Platform operational data flow (per `deployment_flow`):
+1. `provision_infrastructure` → `deploy_configuration_baseline` → `validate_automation_results` (`src/automation.py`)
+2. `schedule_backup_job` → `execute_backup` → `validate_backup_integrity` → `generate_backup_report` (`src/backup.py`)
+3. `deploy_network_foundation` → `deploy_kubernetes_platform` → `deploy_ai_platform` → `deploy_data_platform` → `validate_platform_observability` (`src/deploy.py`)
+4. `create_recovery_plan` → `validate_recovery_objectives` (recovery + validate) (`src/dr_platform.py`)
+5. `validate_vault_policy` (validate) (`src/security_vault.py`)
+6. `publish_service_catalog` → `register_platform_api` → `validate_api_subscription` (`src/service_broker.py`)
 
 ## 8.2 Data Storage
 
-- `write_json(path, payload)` in `scripts/detect-impact.py` is the only explicit persistent data storage operation detected in the repository.
-- No database, object storage, or file storage configuration was detected for `src/*.py` modules.
+`write_json(path, payload)` in `scripts/detect-impact.py` persists the built documentation request as JSON. No database, object storage, or persistent data store was detected elsewhere in the repository.
 
 ## 8.3 Database Objects
 
@@ -286,17 +200,19 @@ TBD - repository evidence not found.
 
 ## 8.4 Data Access Design
 
-- File-based access: `read_yaml(path)`, `read_changed_files(path)`, `write_json(path, payload)` (all in `scripts/detect-impact.py`).
-- No ORM, SQL query, or API-based data access pattern was detected in `src/*.py` modules.
+- YAML configuration reading via `read_yaml(path)` (`scripts/detect-impact.py`)
+- File list reading via `read_changed_files(path)` (`scripts/detect-impact.py`)
+- JSON write access via `write_json(path, payload)` (`scripts/detect-impact.py`)
+- No ORM, database query layer, or REST API client implementation was detected.
 
 ## 8.5 Data Classification
 
 | Data Type | Classification |
 |----------|----------|
-| Repository change/impact mapping data (`read_yaml`, `build_doc_request` output) | Internal / Build Metadata |
-| Backup report data (`generate_backup_report`) | Operational |
-| DR readiness report data (`generate_dr_readiness_report`) | Operational |
-| Encryption key material (`create_customer_managed_key`, `rotate_encryption_key`) | Confidential / Security-Sensitive |
+| Changed file paths / PR metadata (`get_repository_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`) | Operational / Repository Metadata |
+| Encryption keys (`create_customer_managed_key`, `rotate_encryption_key`) | Sensitive / Security-Critical |
+| Backup artifacts (`execute_backup`, `validate_backup_integrity`) | Sensitive / Recoverable Workload Data |
+| Service catalog / API registration data (`publish_service_catalog`, `register_platform_api`) | Internal / Service Metadata |
 
 ---
 
@@ -306,26 +222,24 @@ TBD - repository evidence not found.
 
 | System | Purpose | Integration Type |
 |----------|----------|----------|
-| GitHub Repository / Pull Request context | Change detection input for `scripts/detect-impact.py` (`get_repository_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`) | Environment/context read (inferred CI integration) |
-| HashiCorp Vault (catalog technology) | Backing platform for `src/security_vault.py` operations | Inferred functional integration (not explicit import) |
-| Service Broker platform (catalog technology) | Backing platform for `src/service_broker.py` catalog/API operations | Inferred functional integration (not explicit import) |
+| HashiCorp Vault (catalog technology) | Secrets and customer-managed key management, referenced by `src/security_vault.py` domain `security` | Inferred |
+| Canopy Enterprise Backup / Avamar / Data Domain (catalog technology) | Backup execution and storage, referenced by `src/backup.py` domain `backup`/`storage` | Inferred |
+| VMware Site Recovery Manager (SRM) / vSphere Replication (catalog technology) | Site failover and recovery, referenced by `src/dr_platform.py` domain `disaster-recovery` | Inferred |
+| Service Broker platform (catalog technology) | Service catalog publication and API registration, referenced by `src/service_broker.py` domain `api-service-broker` | Inferred |
+| Aria Automation / Aria Orchestrator (catalog technology) | Workflow orchestration referenced by `src/automation.py` functions `execute_platform_workflow`, `provision_infrastructure` | Inferred |
 
-## 9.2 Interfaces & APIs (from `function_relationships`)
+## 9.2 Interfaces & APIs
 
-| Interface (Function) | Module | Protocol | Authentication |
-|----------|----------|----------|----------|
-| `register_platform_api(api_name)` → `bool` | `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
-| `validate_api_subscription(subscription_id)` → `bool` | `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
-| `create_service_offering(service_name)` → `bool` | `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
-| `publish_service_catalog(catalog_name)` → `bool` | `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
-| `create_vault_namespace(namespace_name)` → `bool` | `src/security_vault.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
-| `create_customer_managed_key(key_name)` → `str` | `src/security_vault.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
-
-**Note:** No protocol (REST/gRPC) or authentication scheme is explicitly implemented in the scanned source; all functions return simple `bool`/`str`/`dict` types with no HTTP framework imports detected.
+| Interface | Protocol | Authentication |
+|----------|----------|----------|
+| `register_platform_api(api_name)` in `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| `validate_api_subscription(subscription_id)` in `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| `create_service_offering(service_name)` in `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| `publish_service_catalog(catalog_name)` in `src/service_broker.py` | TBD - repository evidence not found. | TBD - repository evidence not found. |
 
 ## 9.3 Message Flows
 
-TBD - repository evidence not found (no message queue/broker implementation detected).
+Not applicable — no message queue, event bus, or pub/sub integration detected in repository.
 
 ---
 
@@ -333,7 +247,7 @@ TBD - repository evidence not found (no message queue/broker implementation dete
 
 ## 10.1 Identity & Access Management
 
-TBD - repository evidence not found (no IAM provider integration code detected).
+TBD - repository evidence not found. (No IAM configuration files detected.)
 
 ## 10.2 RBAC Model
 
@@ -341,17 +255,17 @@ TBD - repository evidence not found.
 
 ## 10.3 Service Accounts
 
-TBD - repository evidence not found.
+`assign_key_to_service(key_name, service_name)` in `src/security_vault.py` associates encryption keys with platform services, indicating a service-to-key binding model. Explicit service account definitions were not detected.
 
 ## 10.4 Network Security
 
-- Networking domain functions (`deploy_network_foundation`) exist in `src/deploy.py`, but no explicit firewall, segmentation, or security-zone code was detected.
+Domain `security` is declared across every `src/` module (`automation.py`, `backup.py`, `deploy.py`, `dr_platform.py`, `security_vault.py`, `service_broker.py`), indicating security is a cross-cutting concern of the platform. No firewall rules or network security group definitions were detected.
 
 ## 10.5 Encryption
 
 ### Encryption At Rest
 
-- `create_customer_managed_key(key_name)` in `src/security_vault.py` returns a customer-managed key identifier (`str`), supporting encryption-at-rest key management for the `security` domain.
+Implemented via `create_customer_managed_key(key_name)` and `assign_key_to_service(key_name, service_name)` in `src/security_vault.py`.
 
 ### Encryption In Transit
 
@@ -361,13 +275,11 @@ TBD - repository evidence not found.
 
 ### Vault Integration
 
-- `src/security_vault.py` implements vault namespace management via `create_vault_namespace(namespace_name)`, aligning with the `hashicorp-vault` catalog technology and the `security`, `automation`, `api-service-broker`, `kubernetes`, `lifecycle-management`, `observability` domains (per `module_relationships`).
+`src/security_vault.py` implements vault namespace lifecycle via `create_vault_namespace(namespace_name)` and policy validation via `validate_vault_policy(policy_name)`.
 
 ### Key Management
 
-- `create_customer_managed_key(key_name)` — creates a customer-managed encryption key.
-- `rotate_encryption_key(key_name)` — rotates an existing encryption key.
-- `assign_key_to_service(key_name, service_name)` — associates an encryption key with a platform service.
+`create_customer_managed_key(key_name)` returns a key identifier (`str`); `rotate_encryption_key(key_name)` returns rotation status (`bool`); `assign_key_to_service(key_name, service_name)` binds keys to services (`bool`).
 
 ### Certificate Management
 
@@ -381,11 +293,11 @@ TBD - repository evidence not found.
 
 ### Audit Logging
 
-- `logging` module is imported by `src/security_vault.py` (per `module_relationships` — `imports` relationship), supporting audit trail capture for vault operations.
+`logging` import declared in `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py` per `module_relationships`.
 
 ### Security Event Logging
 
-- `validate_vault_policy(policy_name)` in `src/security_vault.py` validates vault security policy assignment, supporting security event/compliance checks.
+Domain `observability` is declared alongside `security` in every `src/` module, indicating combined security/observability instrumentation.
 
 ### SIEM Integration
 
@@ -397,33 +309,31 @@ TBD - repository evidence not found.
 
 ## 11.1 High Availability Design
 
-TBD - repository evidence not found.
+TBD - repository evidence not found. (No HA configuration detected in repository.)
 
 ## 11.2 Disaster Recovery Design
 
-DR design is implemented in `src/dr_platform.py`, supporting the `disaster-recovery` domain alongside `ai-platform`, `backup`, `lifecycle-management`, `observability`, and `security`:
+Implemented in `src/dr_platform.py`:
+- `create_recovery_plan(application_name)` → `bool`
+- `execute_site_failover(target_site)` → `bool`
+- `validate_recovery_objectives(application_name)` → `bool`
+- `generate_dr_readiness_report()` → `dict`
 
-- `create_recovery_plan(application_name)` — creates a recovery plan per application.
-- `execute_site_failover(target_site)` — executes failover to a target site.
-- `validate_recovery_objectives(application_name)` — validates recovery objectives per application.
-- `generate_dr_readiness_report()` — produces DR readiness reporting output (`dict`).
-
-Per `deployment_flow`, the DR sequence is: `create_recovery_plan` (recovery) → `validate_recovery_objectives` (validate/recovery).
+Per `deployment_flow`: `create_recovery_plan` (recovery) precedes `validate_recovery_objectives` (validate/recovery).
 
 ## 11.3 Backup Design
 
-Backup design is implemented in `src/backup.py`, supporting `backup`, `lifecycle-management`, `observability`, `security`, and `storage` domains:
+Implemented in `src/backup.py`:
+- `schedule_backup_job(workload_name)` → `bool`
+- `execute_backup(workload_name)` → `bool`
+- `validate_backup_integrity(backup_id)` → `bool`
+- `generate_backup_report()` → `dict`
 
-- `schedule_backup_job(workload_name)` — schedules a backup job for a workload.
-- `execute_backup(workload_name)` — executes the backup.
-- `validate_backup_integrity(backup_id)` — validates backup integrity.
-- `generate_backup_report()` — generates a backup report (`dict`).
-
-Per `deployment_flow`, the backup sequence is: `schedule_backup_job` (backup) → `execute_backup` (backup) → `validate_backup_integrity` (validate/backup) → `generate_backup_report` (backup).
+Per `deployment_flow`: `schedule_backup_job` (backup) → `execute_backup` (backup) → `validate_backup_integrity` (validate + backup) → `generate_backup_report` (backup).
 
 ## 11.4 Failover Design
 
-- Failover is implemented via `execute_site_failover(target_site)` in `src/dr_platform.py`, invoked as part of the DR domain workflow (no explicit automated trigger mechanism detected).
+`execute_site_failover(target_site)` in `src/dr_platform.py` implements site-level failover, supporting the `disaster-recovery` domain.
 
 ---
 
@@ -431,23 +341,15 @@ Per `deployment_flow`, the backup sequence is: `schedule_backup_job` (backup) �
 
 ## 12.1 Infrastructure Dependencies
 
-- `src/deploy.py` functions require underlying network, Kubernetes, AI, and data platform infrastructure to exist or be provisioned prior to `validate_platform_observability(environment)` execution.
+TBD - repository evidence not found. (No infrastructure provisioning manifests detected beyond function-level orchestration in `src/automation.py` and `src/deploy.py`.)
 
 ## 12.2 Software Dependencies
 
-| Module | Import Dependency |
-|----------|----------|
-| `src/automation.py` | `logging` |
-| `src/deploy.py` | `logging` |
-| `src/security_vault.py` | `logging` |
-| `src/service_broker.py` | `logging` |
-| `src/backup.py` | None detected |
-| `src/dr_platform.py` | None detected |
-| `scripts/detect-impact.py` | None detected |
+- `logging` (Python standard library) — imported by `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py`.
 
 ## 12.3 External Dependencies
 
-- GitHub repository/PR metadata (consumed by `get_repository_name`, `get_repository_full_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url` in `scripts/detect-impact.py`).
+Catalog technologies referenced by domain mapping (inferred, not directly imported in code): vSphere, ESXi, vCenter, vSAN, NSX-T, Aria Automation, Aria Orchestrator, Aria Operations, Aria Logs, Aria Network Insight, Tanzu Kubernetes Grid, Tanzu Mission Control, SDDC Manager, vLCM, Aria Suite Lifecycle Manager, Trend Micro, Nessus, HashiCorp Vault, Canopy Enterprise Backup, Avamar, Data Domain, SRM, vSphere Replication, HCX, VMC, Service Broker.
 
 ## 12.4 Access Dependencies
 
@@ -457,7 +359,7 @@ TBD - repository evidence not found.
 
 ### Secrets
 
-- Managed via `src/security_vault.py` (`create_customer_managed_key`, `rotate_encryption_key`).
+Managed via `create_vault_namespace`, `create_customer_managed_key` in `src/security_vault.py`.
 
 ### Certificates
 
@@ -477,63 +379,68 @@ TBD - repository evidence not found.
 
 ## 13.1 Automation Tools
 
-- Repository-native Python automation: `scripts/detect-impact.py` and `src/automation.py`.
-- No Terraform, Ansible, GitHub Actions workflow files, ArgoCD, or Jenkins configuration files were detected among the 8 scanned files.
+Repository-evidenced automation is implemented natively in Python (no Terraform, Ansible, GitHub Actions workflow files, ArgoCD, or Jenkins pipeline definitions were detected in the 8 scanned files). Automation logic resides in:
+- `scripts/detect-impact.py` — change-impact detection and documentation-request automation
+- `src/automation.py` — infrastructure provisioning and workflow execution automation
 
 ## 13.2 Repository Structure
 
-| Path | Role |
-|----------|----------|
-| `README.md` | Repository documentation entry point |
-| `scripts/detect-impact.py` | Change-impact detection and documentation-request automation |
-| `src/automation.py` | Platform provisioning and workflow automation |
-| `src/backup.py` | Backup job lifecycle |
-| `src/deploy.py` | Platform deployment (network, Kubernetes, AI, data) |
-| `src/dr_platform.py` | Disaster recovery lifecycle |
-| `src/security_vault.py` | Vault/secrets and key management |
-| `src/service_broker.py` | Service catalog and API broker management |
+```
+README.md
+scripts/
+  detect-impact.py
+src/
+  automation.py
+  backup.py
+  deploy.py
+  dr_platform.py
+  security_vault.py
+  service_broker.py
+```
 
 ## 13.3 Configuration Management
 
-- Configuration inputs are read via `read_yaml(path)` in `scripts/detect-impact.py`; this is the only detected configuration-file access pattern in the repository.
+`read_yaml(path)` in `scripts/detect-impact.py` reads YAML-based path-to-capability mapping configuration used by `resolve_capabilities_for_changed_file` and `build_impacted_capabilities`.
 
-## 13.4 Deployment Workflow (from `deployment_flow`)
+## 13.4 Deployment Workflow
 
-The following workflow sequence is derived directly from repository `deployment_flow` evidence:
+Per `deployment_flow`, the following sequenced workflows are defined:
 
-1. **Provisioning stage** — `provision_infrastructure` (provision) in `src/automation.py`
-2. **Deployment stage** — `deploy_configuration_baseline` (deploy) in `src/automation.py`
-3. **Validation stage** — `validate_automation_results` (validate) in `src/automation.py`
-4. **Backup stage** — `schedule_backup_job` (backup) → `execute_backup` (backup) → `validate_backup_integrity` (validate/backup) → `generate_backup_report` (backup), all in `src/backup.py`
-5. **Platform deployment stage** — `deploy_network_foundation` (deploy) → `deploy_kubernetes_platform` (deploy) → `deploy_ai_platform` (deploy) → `deploy_data_platform` (deploy) → `validate_platform_observability` (validate), all in `src/deploy.py`
-6. **Recovery stage** — `create_recovery_plan` (recovery) → `validate_recovery_objectives` (validate/recovery), both in `src/dr_platform.py`
-7. **Security validation stage** — `validate_vault_policy` (validate) in `src/security_vault.py`
-8. **Service broker stage** — `publish_service_catalog` (publish) → `register_platform_api` (register) → `validate_api_subscription` (validate), all in `src/service_broker.py`
-
-This sequencing reflects repository-evidenced `deployment_flow` staging (provision → deploy → validate → backup → recovery → publish/register) and should be treated as the canonical operational workflow order.
+1. **Automation workflow** (`src/automation.py`): `provision_infrastructure` (provision) → `deploy_configuration_baseline` (deploy) → `validate_automation_results` (validate)
+2. **Backup workflow** (`src/backup.py`): `schedule_backup_job` (backup) → `execute_backup` (backup) → `validate_backup_integrity` (validate/backup) → `generate_backup_report` (backup)
+3. **Platform deployment workflow** (`src/deploy.py`): `deploy_network_foundation` (deploy) → `deploy_kubernetes_platform` (deploy) → `deploy_ai_platform` (deploy) → `deploy_data_platform` (deploy) → `validate_platform_observability` (validate)
+4. **DR workflow** (`src/dr_platform.py`): `create_recovery_plan` (recovery) → `validate_recovery_objectives` (validate/recovery)
+5. **Security validation** (`src/security_vault.py`): `validate_vault_policy` (validate)
+6. **Service broker workflow** (`src/service_broker.py`): `publish_service_catalog` (publish) → `register_platform_api` (register) → `validate_api_subscription` (validate)
+7. **Impact detection workflow** (`scripts/detect-impact.py`): `main()` orchestrates `read_yaml` → `read_changed_files` → `resolve_capabilities_for_changed_file` (via `build_impacted_capabilities`) → `build_doc_request` → `write_json`
 
 ## 13.5 Input Parameters
 
 | Parameter | Purpose |
 |----------|----------|
-| `environment_name` | Target environment for `provision_infrastructure`, `deploy_configuration_baseline` (`src/automation.py`) |
-| `workflow_name` | Identifies platform workflow for `execute_platform_workflow`, `validate_automation_results` (`src/automation.py`) |
-| `workload_name` | Identifies workload for `schedule_backup_job`, `execute_backup` (`src/backup.py`) |
-| `backup_id` | Identifies backup instance for `validate_backup_integrity` (`src/backup.py`) |
-| `region` | Target region for `deploy_network_foundation` (`src/deploy.py`) |
-| `cluster_name` | Target Kubernetes cluster for `deploy_kubernetes_platform` (`src/deploy.py`) |
-| `environment` | Target environment for `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability` (`src/deploy.py`) |
-| `application_name` | Target application for `create_recovery_plan`, `validate_recovery_objectives` (`src/dr_platform.py`) |
-| `target_site` | Target DR site for `execute_site_failover` (`src/dr_platform.py`) |
-| `namespace_name` | Vault namespace identifier for `create_vault_namespace` (`src/security_vault.py`) |
-| `key_name` | Encryption key identifier for `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service` (`src/security_vault.py`) |
-| `service_name` | Target service for `assign_key_to_service` (`src/security_vault.py`) |
-| `policy_name` | Vault policy identifier for `validate_vault_policy` (`src/security_vault.py`) |
-| `catalog_name` | Service catalog identifier for `publish_service_catalog` (`src/service_broker.py`) |
-| `api_name` | Platform API identifier for `register_platform_api` (`src/service_broker.py`) |
-| `subscription_id` | API subscription identifier for `validate_api_subscription` (`src/service_broker.py`) |
-| `path` | File path input for `read_yaml`, `read_changed_files`, `write_json` (`scripts/detect-impact.py`) |
-| `changed_files`, `path_mapping`, `mapping` | Change-impact resolution inputs for `build_impacted_capabilities`, `build_doc_request`, `resolve_product` (`scripts/detect-impact.py`) |
+| `path` (`read_yaml`, `read_changed_files`, `write_json`) | File path input/output for configuration mapping and JSON payload persistence |
+| `value` (`normalize_path`) | Raw path string to normalize for consistent comparison |
+| `values` (`unique_sorted`) | Collection to deduplicate and sort |
+| `mapping` (`resolve_product`, `build_doc_request`) | Product/capability mapping configuration |
+| `changed_file` / `changed_files` | File(s) changed in a pull request used to resolve impacted capabilities |
+| `path_mapping` | Configured path-to-capability mapping used in impact resolution |
+| `environment_name` (`provision_infrastructure`, `deploy_configuration_baseline`) | Target environment for provisioning/configuration |
+| `workflow_name` (`execute_platform_workflow`, `validate_automation_results`) | Identifies the automation workflow to execute/validate |
+| `workload_name` (`schedule_backup_job`, `execute_backup`) | Identifies the workload targeted for backup |
+| `backup_id` (`validate_backup_integrity`) | Identifies the backup instance to validate |
+| `region` (`deploy_network_foundation`) | Target region for network deployment |
+| `cluster_name` (`deploy_kubernetes_platform`) | Target Kubernetes cluster name |
+| `environment` (`deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`) | Target environment for AI/data platform deployment/validation |
+| `application_name` (`create_recovery_plan`, `validate_recovery_objectives`) | Application targeted for DR planning/validation |
+| `target_site` (`execute_site_failover`) | Destination site for failover |
+| `namespace_name` (`create_vault_namespace`) | Vault namespace to create |
+| `key_name` (`create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`) | Encryption key identifier |
+| `service_name` (`assign_key_to_service`) | Target service for key assignment |
+| `policy_name` (`validate_vault_policy`) | Vault policy to validate |
+| `catalog_name` (`publish_service_catalog`) | Service catalog to publish |
+| `api_name` (`register_platform_api`) | API endpoint to register |
+| `service_name` (`create_service_offering`) | Self-service offering name |
+| `subscription_id` (`validate_api_subscription`) | API subscription identifier to validate |
 
 ---
 
@@ -541,14 +448,13 @@ This sequencing reflects repository-evidenced `deployment_flow` staging (provisi
 
 ## 14.1 Monitoring
 
-- **Metrics:** No explicit metrics-emitting code detected.
-- **Dashboards:** TBD - repository evidence not found.
-- Observability domain is supported by `src/automation.py`, `src/backup.py`, `src/deploy.py` (via `validate_platform_observability`), `src/dr_platform.py`, `src/security_vault.py`, and `src/service_broker.py` — indicating observability is a cross-cutting concern across nearly all modules per `module_relationships`.
+- Metrics: `validate_platform_observability(environment)` in `src/deploy.py` validates monitoring, logging, and observability configuration.
+- Dashboards: TBD - repository evidence not found.
+- All `src/` modules declare `observability` as a supported domain, indicating observability is a cross-cutting design concern.
 
 ## 14.2 Logging
 
-- `logging` module imported by `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py` per `module_relationships` (`imports`).
-- `src/backup.py` and `src/dr_platform.py` support the `observability` domain but do not show an explicit `logging` import (fallback parser limitation noted).
+`logging` module imported by `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py` per `module_relationships`.
 
 ## 14.3 Alerting
 
@@ -556,7 +462,7 @@ TBD - repository evidence not found.
 
 ## 14.4 Operational Ownership
 
-TBD - repository evidence not found.
+Module author attribution ("Jijeesh Valappil") is present in module descriptions for `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, and `src/service_broker.py`.
 
 ---
 
@@ -564,12 +470,11 @@ TBD - repository evidence not found.
 
 ## 15.1 Component Testing
 
-- Validation functions exist per module: `validate_automation_results` (`src/automation.py`), `validate_backup_integrity` (`src/backup.py`), `validate_platform_observability` (`src/deploy.py`), `validate_recovery_objectives` (`src/dr_platform.py`), `validate_vault_policy` (`src/security_vault.py`), `validate_api_subscription` (`src/service_broker.py`).
-- No dedicated test files were detected among the 8 scanned repository files.
+Validation functions exist per module: `validate_automation_results` (`src/automation.py`), `validate_backup_integrity` (`src/backup.py`), `validate_platform_observability` (`src/deploy.py`), `validate_recovery_objectives` (`src/dr_platform.py`), `validate_vault_policy` (`src/security_vault.py`), `validate_api_subscription` (`src/service_broker.py`).
 
 ## 15.2 Integration Testing
 
-TBD - repository evidence not found.
+TBD - repository evidence not found. (No test files were included in the 8 scanned files.)
 
 ## 15.3 Performance Testing
 
@@ -577,15 +482,15 @@ TBD - repository evidence not found.
 
 ## 15.4 Security Testing
 
-- `validate_vault_policy(policy_name)` in `src/security_vault.py` provides policy-level security validation; no automated security test suite detected.
+`validate_vault_policy(policy_name)` in `src/security_vault.py` provides policy-level security validation.
 
 ## 15.5 Failover Testing
 
-- `execute_site_failover(target_site)` in `src/dr_platform.py` provides failover execution capability; no automated failover test harness detected.
+`execute_site_failover(target_site)` and `validate_recovery_objectives(application_name)` in `src/dr_platform.py` support failover validation.
 
 ## 15.6 Disaster Recovery Testing
 
-- `validate_recovery_objectives(application_name)` and `generate_dr_readiness_report()` in `src/dr_platform.py` support DR readiness verification.
+`generate_dr_readiness_report()` in `src/dr_platform.py` returns a `dict` report supporting DR readiness assessment.
 
 ## 15.7 Operational Acceptance Testing
 
@@ -595,15 +500,15 @@ TBD - repository evidence not found.
 
 # 16. Lifecycle Management
 
-The `lifecycle-management` domain is supported by every source module in `src/` and by `scripts/detect-impact.py` (per `module_relationships`), indicating lifecycle operations are a cross-cutting concern across the entire platform.
+Every `src/` module declares `lifecycle-management` as a supported domain, confirming lifecycle-management as a cross-cutting platform concern.
 
 ## 16.1 Patch Management
 
-TBD - repository evidence not found (no explicit patching function detected; `deploy_configuration_baseline` in `src/automation.py` applies configuration baselines but does not implement patch orchestration).
+`deploy_configuration_baseline(environment_name)` in `src/automation.py` applies standard platform configuration baselines, supporting patch/configuration consistency.
 
 ## 16.2 Upgrade Strategy
 
-TBD - repository evidence not found.
+`execute_platform_workflow(workflow_name)` in `src/automation.py` executes platform automation workflows, inferred to support upgrade orchestration.
 
 ## 16.3 Rollback Strategy
 
@@ -630,10 +535,10 @@ TBD - repository evidence not found.
 
 | Type | Description | Owner | Mitigation |
 |----------|----------|----------|----------|
-| Risk | `scripts/detect-impact.py`, `src/backup.py`, and `src/dr_platform.py` use fallback regex parsing (`ast_failed_regex_fallback`), indicating structural code analysis confidence is reduced for these modules | Platform Engineering | Refactor modules for clean AST parsing; add unit tests |
-| Assumption | Cross-module coupling identified in Section 6.1 is inferred from shared domain support, not explicit import statements | Solution Architect | Validate with source-level call-graph analysis |
-| Issue | No classes detected across the entire repository (0 classes / 41 functions), limiting encapsulation and testability | Platform Engineering | Consider introducing service classes for stateful operations (e.g., vault session, backup job state) |
-| Dependency | All secrets/key management operations depend on `src/security_vault.py` functions being available before `assign_key_to_service` can execute | Security Architect | Enforce sequencing in automation pipeline |
+| Risk | `scripts/detect-impact.py` parse status is `ast_failed_regex_fallback`, indicating parser could not fully resolve AST structure; some function signatures (e.g., `resolve_capabilities_for_changed_file`) appear truncated/malformed in extracted metadata | Platform Engineering | Review and refactor `scripts/detect-impact.py` for parser compatibility |
+| Assumption | Catalog technologies (vSphere, NSX-T, Aria Suite, Tanzu, etc.) are assumed to be the runtime targets for the domain-tagged modules, though no direct code-level integration (API calls, SDK imports) was detected | Solution Architect | Confirm technology bindings during implementation review |
+| Issue | No classes detected across repository; all logic implemented as standalone functions, limiting encapsulation and state management | Development Team | Evaluate refactor to class-based service design if stateful behavior is required |
+| Dependency | `src/backup.py` and `src/dr_platform.py` share `backup` domain overlap; coordination required to avoid duplicate backup workflow logic | Platform Engineering | Define clear ownership boundary between backup and DR backup responsibilities |
 
 ---
 
@@ -641,6 +546,149 @@ TBD - repository evidence not found.
 
 | Question | Owner | Due Date |
 |----------|----------|----------|
-| What protocol/authentication mechanism backs `register_platform_api` and `validate_api_subscription` in `src/service_broker.py`? | Solution Architect | TBD - repository evidence not found. |
-| What YAML schema is expected by `read_yaml` in `scripts/detect-impact.py`? | Platform Engineering | TBD - repository evidence not found. |
-| Are `src/backup.py` and `src/dr_platform.py` intended to call each other direct
+| What technology (Vault, cloud KMS, etc.) is actually invoked by `create_customer_managed_key`/`rotate_encryption_key` in `src/security_vault.py`? | Security Architect | TBD |
+| What orchestration engine executes `execute_platform_workflow` in `src/automation.py`? | Solution Architect | TBD |
+| Is `scripts/detect-impact.py` triggered by a CI/CD pipeline (e.g., GitHub Actions), and if so, where is that pipeline definition? | Platform Owner | TBD |
+| What is the actual return schema for `generate_backup_report()` and `generate_dr_readiness_report()`? | Service Owner | TBD |
+
+---
+
+# 20. Appendices
+
+## 20.1 Configuration Parameters
+
+| Parameter | Value | Description |
+|----------|----------|----------|
+| `path_mapping` | TBD - repository evidence not found. | YAML-configured mapping of file paths to capabilities used by `resolve_capabilities_for_changed_file` |
+
+## 20.2 Naming Standards
+
+TBD - repository evidence not found.
+
+## 20.3 IP Address Plan
+
+TBD - repository evidence not found.
+
+## 20.4 Ports & Protocols
+
+| Source | Destination | Port | Protocol | Purpose |
+|----------|----------|----------|----------|----------|
+| TBD - repository evidence not found. | TBD - repository evidence not found. | TBD - repository evidence not found. | TBD - repository evidence not found. | TBD - repository evidence not found. |
+
+## 20.5 Glossary
+
+| Term | Definition |
+|----------|----------|
+| HLD | High-Level Design |
+| LLD | Low-Level Design |
+| BIG | Build & Installation Guide |
+| OPG | Operations Guide |
+| ADR | Architecture Decision Record |
+| IAM | Identity & Access Management |
+| RBAC | Role-Based Access Control |
+| RPO | Recovery Point Objective |
+| RTO | Recovery Time Objective |
+
+---
+
+# Appendix A: Module Dependency Matrix
+
+Derived from `module_relationships`:
+
+| Module | ai-platform | api-service-broker | automation | backup | compute | data-platform | disaster-recovery | kubernetes | lifecycle-management | networking | observability | security | storage | logging (import) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `scripts/detect-impact.py` | ✔ | ✔ | ✔ | — | ✔ | ✔ | — | — | ✔ | — | — | — | — | — |
+| `src/automation.py` | — | — | ✔ | — | — | — | — | — | ✔ | — | ✔ | ✔ | — | ✔ |
+| `src/backup.py` | — | — | — | ✔ | — | — | — | — | ✔ | — | ✔ | ✔ | ✔ | — |
+| `src/deploy.py` | ✔ | ✔ | — | — | ✔ | ✔ | — | ✔ | ✔ | ✔ | ✔ | ✔ | — | ✔ |
+| `src/dr_platform.py` | ✔ | — | — | ✔ | — | — | ✔ | — | ✔ | — | ✔ | ✔ | — | — |
+| `src/security_vault.py` | — | ✔ | ✔ | — | — | — | — | ✔ | ✔ | — | ✔ | ✔ | — | ✔ |
+| `src/service_broker.py` | — | ✔ | — | — | — | — | — | — | ✔ | — | ✔ | ✔ | — | ✔ |
+
+---
+
+# Appendix B: Function / Interface Mapping (from function_relationships)
+
+| Module | Function | Arguments | Return Type |
+|---|---|---|---|
+| `scripts/detect-impact.py` | `read_yaml` | `path` | `dict` |
+| `scripts/detect-impact.py` | `read_changed_files` | `path` | `list[str]` |
+| `scripts/detect-impact.py` | `normalize_path` | `value` | `str` |
+| `scripts/detect-impact.py` | `unique_sorted` | `values` | `list[str]` |
+| `scripts/detect-impact.py` | `get_repository_name` | — | `str` |
+| `scripts/detect-impact.py` | `get_repository_full_name` | — | `str` |
+| `scripts/detect-impact.py` | `get_pull_request_number` | — | `str` |
+| `scripts/detect-impact.py` | `get_pull_request_title` | — | `str` |
+| `scripts/detect-impact.py` | `get_pull_request_url` | — | `str` |
+| `scripts/detect-impact.py` | `resolve_product` | `mapping` | `str` |
+| `scripts/detect-impact.py` | `resolve_capabilities_for_changed_file` | `changed_file`, `path_mapping` | `list[str]` |
+| `scripts/detect-impact.py` | `build_impacted_capabilities` | `changed_files`, `path_mapping` | `dict` |
+| `scripts/detect-impact.py` | `build_doc_request` | `mapping`, `changed_files` | `dict` |
+| `scripts/detect-impact.py` | `write_json` | `path`, `payload` | `None` |
+| `scripts/detect-impact.py` | `main` | — | `None` |
+| `src/automation.py` | `provision_infrastructure` | `environment_name` | `bool` |
+| `src/automation.py` | `execute_platform_workflow` | `workflow_name` | `bool` |
+| `src/automation.py` | `deploy_configuration_baseline` | `environment_name` | `bool` |
+| `src/automation.py` | `validate_automation_results` | `workflow_name` | `bool` |
+| `src/backup.py` | `schedule_backup_job` | `workload_name` | `bool` |
+| `src/backup.py` | `execute_backup` | `workload_name` | `bool` |
+| `src/backup.py` | `validate_backup_integrity` | `backup_id` | `bool` |
+| `src/backup.py` | `generate_backup_report` | — | `dict` |
+| `src/deploy.py` | `deploy_network_foundation` | `region` | `bool` |
+| `src/deploy.py` | `deploy_kubernetes_platform` | `cluster_name` | `bool` |
+| `src/deploy.py` | `deploy_ai_platform` | `environment` | `bool` |
+| `src/deploy.py` | `deploy_data_platform` | `environment` | `bool` |
+| `src/deploy.py` | `validate_platform_observability` | `environment` | `bool` |
+| `src/dr_platform.py` | `create_recovery_plan` | `application_name` | `bool` |
+| `src/dr_platform.py` | `execute_site_failover` | `target_site` | `bool` |
+| `src/dr_platform.py` | `validate_recovery_objectives` | `application_name` | `bool` |
+| `src/dr_platform.py` | `generate_dr_readiness_report` | — | `dict` |
+| `src/security_vault.py` | `create_vault_namespace` | `namespace_name` | `bool` |
+| `src/security_vault.py` | `create_customer_managed_key` | `key_name` | `str` |
+| `src/security_vault.py` | `rotate_encryption_key` | `key_name` | `bool` |
+| `src/security_vault.py` | `assign_key_to_service` | `key_name`, `service_name` | `bool` |
+| `src/security_vault.py` | `validate_vault_policy` | `policy_name` | `bool` |
+| `src/service_broker.py` | `publish_service_catalog` | `catalog_name` | `bool` |
+| `src/service_broker.py` | `register_platform_api` | `api_name` | `bool` |
+| `src/service_broker.py` | `create_service_offering` | `service_name` | `bool` |
+| `src/service_broker.py` | `validate_api_subscription` | `subscription_id` | `bool` |
+
+---
+
+# Appendix C: Per-Module Design Specification
+
+## C.1 `scripts/detect-impact.py`
+
+- **Purpose:** Detects changed files in a pull request, resolves impacted platform capabilities/domains via a path mapping configuration, and builds/persists a documentation-refresh request payload.
+- **Functions:** `read_yaml`, `read_changed_files`, `normalize_path`, `unique_sorted`, `get_repository_name`, `get_repository_full_name`, `get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`, `resolve_product`, `resolve_capabilities_for_changed_file`, `build_impacted_capabilities`, `build_doc_request`, `write_json`, `main`.
+- **Inputs:** YAML configuration path, changed-files list path, repository/pull-request environment context.
+- **Outputs:** JSON documentation request payload (via `write_json`).
+- **Dependencies:** None declared beyond standard file/YAML/JSON handling (parse status: `ast_failed_regex_fallback`).
+- **Capability Mapping:** ai-platform, api-service-broker, automation, compute, data-platform, lifecycle-management.
+- **Technology Mapping:** No specific catalog technology directly referenced; supports automation/lifecycle-management tooling generically.
+
+## C.2 `src/automation.py`
+
+- **Purpose:** Automates infrastructure provisioning, execution of platform automation workflows, configuration baseline deployment, and validation of automation outcomes.
+- **Functions:** `provision_infrastructure(environment_name)`, `execute_platform_workflow(workflow_name)`, `deploy_configuration_baseline(environment_name)`, `validate_automation_results(workflow_name)`.
+- **Inputs:** `environment_name`, `workflow_name`.
+- **Outputs:** `bool` status for all four functions.
+- **Dependencies:** `logging` (import).
+- **Capability Mapping:** automation.
+- **Technology Mapping:** Inferred alignment with `aria-automation` / `aria-orchestrator` catalog technologies (not directly referenced in code).
+
+## C.3 `src/backup.py`
+
+- **Purpose:** Schedules, executes, and validates workload backups, and generates backup reports.
+- **Functions:** `schedule_backup_job(workload_name)`, `execute_backup(workload_name)`, `validate_backup_integrity(backup_id)`, `generate_backup_report()`.
+- **Inputs:** `workload_name`, `backup_id`.
+- **Outputs:** `bool` for scheduling/execution/validation; `dict` for report.
+- **Dependencies:** None declared beyond domain tagging.
+- **Capability Mapping:** backup.
+- **Technology Mapping:** Inferred alignment with `canopy-enterprise-backup`, `avamar`, `data-domain` catalog technologies (not directly referenced in code).
+
+## C.4 `src/deploy.py`
+
+- **Purpose:** Deploys core networking, Kubernetes platform services, AI platform services, and data platform/analytics services; validates observability configuration.
+- **Functions:** `deploy_network_foundation(region)`, `deploy_kubernetes_platform(cluster_name)`, `deploy_ai_platform(environment)`, `deploy_data_platform(environment)`, `validate_platform_observability(environment)`.
+- **In

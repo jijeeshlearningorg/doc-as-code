@@ -1,10 +1,10 @@
 # Operations Guide (OPG): My Cloud Services (my-cloud-platform)
 
-**Author:** Senior Operations Architect
+**Author:** Senior Operations Architect (Generated)
 **Date:** TBD - repository evidence not found.
 **Version:** 1.0
 **Status:** Draft
-**Owner:** TBD - repository evidence not found.
+**Owner:** Platform Operations Team
 
 ---
 
@@ -34,7 +34,7 @@
 
 | Version | Date | Description | Author |
 |----------|----------|----------|----------|
-| 1.0 | TBD | Initial generation from repository `jijeeshlearningorg/greenfield-code` (branch `main`) | Senior Operations Architect |
+| 1.0 | TBD - repository evidence not found. | Initial generated Operations Guide from repository scan of `jijeeshlearningorg/greenfield-code` (branch `main`) | Senior Operations Architect (Generated) |
 
 ---
 
@@ -47,7 +47,7 @@
 | BIG | TBD - repository evidence not found. | Build & Installation |
 | OPG | This document | Current Document |
 | ADR | TBD - repository evidence not found. | Design Decisions |
-| Runbooks | `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` | Operations Procedures |
+| Runbooks | Derived from `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` | Operations Procedures |
 
 ---
 
@@ -55,25 +55,24 @@
 
 ## 3.1 Service Purpose
 
-My Cloud Services (`my-cloud-platform`) is a VMware-based cloud platform providing compute, storage, networking, automation, monitoring, security, disaster recovery, backup, container, multi-tenancy, lifecycle-management, public-cloud-integration, reporting and API service broker capabilities, as declared in the Product Capabilities catalog.
+My Cloud Services is a VMware-based cloud platform (`my-cloud-platform`) composed of automation, backup, deployment, disaster recovery, security/vault, and service broker modules. Based on repository evidence, the platform:
 
-The repository `jijeeshlearningorg/greenfield-code` implements the operational automation layer for this platform through the following source modules:
+- Provisions infrastructure and applies configuration baselines (`src/automation.py`: `provision_infrastructure`, `deploy_configuration_baseline`, `execute_platform_workflow`, `validate_automation_results`).
+- Deploys network, Kubernetes, AI, and data platform services (`src/deploy.py`: `deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`).
+- Executes and validates backup jobs (`src/backup.py`: `schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`).
+- Provides disaster recovery planning and failover (`src/dr_platform.py`: `create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`).
+- Manages secrets/encryption via an enterprise vault (`src/security_vault.py`: `create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`).
+- Publishes and governs service catalog/API consumption (`src/service_broker.py`: `publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`).
 
-- `scripts/detect-impact.py` — Change impact detection across repository domains (ai-platform, api-service-broker, automation, compute, data-platform, lifecycle-management), used to drive documentation and operational impact analysis for pull requests.
-- `src/automation.py` — Infrastructure provisioning and platform workflow automation (`provision_infrastructure`, `execute_platform_workflow`, `deploy_configuration_baseline`, `validate_automation_results`).
-- `src/backup.py` — Backup scheduling, execution, integrity validation and reporting (`schedule_backup_job`, `execute_backup`, `validate_backup_integrity`, `generate_backup_report`).
-- `src/deploy.py` — Platform deployment across network, Kubernetes, AI and data domains, plus observability validation (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`, `validate_platform_observability`).
-- `src/dr_platform.py` — Disaster recovery planning, failover execution, and recovery validation (`create_recovery_plan`, `execute_site_failover`, `validate_recovery_objectives`, `generate_dr_readiness_report`).
-- `src/security_vault.py` — Secrets/key management operations (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`).
-- `src/service_broker.py` — Service catalog publication and API subscription management (`publish_service_catalog`, `register_platform_api`, `create_service_offering`, `validate_api_subscription`).
+The product catalog additionally describes capabilities for compute, storage, networking, monitoring, security, disaster-recovery, backup, containers, multi-tenancy, lifecycle-management, public-cloud-integration, reporting, and api-service-broker, implemented using VMware technologies (vSphere, vSAN, NSX-T, Aria Suite, Tanzu, SDDC Manager, SRM, HCX, etc.) as listed in the Product Technologies catalog.
 
-Consumers of the platform are tenants provisioned via the automation and service broker layers, consistent with the `api-service-broker` and `multi-tenancy` capabilities in the Product Capability catalog.
+Consumers: Internal platform teams and tenants consuming services through the API/service broker layer (`src/service_broker.py`).
 
 ---
 
 ## 3.2 Business Criticality
 
-TBD - repository evidence not found. (No explicit criticality classification present in repository; platform capabilities suggest Business Critical / Mission Critical infrastructure services, but this must be formally confirmed by the Service Owner.)
+TBD - repository evidence not found. (No explicit criticality classification present in repository; platform supports compute, networking, backup and DR domains, which are typically business/mission critical infrastructure functions — this is an inference, not a confirmed classification.)
 
 ---
 
@@ -84,7 +83,7 @@ TBD - repository evidence not found. (No explicit criticality classification pre
 - UAT
 - Production
 
-(Environment names are not explicitly declared in the repository; the `environment_name` / `environment` parameters in `provision_infrastructure`, `deploy_configuration_baseline`, `deploy_ai_platform`, `deploy_data_platform`, and `validate_platform_observability` confirm environment-scoped operations. Specific environment identifiers are TBD.)
+TBD - repository evidence not found. (No environment-specific configuration files detected in the scanned repository beyond `environment_name`/`environment` function parameters in `src/automation.py` and `src/deploy.py`.)
 
 ---
 
@@ -93,12 +92,12 @@ TBD - repository evidence not found. (No explicit criticality classification pre
 ### In Scope
 
 - Monitoring and observability validation (`validate_platform_observability` in `src/deploy.py`)
-- Automation and lifecycle workflows (`src/automation.py`)
-- Backup scheduling, execution and validation (`src/backup.py`)
-- Disaster recovery planning and failover (`src/dr_platform.py`)
-- Secrets/key lifecycle management (`src/security_vault.py`)
-- Service catalog and API lifecycle management (`src/service_broker.py`)
-- Change impact detection for repository-driven documentation (`scripts/detect-impact.py`)
+- Automated provisioning and configuration baseline management (`src/automation.py`)
+- Backup scheduling, execution, and validation (`src/backup.py`)
+- Disaster recovery planning, failover execution, and readiness reporting (`src/dr_platform.py`)
+- Secrets and encryption key lifecycle management (`src/security_vault.py`)
+- Service catalog publication and API subscription validation (`src/service_broker.py`)
+- Impact detection for documentation/change management (`scripts/detect-impact.py`)
 
 ### Out of Scope
 
@@ -116,12 +115,10 @@ TBD - repository evidence not found. (No explicit criticality classification pre
 |----------|----------|
 | Service Owner | TBD - repository evidence not found. |
 | Technical Owner | TBD - repository evidence not found. |
-| Operations Team | TBD - repository evidence not found. |
+| Operations Team | Platform Operations (inferred from automation/deploy/backup/dr modules) |
 | Support Team | TBD - repository evidence not found. |
-| Security Team | Owner of `src/security_vault.py` operations (vault namespace, key rotation, policy validation) — TBD name |
-| Vendor | TBD - repository evidence not found. |
-
-Note: Module headers in `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, and `src/service_broker.py` reference "Author: Jijeesh Valappil" as the code author; this is a code authorship attribution and not confirmed as an operational ownership role.
+| Security Team | Owns `src/security_vault.py` domain (security, api-service-broker, automation, kubernetes, lifecycle-management, observability) |
+| Vendor | VMware (vSphere, NSX-T, Aria Suite, SDDC Manager, SRM, HCX — per Product Technologies catalog) |
 
 ---
 
@@ -129,10 +126,10 @@ Note: Module headers in `src/automation.py`, `src/deploy.py`, `src/security_vaul
 
 | Level | Responsibility |
 |----------|----------|
-| L1 | Monitor observability outputs from `validate_platform_observability`; execute published runbooks for automation, backup, and deployment workflows; raise alerts on function failures (`False` return values) from any operational module. |
-| L2 | Investigate failures across `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py`; execute `validate_*` functions to diagnose failed workflows; coordinate remediation using the function chains defined in Section 12.2. |
-| L3 | Perform root-cause analysis on deployment_flow failures, including `execute_site_failover` and `create_recovery_plan` failures in `src/dr_platform.py`; update automation source and configuration baselines. |
-| Vendor | TBD - repository evidence not found. (Underlying platform technologies — vSphere, NSX-T, Aria Suite, SDDC Manager, Tanzu — are catalog-referenced technologies; vendor support model TBD.) |
+| L1 | Initial monitoring, alert triage, execution of published operational functions (e.g., `validate_automation_results`, `validate_backup_integrity`, `validate_platform_observability`) and escalation of failures. |
+| L2 | Investigation of failed deployment/backup/DR functions across modules (`src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`); coordination of remediation using existing automation entry points. |
+| L3 | Deep technical investigation of module-level failures, code-level defects in `src/*.py` and `scripts/detect-impact.py`, and engineering-level fixes. |
+| Vendor | VMware support for underlying technologies (vSphere, vSAN, NSX-T, SRM, Vault-equivalent, backup appliances) per Product Technologies catalog. |
 
 ---
 
@@ -151,21 +148,21 @@ Note: Module headers in `src/automation.py`, `src/deploy.py`, `src/security_vaul
 
 ## 5.1 Approved Change Mechanisms
 
-Repository evidence confirms a change-detection driven operational model via `scripts/detect-impact.py`, which reads changed files (`read_changed_files`), resolves impacted capabilities (`resolve_capabilities_for_changed_file`, `build_impacted_capabilities`), and generates documentation impact requests (`build_doc_request`) tied to Pull Requests (`get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`).
+All production changes shall be performed using approved change processes, including:
 
-This confirms the following approved change mechanisms:
-
-- Pull Requests (evidenced by `get_pull_request_*` functions)
-- Automated impact detection and documentation triggering (`scripts/detect-impact.py`)
-- Infrastructure-as-Code style automation functions (`provision_infrastructure`, `deploy_configuration_baseline`)
+- Pull Requests against the `jijeeshlearningorg/greenfield-code` repository
+- Automated impact detection via `scripts/detect-impact.py` (`build_impacted_capabilities`, `build_doc_request`) to identify affected capabilities/domains on change
+- CI/CD Pipelines (inferred; no pipeline definition files were included in the scanned file set)
+- Infrastructure-as-Code equivalent modules (`src/automation.py`, `src/deploy.py`)
 
 ---
 
 ## 5.2 Configuration Management Principles
 
-- Environment-scoped provisioning via `provision_infrastructure(environment_name)` and `deploy_configuration_baseline(environment_name)` in `src/automation.py`.
-- Automated validation gating via `validate_automation_results(workflow_name)` and `validate_platform_observability(environment)`.
-- Path-to-capability mapping is centrally configured and read via `read_yaml` in `scripts/detect-impact.py`, indicating configuration-as-code for impact/capability mapping.
+- Configuration baselines applied via `deploy_configuration_baseline` (`src/automation.py`)
+- Automated provisioning via `provision_infrastructure` (`src/automation.py`)
+- Automated validation gates via `validate_automation_results`, `validate_platform_observability`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_vault_policy`, `validate_api_subscription`
+- Version-controlled source repository as the system of record
 
 ---
 
@@ -173,24 +170,23 @@ This confirms the following approved change mechanisms:
 
 ### Supported Activities
 
-- Execute automation workflows (`execute_platform_workflow`)
-- Execute backup jobs (`schedule_backup_job`, `execute_backup`)
-- Execute validated deployment functions (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`)
-- Execute recovery plans (`create_recovery_plan`, `execute_site_failover`)
-- Execute published runbooks derived from the deployment_flow
+- Restart/re-execute automation workflows (`execute_platform_workflow`)
+- Approve and trigger deployments (`deploy_network_foundation`, `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform`)
+- Execute published backup/DR/security functions
+- Investigate alerts arising from validation function failures
 
 ### Restricted Activities
 
-- Manual production reconfiguration outside `deploy_configuration_baseline`
-- Direct modification of vault namespaces/keys outside `src/security_vault.py` functions
-- Bypass of `validate_automation_results`, `validate_backup_integrity`, `validate_recovery_objectives`, `validate_platform_observability`, or `validate_api_subscription` validation gates
-- Untracked changes bypassing `scripts/detect-impact.py` change detection
+- Manual production reconfiguration outside `src/automation.py` / `src/deploy.py` workflows
+- Direct infrastructure modification bypassing `provision_infrastructure`/`deploy_configuration_baseline`
+- Bypass of validation functions (`validate_*`)
+- Untracked changes outside the source repository
 
 ---
 
 ## 5.4 Break Glass Procedures
 
-TBD - repository evidence not found. No break-glass function or emergency access module was identified in the repository. This must be defined by the Operations Team.
+TBD - repository evidence not found. (No emergency access or break-glass procedure defined in repository. `execute_site_failover` in `src/dr_platform.py` is the closest evidenced emergency operational function and should be governed by an approved emergency change process.)
 
 ---
 
@@ -198,22 +194,15 @@ TBD - repository evidence not found. No break-glass function or emergency access
 
 ## 6.1 Monitoring Requirements
 
-Repository evidence confirms an `observability` domain applied across `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, and `src/service_broker.py` (see Module Relationships). Explicit observability validation exists via `validate_platform_observability(environment)` in `src/deploy.py`, described as "Validates monitoring, logging and observability configuration."
-
-No explicit numeric thresholds (CPU, memory, disk, response time) are present in the repository.
-
 | Metric | Threshold | Alert Required |
 |----------|----------|----------|
-| CPU | TBD - repository evidence not found. | TBD |
-| Memory | TBD - repository evidence not found. | TBD |
-| Disk | TBD - repository evidence not found. | TBD |
-| Availability | TBD - repository evidence not found. | Yes — inferred from `validate_platform_observability` |
-| Response Time | TBD - repository evidence not found. | TBD |
-| Automation Workflow Outcome | Boolean success/fail (`validate_automation_results`) | Yes |
-| Backup Integrity | Boolean success/fail (`validate_backup_integrity`) | Yes |
-| Recovery Objective Compliance | Boolean success/fail (`validate_recovery_objectives`) | Yes |
-| Vault Policy Compliance | Boolean success/fail (`validate_vault_policy`) | Yes |
-| API Subscription Validity | Boolean success/fail (`validate_api_subscription`) | Yes |
+| CPU | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Memory | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Disk | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Availability | TBD - repository evidence not found. | Yes (validated via `validate_platform_observability` in `src/deploy.py`) |
+| Response Time | TBD - repository evidence not found. | TBD - repository evidence not found. |
+
+Observability is asserted programmatically via `validate_platform_observability(environment)` in `src/deploy.py`, which is described as validating "monitoring, logging and observability configuration." No numeric thresholds are present in the source repository; the product catalog identifies `aria-operations` and `aria-logs` as the associated monitoring/logging technologies.
 
 ---
 
@@ -221,51 +210,46 @@ No explicit numeric thresholds (CPU, memory, disk, response time) are present in
 
 | Dashboard | Purpose |
 |----------|----------|
-| TBD - repository evidence not found. | No dashboard configuration files detected in repository. Product Technology catalog references `aria-operations` (infrastructure monitoring and operational analytics) and `aria-network-insight` (network visibility) as candidate dashboard sources — inferred, not confirmed in repository code. |
+| TBD - repository evidence not found. | No dashboard definitions detected in repository. Product Technologies catalog references `aria-operations` (infrastructure monitoring and operational analytics) and `aria-network-insight` (network visibility) as candidate dashboard sources. |
 
 ---
 
 ## 6.3 Alerting
 
-No dedicated alerting module (e.g., alert rules, notification integration) was detected in the repository. Alert requirements below are derived from validation function outcomes present in `deployment_flow`.
-
 | Alert | Severity | Response Target |
 |----------|----------|----------|
-| `validate_automation_results` returns `False` | TBD | TBD - repository evidence not found. |
-| `validate_backup_integrity` returns `False` | TBD | TBD - repository evidence not found. |
-| `validate_recovery_objectives` returns `False` | TBD | TBD - repository evidence not found. |
-| `validate_platform_observability` returns `False` | TBD | TBD - repository evidence not found. |
-| `validate_vault_policy` returns `False` | TBD | TBD - repository evidence not found. |
-| `validate_api_subscription` returns `False` | TBD | TBD - repository evidence not found. |
-| `execute_site_failover` failure | TBD | TBD - repository evidence not found. |
+| Automation workflow validation failure (`validate_automation_results` returns `false`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Platform observability validation failure (`validate_platform_observability` returns `false`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Backup integrity validation failure (`validate_backup_integrity` returns `false`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Recovery objective validation failure (`validate_recovery_objectives` returns `false`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Vault policy validation failure (`validate_vault_policy` returns `false`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| API subscription validation failure (`validate_api_subscription` returns `false`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+
+No alert severity levels or response-time targets exist in the scanned repository; all six `validate_*` functions across `src/automation.py`, `src/deploy.py`, `src/backup.py`, `src/dr_platform.py`, `src/security_vault.py`, and `src/service_broker.py` represent the alert-generating control points found in the codebase.
 
 ---
 
 ## 6.4 Logging
 
 ### Application Logs
-
-`logging` is imported directly in `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, and `src/service_broker.py` (see Module Relationships: `imports` → `logging`). This confirms native Python application logging is embedded in automation, deployment, vault, and service broker operations.
+Modules `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, and `src/service_broker.py` each declare a `logging` import (per Module Relationships), indicating structured application-level logging is emitted from these modules.
 
 ### Platform Logs
-
-Product Technology catalog references `aria-logs` (centralized log aggregation and analytics) as the platform-level log aggregation technology — inferred from catalog, not directly referenced in repository source code.
+Platform-level log aggregation is associated with the `aria-logs` technology per the Product Technologies catalog; no direct repository configuration was found.
 
 ### Infrastructure Logs
-
-TBD - repository evidence not found. No infrastructure-level (ESXi/vSphere/NSX-T) log shipping configuration detected in repository.
+TBD - repository evidence not found.
 
 ### Security Logs
-
-Security-domain logging is implied by `security` domain tagging on `src/security_vault.py`, `src/backup.py`, `src/automation.py`, `src/deploy.py`, and `src/service_broker.py`. No dedicated security log module was found; SIEM integration is TBD.
+`src/security_vault.py` supports the `security` and `observability` domains and imports `logging`; security-relevant events (vault namespace creation, key rotation, policy validation) are candidate sources for security logs.
 
 ---
 
 ## 6.5 Audit Logging
 
-- Audit Events: TBD - repository evidence not found. (No explicit audit event schema in repository.)
-- Retention Requirements: TBD - repository evidence not found.
-- Compliance Requirements: TBD - repository evidence not found.
+- **Audit Events:** Inferred from vault operations (`create_vault_namespace`, `create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`, `validate_vault_policy`) and service broker operations (`register_platform_api`, `validate_api_subscription`).
+- **Retention Requirements:** TBD - repository evidence not found.
+- **Compliance Requirements:** TBD - repository evidence not found.
 
 ---
 
@@ -273,15 +257,11 @@ Security-domain logging is implied by `security` domain tagging on `src/security
 
 ## 7.1 Backup Requirements
 
-Backup operations are implemented in `src/backup.py`, mapped to the `backup` capability (see Capability Mapping) and domains `backup`, `lifecycle-management`, `observability`, `security`, `storage`.
-
-Deployment flow order for backup: `schedule_backup_job` → `execute_backup` → `validate_backup_integrity` → `generate_backup_report`.
-
 | Asset | Frequency | Retention |
 |----------|----------|----------|
-| Workload backups (`schedule_backup_job(workload_name)`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
+| Workload backups (`schedule_backup_job`, `execute_backup` in `src/backup.py`) | TBD - repository evidence not found. | TBD - repository evidence not found. |
 
-Product Technology catalog references `canopy-enterprise-backup`, `avamar`, and `data-domain` as backup platform technologies — inferred from catalog, not directly instantiated in repository code.
+Backup capability is implemented through `src/backup.py`, mapped to domains: backup, lifecycle-management, observability, security, storage. Product Technologies catalog identifies `canopy-enterprise-backup`, `avamar`, and `data-domain` as the associated backup platform/storage technologies.
 
 ---
 
@@ -292,26 +272,33 @@ Product Technology catalog references `canopy-enterprise-backup`, `avamar`, and 
 | RPO | TBD - repository evidence not found. |
 | RTO | TBD - repository evidence not found. |
 
-Recovery objective compliance is validated programmatically via `validate_recovery_objectives(application_name)` in `src/dr_platform.py`, but no numeric RPO/RTO values are present in the repository.
+Recovery objectives are validated programmatically via `validate_recovery_objectives(application_name)` in `src/dr_platform.py`; no numeric RPO/RTO values exist in the repository.
 
 ---
 
 ## 7.3 Recovery Procedures
 
-Recovery procedures follow the function chain in `src/backup.py`:
+Backup recovery workflow derived from `deployment_flow` evidence in `src/backup.py`:
 
-1. `schedule_backup_job(workload_name)` — schedule backup for the affected workload.
-2. `execute_backup(workload_name)` — execute the backup job.
-3. `validate_backup_integrity(backup_id)` — verify backup integrity before recovery is attempted.
-4. `generate_backup_report()` — produce a report confirming backup state prior to/after recovery.
+1. `schedule_backup_job(workload_name)` — schedule the backup job for a workload.
+2. `execute_backup(workload_name)` — execute the scheduled backup.
+3. `validate_backup_integrity(backup_id)` — validate the resulting backup artifact.
+4. `generate_backup_report()` — generate a backup status report.
 
-For site-level recovery, follow the DR chain documented in Section 8.3 and Section 12.2.
+DR recovery workflow derived from `src/dr_platform.py`:
+
+1. `create_recovery_plan(application_name)` — create the recovery plan for an application.
+2. `execute_site_failover(target_site)` — execute failover to the target site.
+3. `validate_recovery_objectives(application_name)` — validate recovery objectives were met.
+4. `generate_dr_readiness_report()` — generate DR readiness reporting.
+
+Reference: Site Recovery Manager (`srm`) and vSphere Replication (`vsphere-replication`) are the associated DR technologies per the Product Technologies catalog.
 
 ---
 
 ## 7.4 Backup Validation
 
-Backup validation is performed via `validate_backup_integrity(backup_id)` in `src/backup.py`, returning a boolean success/fail result. `generate_backup_report()` produces a dictionary report used to confirm backup validation status. No automated test-restore schedule was found in the repository — testing cadence is TBD.
+Backup validation is performed through `validate_backup_integrity(backup_id)` in `src/backup.py`, and results are consolidated via `generate_backup_report()`. No test cadence or automated validation schedule is defined in the repository.
 
 ---
 
@@ -319,61 +306,27 @@ Backup validation is performed via `validate_backup_integrity(backup_id)` in `sr
 
 ## 8.1 High Availability Overview
 
-TBD - repository evidence not found. No HA configuration (clustering, load balancing) was detected directly in repository source. The `compute`, `storage`, and `networking` capabilities in the Product Capability catalog (VMware vSphere/vSAN/NSX-T) imply underlying HA infrastructure, but this is catalog-inferred, not repository-confirmed.
+TBD - repository evidence not found. (No HA configuration files or clustering logic found in repository. Underlying platform technologies — vSphere/vSAN/NSX-T — are HA-capable per Product Technologies catalog, but no repository-level HA evidence exists.)
 
 ---
 
 ## 8.2 Failover Process
 
-Failover is implemented in `src/dr_platform.py` via `execute_site_failover(target_site)`. This function is invoked as part of the deployment_flow following `create_recovery_plan(application_name)`.
-
-Failover Sequence (from deployment_flow / function evidence):
-
-1. `create_recovery_plan(application_name)` — establish the recovery plan for the target application.
-2. `execute_site_failover(target_site)` — perform failover to the target site.
-3. `validate_recovery_objectives(application_name)` — confirm recovery objective compliance post-failover.
-4. `generate_dr_readiness_report()` — produce DR readiness status report.
+Failover is executed through `execute_site_failover(target_site)` in `src/dr_platform.py`, preceded by `create_recovery_plan(application_name)` and followed by `validate_recovery_objectives(application_name)` and `generate_dr_readiness_report()`.
 
 ---
 
 ## 8.3 Disaster Recovery
 
-DR capability is implemented in `src/dr_platform.py`, mapped to domains `ai-platform`, `backup`, `disaster-recovery`, `lifecycle-management`, `observability`, `security` (Module Relationships).
+DR strategy is implemented in `src/dr_platform.py`, mapped to domains: ai-platform, backup, disaster-recovery, lifecycle-management, observability, security. The module depends operationally on the backup domain (shared domain mapping with `src/backup.py`), meaning backup integrity (`validate_backup_integrity`) is a functional prerequisite for reliable recovery plan execution.
 
-### Operational Dependency Diagram (DR Module)
-
-```
-src/dr_platform.py
-   ├── depends on: ai-platform domain
-   ├── depends on: backup domain (src/backup.py)
-   ├── supports: disaster-recovery domain
-   ├── supports: lifecycle-management domain
-   ├── supports: observability domain
-   └── supports: security domain
-```
-
-### DR Function Chain (from deployment_flow)
-
-```
-create_recovery_plan(application_name)
-        │
-        ▼
-execute_site_failover(target_site)
-        │
-        ▼
-validate_recovery_objectives(application_name)
-        │
-        ▼
-generate_dr_readiness_report()
-```
-
-Product Technology catalog references `srm` (VMware Site Recovery Manager) and `vsphere-replication` as the underlying DR technologies — inferred from catalog, not directly confirmed in repository code.
+Associated technologies (Product Technologies catalog): `srm` (VMware Site Recovery Manager), `vsphere-replication`, `hcx` (workload mobility).
 
 ---
 
 ## 8.4 Resilience Testing
 
-TBD - repository evidence not found. No automated DR test scheduling module was found. `generate_dr_readiness_report()` in `src/dr_platform.py` provides a reportable readiness output that can support periodic resilience test evidence, but no test cadence is defined in the repository.
+TBD - repository evidence not found. (No test schedule for `execute_site_failover` or `validate_recovery_objectives` found in repository. `generate_dr_readiness_report()` is the evidenced mechanism for reporting DR readiness state.)
 
 ---
 
@@ -381,7 +334,9 @@ TBD - repository evidence not found. No automated DR test scheduling module was 
 
 ## 9.1 Access Management
 
-TBD - repository evidence not found for user onboarding/offboarding workflows. Repository evidence confirms service-level key/namespace access controls only, via `src/security_vault.py`.
+- User onboarding: TBD - repository evidence not found.
+- User offboarding: TBD - repository evidence not found.
+- Role assignments: Managed indirectly through `assign_key_to_service(key_name, service_name)` and `validate_vault_policy(policy_name)` in `src/security_vault.py`.
 
 ---
 
@@ -389,12 +344,11 @@ TBD - repository evidence not found for user onboarding/offboarding workflows. R
 
 | Secret Type | Management Location |
 |----------|----------|
-| Vault namespace (`create_vault_namespace(namespace_name)`) | `src/security_vault.py` |
-| Customer-managed encryption keys (`create_customer_managed_key(key_name)`) | `src/security_vault.py` |
-| Encryption key rotation (`rotate_encryption_key(key_name)`) | `src/security_vault.py` |
-| Key-to-service assignment (`assign_key_to_service(key_name, service_name)`) | `src/security_vault.py` |
+| Customer-managed encryption keys | `src/security_vault.py` (`create_customer_managed_key`, `rotate_encryption_key`, `assign_key_to_service`) |
+| Vault namespaces | `src/security_vault.py` (`create_vault_namespace`) |
+| Vault policies | `src/security_vault.py` (`validate_vault_policy`) |
 
-Product Technology catalog references `hashicorp-vault` as the enterprise secrets/credential management platform underlying these functions — inferred from catalog.
+Underlying secrets platform per Product Technologies catalog: `hashicorp-vault`.
 
 ---
 
@@ -402,23 +356,23 @@ Product Technology catalog references `hashicorp-vault` as the enterprise secret
 
 | Certificate | Owner | Renewal Process |
 |----------|----------|----------|
-| TBD - repository evidence not found. | | |
+| TBD - repository evidence not found. | TBD - repository evidence not found. | TBD - repository evidence not found. |
 
 ---
 
 ## 9.4 Vulnerability Management
 
-TBD - repository evidence not found for a dedicated vulnerability scanning module in the repository. Product Technology catalog references `nessus` (vulnerability scanning) and `trend-micro` (endpoint protection/anti-malware) — inferred from catalog only.
+- Scanning Process: TBD - repository evidence not found. (Product Technologies catalog references `nessus` as the vulnerability scanning solution and `trend-micro` for endpoint protection, but no repository integration evidence found.)
+- Remediation Process: TBD - repository evidence not found.
+- Exception Process: TBD - repository evidence not found.
 
 ---
 
 ## 9.5 Security Event Management
 
 - SIEM Integration: TBD - repository evidence not found.
-- Security Monitoring: Implied via `security` domain tagging present across `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py` (Module Relationships), but no SIEM/security monitoring integration module found.
+- Security Monitoring: Supported by `src/security_vault.py` (domain: security, observability) with `logging` import.
 - Threat Detection: TBD - repository evidence not found.
-
-Security policy compliance is validated programmatically via `validate_vault_policy(policy_name)` in `src/security_vault.py`, which is part of the deployment_flow validation set.
 
 ---
 
@@ -428,34 +382,33 @@ Security policy compliance is validated programmatically via `validate_vault_pol
 
 | Activity | Frequency |
 |----------|----------|
-| Health Checks | TBD - repository evidence not found. (Confirmed by evidence: performed via `validate_automation_results`, `validate_platform_observability`) |
+| Health Checks | TBD - repository evidence not found. (Performed via `validate_automation_results`, `validate_platform_observability`) |
 | Capacity Review | TBD - repository evidence not found. |
-| Patch Review | TBD - repository evidence not found. (`lifecycle-management` domain present across all modules implies patch/lifecycle activity, but cadence undefined) |
-| Backup Verification | TBD - repository evidence not found. (Confirmed mechanism: `validate_backup_integrity`, `generate_backup_report`) |
+| Patch Review | TBD - repository evidence not found. (`vlcm`, `sddc-manager` referenced in Product Technologies catalog for lifecycle patching) |
+| Backup Verification | TBD - repository evidence not found. (Performed via `validate_backup_integrity`, `generate_backup_report`) |
 
 ---
 
 ## 10.2 Patch Management
 
-The `lifecycle-management` domain is present in every scanned module (`scripts/detect-impact.py`, `src/automation.py`, `src/backup.py`, `src/deploy.py`, `src/dr_platform.py`, `src/security_vault.py`, `src/service_broker.py`) — see Module Relationships and Technology Mapping. This indicates lifecycle/patch operations are a cross-cutting concern across the platform, executed through `deploy_configuration_baseline` and `execute_platform_workflow`.
-
 - Maintenance Windows: TBD - repository evidence not found.
-- Approval Process: Governed by Pull Request workflow evidenced in `scripts/detect-impact.py` (`get_pull_request_number`, `get_pull_request_title`, `get_pull_request_url`).
-- Testing Requirements: `validate_automation_results(workflow_name)` must return `True` prior to promotion.
+- Approval Process: Governed by approved change mechanisms (Section 5.1).
+- Testing Requirements: Validated through `validate_automation_results` in `src/automation.py`.
 
-Product Technology catalog references `vlcm` (vSphere Lifecycle Manager), `sddc-manager`, and `aria-suite-lifecycle-manager` as platform lifecycle technologies — inferred from catalog.
+Lifecycle management technologies per Product Technologies catalog: `sddc-manager`, `vlcm`, `aria-suite-lifecycle-manager`.
 
 ---
 
 ## 10.3 Upgrade Management
 
-TBD - repository evidence not found for explicit upgrade path/version compatibility declarations in repository source.
+- Supported Upgrade Paths: TBD - repository evidence not found.
+- Version Compatibility: TBD - repository evidence not found.
 
 ---
 
 ## 10.4 Capacity Management
 
-TBD - repository evidence not found. No capacity scaling logic or threshold configuration was detected in the repository.
+TBD - repository evidence not found. (No capacity thresholds, scaling logic, or growth-management code found in repository.)
 
 ---
 
@@ -463,35 +416,26 @@ TBD - repository evidence not found. No capacity scaling logic or threshold conf
 
 ## 11.1 Standard Requests
 
-Based on repository function evidence, the following standard requests are supported:
-
-- Service catalog publication (`publish_service_catalog(catalog_name)` — `src/service_broker.py`)
-- Platform API registration (`register_platform_api(api_name)` — `src/service_broker.py`)
-- Service offering creation (`create_service_offering(service_name)` — `src/service_broker.py`)
-- API subscription validation (`validate_api_subscription(subscription_id)` — `src/service_broker.py`)
-- Vault namespace creation (`create_vault_namespace(namespace_name)` — `src/security_vault.py`)
-- Customer-managed key creation (`create_customer_managed_key(key_name)` — `src/security_vault.py`)
+- User Access
+- Capacity Increase
+- Certificate Renewal
+- Service Restart
+- New Tenant Onboarding
+- Service Catalog Offering Creation (`create_service_offering` in `src/service_broker.py`)
+- API Registration (`register_platform_api` in `src/service_broker.py`)
 
 ---
 
 ## 11.2 Request Fulfilment Process
 
-Request fulfilment follows the deployment_flow order for the Service Broker module:
+Service catalog and API-based requests are fulfilled through `src/service_broker.py`:
 
-```
-publish_service_catalog(catalog_name)
-        │
-        ▼
-register_platform_api(api_name)
-        │
-        ▼
-create_service_offering(service_name)
-        │
-        ▼
-validate_api_subscription(subscription_id)
-```
+1. `publish_service_catalog(catalog_name)` — publish a service catalog.
+2. `register_platform_api(api_name)` — register a new platform API endpoint.
+3. `create_service_offering(service_name)` — create a self-service catalog offering.
+4. `validate_api_subscription(subscription_id)` — validate API consumer subscriptions.
 
-Ownership of each fulfilment step: TBD - repository evidence not found.
+Underlying technology per Product Technologies catalog: `service-broker` (self-service delivery portal), `aria-automation` / `aria-orchestrator` for workflow automation.
 
 ---
 
@@ -501,66 +445,89 @@ Ownership of each fulfilment step: TBD - repository evidence not found.
 
 | Severity | Description |
 |----------|----------|
-| P1 | TBD - repository evidence not found. (Suggested mapping: `execute_site_failover` failure or `validate_recovery_objectives` failure — service/site-level impact) |
-| P2 | TBD - repository evidence not found. (Suggested mapping: `validate_automation_results` or `validate_platform_observability` failure) |
-| P3 | TBD - repository evidence not found. (Suggested mapping: `validate_backup_integrity` or `validate_vault_policy` failure) |
-| P4 | TBD - repository evidence not found. (Suggested mapping: `validate_api_subscription` failure) |
+| P1 | TBD - repository evidence not found. |
+| P2 | TBD - repository evidence not found. |
+| P3 | TBD - repository evidence not found. |
+| P4 | TBD - repository evidence not found. |
 
 ---
 
 ## 12.2 Operational Troubleshooting
 
-Troubleshooting procedures are built directly from repository function chains (function_relationships / deployment_flow).
+Troubleshooting chains are derived directly from `function_relationships` and `deployment_flow` evidence, grouped by module.
 
-### 12.2.1 Automation & Configuration Baseline Failure (`src/automation.py`)
+### 12.2.1 Automation / Provisioning Failures (`src/automation.py`)
 
-Chain: `provision_infrastructure(environment_name)` → `deploy_configuration_baseline(environment_name)` → `validate_automation_results(workflow_name)`
+Execution chain: `provision_infrastructure(environment_name)` → `deploy_configuration_baseline(environment_name)` → `execute_platform_workflow(workflow_name)` → `validate_automation_results(workflow_name)`
 
-1. Confirm `provision_infrastructure(environment_name)` returned `True`. If `False`, verify target environment inputs.
-2. Confirm `deploy_configuration_baseline(environment_name)` applied without error.
-3. Run `validate_automation_results(workflow_name)`. If `False`, re-run `execute_platform_workflow(workflow_name)` and re-validate.
+Troubleshooting steps:
+1. Confirm `provision_infrastructure` returned `true` for the target `environment_name`.
+2. If provisioning succeeded, confirm `deploy_configuration_baseline` applied the standard configuration baseline.
+3. Re-run `execute_platform_workflow(workflow_name)` for the affected workflow.
+4. Confirm outcome via `validate_automation_results(workflow_name)`; if `false`, escalate to L2/L3 per Section 4.2.
 
-### 12.2.2 Deployment Failure (`src/deploy.py`)
+### 12.2.2 Deployment Failures (`src/deploy.py`)
 
-Chain: `deploy_network_foundation(region)` → `deploy_kubernetes_platform(cluster_name)` → `deploy_ai_platform(environment)` → `deploy_data_platform(environment)` → `validate_platform_observability(environment)`
+Execution chain (per deployment_flow): `deploy_network_foundation(region)` → `deploy_kubernetes_platform(cluster_name)` → `deploy_ai_platform(environment)` → `deploy_data_platform(environment)` → `validate_platform_observability(environment)`
 
-1. Verify `deploy_network_foundation(region)` succeeded before proceeding — network is the foundation dependency for Kubernetes, AI and data platform deployment.
-2. Verify `deploy_kubernetes_platform(cluster_name)` succeeded before `deploy_ai_platform`/`deploy_data_platform`.
-3. If `validate_platform_observability(environment)` returns `False`, treat as a monitoring/logging/observability configuration defect and re-check each prior deployment step in sequence (network → Kubernetes → AI → data).
+Troubleshooting steps:
+1. Verify `deploy_network_foundation(region)` succeeded — network foundation is the first dependency for all subsequent deployment stages.
+2. Verify `deploy_kubernetes_platform(cluster_name)` — Kubernetes platform depends on network foundation.
+3. Verify `deploy_ai_platform(environment)` and `deploy_data_platform(environment)` — both depend on a successful Kubernetes/network layer.
+4. Run `validate_platform_observability(environment)` as the final gate; a `false` result indicates monitoring/logging/observability misconfiguration and should trigger investigation of `aria-operations`/`aria-logs` integration.
 
-### 12.2.3 Backup Failure (`src/backup.py`)
+### 12.2.3 Backup Failures (`src/backup.py`)
 
-Chain: `schedule_backup_job(workload_name)` → `execute_backup(workload_name)` → `validate_backup_integrity(backup_id)` → `generate_backup_report()`
+Execution chain: `schedule_backup_job(workload_name)` → `execute_backup(workload_name)` → `validate_backup_integrity(backup_id)` → `generate_backup_report()`
 
-1. Confirm the job was scheduled (`schedule_backup_job`).
-2. Confirm `execute_backup(workload_name)` completed successfully.
-3. If `validate_backup_integrity(backup_id)` returns `False`, treat the backup as invalid and re-trigger `execute_backup`.
-4. Use `generate_backup_report()` output to confirm final backup state.
+Troubleshooting steps:
+1. Confirm the job was scheduled via `schedule_backup_job(workload_name)`.
+2. Confirm `execute_backup(workload_name)` completed.
+3. Run `validate_backup_integrity(backup_id)` against the resulting `backup_id`; failure indicates a corrupted or incomplete backup requiring re-execution of `execute_backup`.
+4. Use `generate_backup_report()` to confirm overall backup health across workloads.
 
-### 12.2.4 Disaster Recovery / Failover Failure (`src/dr_platform.py`)
+### 12.2.4 Disaster Recovery Failures (`src/dr_platform.py`)
 
-Chain: `create_recovery_plan(application_name)` → `execute_site_failover(target_site)` → `validate_recovery_objectives(application_name)` → `generate_dr_readiness_report()`
+Execution chain: `create_recovery_plan(application_name)` → `execute_site_failover(target_site)` → `validate_recovery_objectives(application_name)` → `generate_dr_readiness_report()`
 
-1. Confirm a recovery plan exists (`create_recovery_plan`) for the affected application prior to failover.
-2. If `execute_site_failover(target_site)` fails, do not proceed to validation — escalate per Section 4.3.
-3. Run `validate_recovery_objectives(application_name)` post-failover; a `False` result indicates recovery objectives were not met.
-4. Use `generate_dr_readiness_report()` to confirm overall DR posture.
+Troubleshooting steps:
+1. Confirm a recovery plan exists for the affected `application_name` via `create_recovery_plan`.
+2. If failover was triggered, confirm `execute_site_failover(target_site)` completed for the correct target site.
+3. Run `validate_recovery_objectives(application_name)`; failure indicates RPO/RTO targets were not met (values TBD - repository evidence not found) and should be escalated immediately.
+4. Consult `generate_dr_readiness_report()` for platform-wide DR posture.
 
-### 12.2.5 Vault / Key Management Failure (`src/security_vault.py`)
+Note: `src/dr_platform.py` shares the `backup` domain with `src/backup.py` — DR troubleshooting should include verification of the underlying backup chain (12.2.3) as a dependency.
 
-Chain: `create_vault_namespace(namespace_name)` → `create_customer_managed_key(key_name)` → `rotate_encryption_key(key_name)` → `assign_key_to_service(key_name, service_name)` → `validate_vault_policy(policy_name)`
+### 12.2.5 Security / Vault Failures (`src/security_vault.py`)
 
-1. Confirm namespace exists before key creation.
-2. Confirm key creation succeeded before rotation/assignment.
-3. If `validate_vault_policy(policy_name)` returns `False`, review key assignment (`assign_key_to_service`) and namespace configuration.
+Execution chain: `create_vault_namespace(namespace_name)` → `create_customer_managed_key(key_name)` → `rotate_encryption_key(key_name)` → `assign_key_to_service(key_name, service_name)` → `validate_vault_policy(policy_name)`
 
-### 12.2.6 Service Broker / API Failure (`src/service_broker.py`)
+Troubleshooting steps:
+1. Confirm the vault namespace exists via `create_vault_namespace(namespace_name)`.
+2. Confirm the encryption key was created via `create_customer_managed_key(key_name)`.
+3. If a rotation issue is suspected, verify `rotate_encryption_key(key_name)` completed successfully.
+4. Confirm the key is correctly associated using `assign_key_to_service(key_name, service_name)`.
+5. Run `validate_vault_policy(policy_name)` as the final control check; failure indicates a policy misassignment requiring security team escalation (Section 4.1).
 
-Chain: `publish_service_catalog(catalog_name)` → `register_platform_api(api_name)` → `create_service_offering(service_name)` → `validate_api_subscription(subscription_id)`
+### 12.2.6 Service Broker / API Failures (`src/service_broker.py`)
 
-1. Confirm catalog publication succeeded before API registration.
-2. Confirm API registration succeeded before offering creation.
-3. If `validate_api_subscription(subscription_id)` returns `False`, investigate subscription state against the registered API/offering.
+Execution chain (per deployment_flow): `publish_service_catalog(catalog_name)` → `register_platform_api(api_name)` → `create_service_offering(service_name)` → `validate_api_subscription(subscription_id)`
+
+Troubleshooting steps:
+1. Confirm the catalog was published via `publish_service_catalog(catalog_name)`.
+2. Confirm the API was registered via `register_platform_api(api_name)`.
+3. Confirm the offering exists via `create_service_offering(service_name)`.
+4. Run `validate_api_subscription(subscription_id)` to confirm consumer access; failure indicates a subscription configuration issue.
+
+### 12.2.7 Change Impact Investigation (`scripts/detect-impact.py`)
+
+When troubleshooting an operational regression correlated with a recent change:
+
+1. `read_changed_files(path)` — identify files changed in the triggering pull request.
+2. `resolve_capabilities_for_devices` (`resolve_capabilities_for_changed_file`) — map changed files to impacted capabilities using `path_mapping`.
+3. `build_impacted_capabilities(changed_files, path_mapping)` — build the full impacted-capability set.
+4. `build_doc_request(mapping, changed_files)` — produce the documentation/operational impact request.
+5. Cross-reference impacted capabilities/domains against Sections 12.2.1–12.2.6 to identify the correct troubleshooting chain.
 
 ---
 
@@ -568,8 +535,7 @@ Chain: `publish_service_catalog(catalog_name)` → `register_platform_api(api_na
 
 | Issue | Workaround |
 |----------|----------|
-| `resolve_capabilities_for_changed_file` docstring/return-type parsing in `scripts/detect-impact.py` was detected via fallback regex parser (AST parse failed) | Review function manually; do not rely solely on automated documentation extraction for this function. |
-| `src/backup.py`, `src/dr_platform.py` parsed via fallback regex parser (`ast_failed_regex_fallback`) | Manually verify function signatures and logic before operational reliance. |
+| TBD - repository evidence not found. | TBD - repository evidence not found. |
 
 ---
 
@@ -577,7 +543,7 @@ Chain: `publish_service_catalog(catalog_name)` → `register_platform_api(api_na
 
 ## 13.1 Compliance Requirements
 
-TBD - repository evidence not found. No compliance framework references (ISO27001, GDPR, PCI-DSS) were found in the repository.
+TBD - repository evidence not found.
 
 ---
 
@@ -585,7 +551,7 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 - Audit Responsibilities: TBD - repository evidence not found.
 - Log Retention: TBD - repository evidence not found.
-- Evidence Collection: `generate_backup_report()` (`src/backup.py`) and `generate_dr_readiness_report()` (`src/dr_platform.py`) provide structured dictionary outputs suitable for audit evidence collection.
+- Evidence Collection: Vault and service broker operations (`src/security_vault.py`, `src/service_broker.py`) are the primary evidenced sources of auditable events.
 
 ---
 
@@ -593,14 +559,14 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Item | Status |
 |----------|----------|
-| Monitoring Configured | Partial — `validate_platform_observability` exists; thresholds/dashboards TBD |
-| Alerting Configured | Not Confirmed — no alerting module found in repository |
-| Backup Configured | Confirmed — `src/backup.py` functions present |
-| Recovery Tested | Not Confirmed — `generate_dr_readiness_report` exists; test cadence TBD |
-| Runbooks Available | Partial — function-level chains documented in Section 12.2; formal runbook documents TBD |
-| Ownership Assigned | Not Confirmed — TBD |
-| Escalation Defined | Not Confirmed — TBD |
-| Documentation Complete | In Progress |
+| Monitoring Configured | Partial — validated via `validate_platform_observability` (`src/deploy.py`); no thresholds defined |
+| Alerting Configured | Not Confirmed — no alert severities/targets found in repository |
+| Backup Configured | Confirmed — `schedule_backup_job`, `execute_backup` present in `src/backup.py` |
+| Recovery Tested | Not Confirmed — no test cadence found for `execute_site_failover` |
+| Runbooks Available | Partial — functional chains documented in Section 12.2 from repository functions |
+| Ownership Assigned | Not Confirmed — TBD - repository evidence not found. |
+| Escalation Defined | Not Confirmed — TBD - repository evidence not found. |
+| Documentation Complete | In Progress (this document) |
 
 ---
 
@@ -610,9 +576,9 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Risk | Impact | Mitigation |
 |----------|----------|----------|
-| No dedicated alerting module detected in repository | Delayed incident detection | Implement alerting integration tied to `validate_*` function outcomes |
-| Two source files (`src/backup.py`, `src/dr_platform.py`) parsed via fallback regex (AST parse failed) | Reduced confidence in automated documentation accuracy for backup/DR logic | Manual code review of `src/backup.py` and `src/dr_platform.py` |
-| No numeric RTO/RPO/thresholds defined in repository | Unclear recovery/monitoring expectations | Define and document RTO/RPO and thresholds with Service Owner |
+| No numeric RPO/RTO values defined in repository | Recovery expectations cannot be validated against business need | Define RPO/RTO in conjunction with `validate_recovery_objectives` implementation |
+| No alert severity/thresholds defined | Delayed incident response | Define thresholds for CPU/Memory/Disk/Availability/Response Time and wire to `validate_*` functions |
+| DR (`src/dr_platform.py`) depends on backup domain (`src/backup.py`) integrity | Failed backups may compromise recovery plan validity | Ensure `validate_backup_integrity` passes before relying on `create_recovery_plan`/`execute_site_failover` |
 
 ---
 
@@ -620,8 +586,8 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Assumption | Owner |
 |----------|----------|
-| Underlying infrastructure technologies (vSphere, NSX-T, vSAN, Aria Suite, Tanzu) referenced in the Product Technology catalog are deployed and operated per vendor documentation | TBD |
-| Module docstring author ("Jijeesh Valappil") reflects code authorship, not operational ownership | TBD |
+| Underlying VMware technologies (vSphere, vSAN, NSX-T, SRM, Vault) referenced in Product Technologies catalog are deployed and operable | TBD - repository evidence not found. |
+| `logging` imports in `src/automation.py`, `src/deploy.py`, `src/security_vault.py`, `src/service_broker.py` are wired to a centralized log platform (`aria-logs`) | TBD - repository evidence not found. |
 
 ---
 
@@ -629,8 +595,8 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Issue | Owner |
 |----------|----------|
-| No alerting module present in repository | TBD |
-| No explicit SLA/SLO/RTO/RPO values defined in repository | TBD |
+| No CI/CD pipeline definitions found in scanned repository files | TBD - repository evidence not found. |
+| No environment-specific configuration files found | TBD - repository evidence not found. |
 
 ---
 
@@ -638,10 +604,10 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Dependency | Owner |
 |----------|----------|
-| `src/deploy.py` deployment sequence depends on `deploy_network_foundation` succeeding before `deploy_kubernetes_platform`, `deploy_ai_platform`, `deploy_data_platform` | TBD |
-| `src/dr_platform.py` DR domain depends on `backup` domain (Module Relationships: `src/dr_platform.py -> backup`) | TBD |
-| `src/security_vault.py` supports `api-service-broker`, `automation`, and `kubernetes` domains | TBD |
-| `scripts/detect-impact.py` drives documentation/impact workflows across `ai-platform`, `api-service-broker`, `automation`, `compute`, `data-platform`, `lifecycle-management` domains | TBD |
+| `src/deploy.py` deployment sequence depends on `src/automation.py` provisioning completing successfully | Platform Operations |
+| `src/dr_platform.py` recovery validity depends on `src/backup.py` backup integrity | Platform Operations / DR Team |
+| `src/service_broker.py` API registration depends on `src/security_vault.py` key/policy validation for secured services | Security Team |
+| `scripts/detect-impact.py` change-impact detection depends on accurate `path_mapping` configuration | TBD - repository evidence not found. |
 
 ---
 
@@ -651,7 +617,7 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Link | Purpose |
 |----------|----------|
-| Repository: `jijeeshlearningorg/greenfield-code` (branch `main`) | Source of operational automation modules |
+| TBD - repository evidence not found. | Source repository: `jijeeshlearningorg/greenfield-code` (branch `main`) |
 
 ---
 
@@ -659,17 +625,22 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Tool | Purpose |
 |----------|----------|
-| `scripts/detect-impact.py` | Detects changed files and maps them to impacted product capabilities/domains for documentation and change impact analysis |
-| `src/automation.py` | Infrastructure provisioning and platform workflow automation |
-| `src/backup.py` | Backup scheduling, execution, integrity validation and reporting |
-| `src/deploy.py` | Platform deployment (network, Kubernetes, AI, data) and observability validation |
-| `src/dr_platform.py` | Disaster recovery planning, failover execution and recovery validation |
-| `src/security_vault.py` | Vault namespace, key creation, rotation and policy validation |
-| `src/service_broker.py` | Service catalog publication, API registration and subscription validation |
-| Aria Suite (`aria-automation`, `aria-orchestrator`, `aria-operations`, `aria-logs`, `aria-network-insight`) | Catalog-referenced automation, monitoring, and logging platform (inferred) |
-| `hashicorp-vault` | Catalog-referenced secrets management platform underlying `src/security_vault.py` (inferred) |
-| `canopy-enterprise-backup`, `avamar`, `data-domain` | Catalog-referenced backup platform underlying `src/backup.py` (inferred) |
-| `srm`, `vsphere-replication` | Catalog-referenced DR platform underlying `src/dr_platform.py` (inferred) |
+| vsphere / esxi / vcenter | Core virtualization platform |
+| vsan | Software-defined storage |
+| nsx-t | Software-defined networking and security |
+| aria-automation / aria-orchestrator | Provisioning and workflow automation (aligned to `src/automation.py`) |
+| aria-operations | Infrastructure monitoring and operational analytics (aligned to `validate_platform_observability`) |
+| aria-logs | Centralized log aggregation (aligned to `logging` imports across modules) |
+| aria-network-insight | Network visibility and analytics |
+| tanzu-kubernetes-grid / tanzu-mission-control | Kubernetes runtime and governance (aligned to `deploy_kubernetes_platform`) |
+| sddc-manager / vlcm / aria-suite-lifecycle-manager | Lifecycle management and patching |
+| trend-micro / nessus | Endpoint protection and vulnerability scanning |
+| hashicorp-vault | Secrets and credential management (aligned to `src/security_vault.py`) |
+| canopy-enterprise-backup / avamar / data-domain | Backup platform and storage (aligned to `src/backup.py`) |
+| srm / vsphere-replication | Disaster recovery and replication (aligned to `src/dr_platform.py`) |
+| hcx | Workload mobility/migration |
+| vmc | Public cloud integration |
+| service-broker | Self-service delivery portal (aligned to `src/service_broker.py`) |
 
 ---
 
@@ -677,9 +648,10 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 
 | Team | Contact |
 |----------|----------|
-| Operations Team | TBD - repository evidence not found. |
+| Platform Operations | TBD - repository evidence not found. |
 | Security Team | TBD - repository evidence not found. |
-| Support Team | TBD - repository evidence not found. |
+| Support Desk | TBD - repository evidence not found. |
+| Vendor (VMware) | TBD - repository evidence not found. |
 
 ---
 
@@ -697,5 +669,66 @@ TBD - repository evidence not found. No compliance framework references (ISO2700
 | RPO | Recovery Point Objective |
 | IAM | Identity & Access Management |
 | RBAC | Role-Based Access Control |
-| DR | Disaster Recovery |
-| PR | Pull Request |
+
+---
+
+## 16.5 Operational Dependency Map (Derived from Module Relationships)
+
+```
+scripts/detect-impact.py
+   └─ supports: ai-platform, api-service-broker, automation, compute, data-platform, lifecycle-management
+
+src/automation.py  (imports: logging)
+   └─ supports: automation, lifecycle-management, observability, security
+   └─ feeds into: src/deploy.py (deployment relies on provisioned/configured infrastructure)
+
+src/backup.py
+   └─ supports: backup, lifecycle-management, observability, security, storage
+   └─ feeds into: src/dr_platform.py (shared domain: backup)
+
+src/deploy.py  (imports: logging)
+   └─ supports: ai-platform, api-service-broker, compute, data-platform, kubernetes,
+               lifecycle-management, networking, observability, security
+   └─ downstream of: src/automation.py
+
+src/dr_platform.py
+   └─ supports: ai-platform, backup, disaster-recovery, lifecycle-management, observability, security
+   └─ depends on: src/backup.py (backup domain overlap)
+
+src/security_vault.py  (imports: logging)
+   └─ supports: api-service-broker, automation, kubernetes, lifecycle-management, observability, security
+   └─ feeds into: src/service_broker.py (shared domain: api-service-broker, security)
+
+src/service_broker.py  (imports: logging)
+   └─ supports: api-service-broker, lifecycle-management, observability, security
+   └─ downstream of: src/security_vault.py
+```
+
+Common cross-cutting domains observed across nearly all modules: `lifecycle-management`, `observability`, `security` — indicating these are platform-wide operational concerns rather than module-isolated ones, and should be monitored holistically rather than per-module.
+
+---
+
+## 16.6 End-to-End Operational Workflow (Derived from deployment_flow)
+
+```
+1. provision_infrastructure          (src/automation.py)  [provision]
+2. deploy_configuration_baseline     (src/automation.py)  [deploy]
+3. validate_automation_results       (src/automation.py)  [validate]
+4. schedule_backup_job               (src/backup.py)      [backup]
+5. execute_backup                    (src/backup.py)      [backup]
+6. validate_backup_integrity         (src/backup.py)      [validate/backup]
+7. generate_backup_report            (src/backup.py)      [backup]
+8. deploy_network_foundation         (src/deploy.py)       [deploy]
+9. deploy_kubernetes_platform        (src/deploy.py)       [deploy]
+10. deploy_ai_platform               (src/deploy.py)       [deploy]
+11. deploy_data_platform             (src/deploy.py)       [deploy]
+12. validate_platform_observability  (src/deploy.py)       [validate]
+13. create_recovery_plan             (src/dr_platform.py)  [recovery]
+14. validate_recovery_objectives     (src/dr_platform.py)  [validate/recovery]
+15. validate_vault_policy            (src/security_vault.py) [validate]
+16. publish_service_catalog          (src/service_broker.py) [publish]
+17. register_platform_api            (src/service_broker.py) [register]
+18. validate_api_subscription        (src/service_broker.py) [validate]
+```
+
+This sequence represents the evidenced end-to-end operational lifecycle: infrastructure provisioning → configuration → backup readiness → platform deployment (network/Kubernetes/AI/data) → observability validation → DR planning/validation → security policy validation → service catalog publication and API validation.
